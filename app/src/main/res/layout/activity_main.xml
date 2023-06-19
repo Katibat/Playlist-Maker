@@ -4,27 +4,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/mainLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
-        style="@style/mainTextStyle" />
+        style="@style/mainTextStyle"
+        android:layout_marginStart="@dimen/icon_16"
+        android:layout_marginTop="@dimen/icon_14"
+        android:layout_marginBottom="@dimen/icon_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/search"
         style="@style/mainButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/icon_16"
+        android:layout_marginRight="@dimen/icon_16"
+        android:layout_marginTop="@dimen/icon_40"
+        android:layout_gravity="center"
         android:text="@string/search"
         app:icon="@drawable/search_vector" />
 
     <Button
         android:id="@+id/media"
         style="@style/mainButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/icon_16"
+        android:layout_marginRight="@dimen/icon_16"
+        android:layout_marginTop="@dimen/icon_40"
+        android:layout_gravity="center"
         android:text="@string/media"
         app:icon="@drawable/media_vector" />
 
     <Button
         android:id="@+id/settings"
         style="@style/mainButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/icon_16"
+        android:layout_marginRight="@dimen/icon_16"
+        android:layout_marginTop="@dimen/icon_40"
+        android:layout_gravity="center"
         android:text="@string/settings"
         app:icon="@drawable/setting_vector" />
 

@@ -1,93 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="mainLinearLayout" parent="matchParent">
+    <style name="mainLinearLayout">
         <item name="android:background">@color/system_PM</item>
     </style>
 
     <style name="settingsLinearLayout" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/white</item>
     </style>
 
     <style name="mainButtonStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/icon_0</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_marginLeft">@dimen/icon_16</item>
-        <item name="android:layout_marginRight">@dimen/icon_16</item>
-        <item name="android:layout_marginTop">@dimen/icon_40</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">@dimen/text_22</item>
-        <item name="android:layout_gravity">center</item>
         <item name="cornerRadius">@dimen/icon_16</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/icon_10</item>
         <item name="iconTint">@color/black</item>
     </style>
 
-<!--    <style name="buttonBack">-->
-<!--        <item name="iconTint">@color/black</item>-->
-<!--        <item name="android:layout_width">@dimen/icon_48</item>-->
-<!--        <item name="android:layout_height">@dimen/icon_48</item>-->
-<!--        <item name="android:layout_marginStart">@dimen/icon_4</item>-->
-<!--        <item name="android:layout_marginTop">@dimen/icon_4</item>-->
-<!--    </style>-->
-
-    <style name="settingsText">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:layout_marginStart">@dimen/icon_12</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textSize">@dimen/text_22</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="mainTextStyle" parent="wrapContent">
-        <item name="android:layout_marginStart">@dimen/icon_16</item>
-        <item name="android:layout_marginTop">@dimen/icon_14</item>
-        <item name="android:layout_marginBottom">@dimen/icon_16</item>
+    <style name="mainTextStyle">
         <item name="android:text">@string/title</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_22</item>
     </style>
 
-    <style name="settingsTextStyle" parent="wrapContent">
-        <item name="android:layout_marginStart">@dimen/icon_16</item>
-        <item name="android:layout_marginTop">@dimen/icon_14</item>
-        <item name="android:layout_marginBottom">@dimen/icon_16</item>
-        <item name="android:text">@string/settings</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/text_22</item>
-    </style>
-
-    <style name="settingsFrame" parent="matchParent">
+    <style name="settingsFrame">
         <item name="android:paddingTop">@dimen/icon_21</item>
         <item name="android:paddingBottom">@dimen/icon_21</item>
     </style>
 
     <style name="settingsButtonText">
-        <item name="android:layout_width">@dimen/icon_300</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_16</item>
-    </style>
-
-    <style name="switchTheme" parent="wrapContent">
-        <item name="android:thumbTint">@color/gray</item>
-        <item name="android:trackTint">@color/light_gray</item>
-        <item name="android:layout_gravity">end</item>
-        <item name="android:layout_marginEnd">@dimen/icon_10</item>
-        <item name="android:paddingBottom">@dimen/icon_12</item>
-    </style>
-
-    <style name="settingIconImage" parent="wrapContent">
-        <item name="android:drawableTint">@color/gray</item>
-        <item name="android:layout_gravity">end</item>
     </style>
 
     <style name="Toolbar">
@@ -115,13 +60,4 @@
         <item name="android:elevation">@dimen/icon_4</item>
     </style>
 
-    <style name="matchParent">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-    </style>
-
-    <style name="wrapContent">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
 </resources>

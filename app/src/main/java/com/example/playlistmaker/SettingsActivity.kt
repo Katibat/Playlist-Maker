@@ -7,7 +7,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 
-
 class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,10 +16,11 @@ class SettingsActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-//        val buttonBack = findViewById<Button>(R.id.buttonBack)
-//        buttonBack.setOnClickListener {
-//            this.finish()
-//        }
+        supportActionBar?.apply {
+            title = "Настройки"
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
