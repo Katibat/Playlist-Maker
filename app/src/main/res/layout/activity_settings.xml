@@ -16,13 +16,8 @@
         android:background="@color/white"
         android:minHeight="?attr/actionBarSize"
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:title="@string/settings"
-        app:contentInsetLeft="@dimen/icon_4"
         app:titleTextAppearance="@style/ToolbarTextAppearance.Title"
-        style="@style/MyToolbar"
-        android:showDividers="none"
-        app:contentInsetStart="0dp"
-        app:contentInsetStartWithNavigation="0dp" />
+        style="@style/MyToolbar" />
 ‹
     <LinearLayout
         android:id="@+id/linearLayout2"
