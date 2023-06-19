@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/settingsLinearLayout"
+    android:orientation="vertical"
     tools:context=".SettingsActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
-
-        <Button
-            android:id="@+id/buttonBack"
-            style="@style/buttonBack"
-            android:background="@android:color/transparent"
-            app:icon="@drawable/back_vector"
-            app:iconGravity="textStart" />
-
-        <TextView
-            style="@style/settingsText" />
-    </LinearLayout>
+        android:background="@color/white"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:title="@string/settings"
+        app:navigationIcon="@drawable/back_vector"
+        app:contentInsetLeft="@dimen/icon_4"
+        app:titleTextAppearance="@style/ToolbarTextAppearance.Title"
+        style="@style/MyToolbar" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -35,49 +31,45 @@
         tools:ignore="RtlSymmetry">
 
         <FrameLayout style="@style/settingsFrame">
-            <TextView
-                style="@style/settingsButtonText"
-                android:text="@string/black_theme" />
             <Switch
                 android:id="@+id/switchTheme"
-                style="@style/switchTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/black_theme"
+                android:textSize="@dimen/text_16"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
         </FrameLayout>
 
         <FrameLayout style="@style/settingsFrame">
+
             <TextView
                 android:id="@+id/shareApp"
                 style="@style/settingsButtonText"
-                android:text="@string/share_app" />
-            <ImageView
-                style="@style/settingIconImage"
+                android:layout_width="match_parent"
                 android:layout_marginEnd="@dimen/icon_16"
-                android:src="@drawable/share_app_vector" />
+                android:text="@string/share_app"
+                app:drawableEndCompat="@drawable/share_app_vector" />
         </FrameLayout>
 
         <FrameLayout style="@style/settingsFrame">
             <TextView
                 android:id="@+id/writeSupport"
                 style="@style/settingsButtonText"
-                android:text="@string/write_to_support" />
-            <ImageView
-                style="@style/settingIconImage"
+                android:layout_width="match_parent"
+                android:text="@string/write_to_support"
                 android:layout_marginEnd="@dimen/icon_14"
-                android:src="@drawable/write_to_support_vector" />
+                app:drawableEndCompat="@drawable/write_to_support_vector" />
         </FrameLayout>
 
         <FrameLayout style="@style/settingsFrame">
             <TextView
                 android:id="@+id/userAgreement"
                 style="@style/settingsButtonText"
-                android:text="@string/user_agreement" />
-            <ImageView
-                style="@style/settingIconImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="@string/user_agreement"
                 android:layout_marginEnd="@dimen/icon_20"
-                android:src="@drawable/user_agreement_vector" />
+                app:drawableEndCompat="@drawable/user_agreement_vector" />
         </FrameLayout>
 
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
