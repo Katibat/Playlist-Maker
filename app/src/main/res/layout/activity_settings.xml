@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/settingsLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SettingsActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:titleTextAppearance="@style/ToolbarTextAppearance.Title"
+        style="@style/MyToolbar" />
+‹
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/icon_5"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/icon_16"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:ignore="RtlSymmetry">
+
+        <FrameLayout
+            style="@style/settingsFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <Switch
+                android:id="@+id/switchTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/black_theme"
+                android:textSize="@dimen/text_16"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/settingsFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/shareApp"
+                style="@style/settingsButtonText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/icon_16"
+                android:text="@string/share_app"
+                app:drawableEndCompat="@drawable/share_app_vector" />
+        </FrameLayout>
+
+        <FrameLayout style="@style/settingsFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/writeSupport"
+                style="@style/settingsButtonText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/write_to_support"
+                android:layout_marginEnd="@dimen/icon_14"
+                app:drawableEndCompat="@drawable/write_to_support_vector" />
+        </FrameLayout>
+
+        <FrameLayout style="@style/settingsFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/userAgreement"
+                style="@style/settingsButtonText"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="@string/user_agreement"
+                android:layout_marginEnd="@dimen/icon_20"
+                app:drawableEndCompat="@drawable/user_agreement_vector" />
+        </FrameLayout>
+
+    </LinearLayout>
+</LinearLayout>
