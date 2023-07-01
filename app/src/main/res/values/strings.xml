@@ -9,6 +9,11 @@
     <string name="write_to_support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
     <string name="back">Back</string>
+    <string name="url_android_developer">https://practicum.yandex.ru/android-developer/</string>
+    <string name="email">katerina.mahova@yandex.ru</string>
+    <string name="theme_support_message">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="support_message">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="url_oferta">https://yandex.ru/legal/practicum_offer/</string>
     <string name="messages_header" />
     <string name="signature_title" />
     <string name="reply_title" />
