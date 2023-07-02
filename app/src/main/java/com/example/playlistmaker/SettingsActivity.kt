@@ -35,7 +35,6 @@ class SettingsActivity : AppCompatActivity() {
         themeSwitch.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
                 false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }

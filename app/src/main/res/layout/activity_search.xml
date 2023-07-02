@@ -1,8 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/settingsLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity" />
+    android:orientation="vertical"
+    tools:context=".SearchActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:titleTextAppearance="@style/ToolbarTextAppearance.Title"
+        style="@style/MyToolbar" />
+    ‹
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            style="@style/settingsFrame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/icon_16"
+            android:layout_marginEnd="@dimen/icon_16"
+            tools:layout_editor_absoluteX="@dimen/icon_16">
+
+            <EditText
+                android:id="@+id/search"
+                style="@style/searchEditText"
+                android:background="@drawable/ic_radius_background"
+                android:drawableStart="@drawable/search_textedit_vector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/icon_24"
+                android:hint="@string/search"
+                tools:ignore="Autofill"/>
+
+            <ImageView
+                android:id="@+id/clearButton"
+                android:src="@drawable/close_vector"
+                style="@style/searchCloseEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/icon_12"
+                android:layout_marginEnd="@dimen/icon_14"
+                tools:ignore="ContentDescription"
+                />
+        </FrameLayout>
+
+    </LinearLayout>
+</LinearLayout>
