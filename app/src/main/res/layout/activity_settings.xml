@@ -38,6 +38,7 @@
                 style="@style/switchTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:text="@string/black_theme"
                 android:textSize="@dimen/text_16"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />

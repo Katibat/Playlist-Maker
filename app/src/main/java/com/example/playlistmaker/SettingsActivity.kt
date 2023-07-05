@@ -52,15 +52,14 @@ class SettingsActivity : AppCompatActivity() {
 
         // Настройка кнопки "Написать в поддержку"
         sendSupport.setOnClickListener {
-            val sendIntent: Intent = Intent().apply {
+            Intent().apply {
                 action = ACTION_SENDTO
                 data = Uri.parse("mailto:")
                 putExtra(EXTRA_EMAIL, arrayOf(getString(R.string.email)))
                 putExtra(EXTRA_SUBJECT, getString(R.string.theme_support_message))
                 putExtra(EXTRA_TEXT, getString(R.string.support_message))
+                startActivity(createChooser(this, null))
             }
-            val sendEmail = createChooser(sendIntent, null)
-            startActivity(sendEmail)
         }
 
         // Настройка кнопки "Пользовательское соглашение"

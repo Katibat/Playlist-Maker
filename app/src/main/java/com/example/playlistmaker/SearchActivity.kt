@@ -30,7 +30,7 @@ class SearchActivity : AppCompatActivity() {
         // Настроить Toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
-            title = getString(R.string.settings)
+            title = getString(R.string.search)
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }

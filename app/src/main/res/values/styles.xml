@@ -49,11 +49,8 @@
     </style>
 
     <style name="ToolbarTextAppearance">
-        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">2</item>
         <item name="android:shadowColor">@color/black</item>
     </style>
 
@@ -64,15 +61,13 @@
     <style name="MyToolbar">
         <item name="theme">@style/ThemeOverlay.AppCompat.Dark</item>
         <item name="android:background">@color/white</item>
-        <item name="android:elevation">@dimen/icon_4</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textFontWeight" tools:ignore="NewApi">500</item>
+        <item name="android:textFontWeight">500</item>
     </style>
 
     <style name="switchTheme">
         <item name="android:thumbTint">@color/gray</item>
         <item name="android:trackTint">@color/light_gray</item>
-        <item name="android:layout_gravity">end</item>
         <item name="android:layout_marginEnd">@dimen/icon_6</item>
         <item name="android:paddingBottom">@dimen/icon_7</item>
     </style>
