@@ -10,4 +10,6 @@
     <color name="system_PM">#3772E7</color>
     <color name="gray">#AEAFB4</color>
     <color name="light_gray">#959FAE</color>
+    <color name="dark_theme_item">#1A1B22</color>
+    <color name="switch_track">#E6E8EB</color>
 </resources>
