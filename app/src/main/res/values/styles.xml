@@ -83,7 +83,7 @@
         <item name="android:backgroundTint">@color/switch_track</item>
         <item name="android:inputType">text</item>
         <item name="android:textColorHint">@color/gray</item>
-        <item name="android:textColor">@color/gray</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:singleLine">true</item>
     </style>
@@ -91,6 +91,38 @@
     <style name="searchCloseEditText">
         <item name="android:visibility">gone</item>
         <item name="android:src">@drawable/close_vector</item>
+    </style>
+
+    <style name="track_cardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="recyclerView">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="track_name">
+        <item name="android:text">TextView</item>
+        <item name="android:textSize">@dimen/text_16</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="track_artist">
+        <item name="android:text">TextView</item>
+        <item name="android:textSize">@dimen/text_11</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="track_icon_arrow">
+        <item name="android:tint">@color/gray</item>
     </style>
 
 </resources>
