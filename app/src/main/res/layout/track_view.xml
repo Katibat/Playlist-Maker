@@ -46,11 +46,16 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                style="@style/track_artist"
+            <ImageView
+                android:id="@+id/track_separator"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                style="@style/track_separator"
+                android:src="@drawable/separator_dot"
+                android:layout_gravity="center"
                 android:layout_marginStart="@dimen/icon_5"
-                android:paddingBottom="@dimen/icon_12"
-                android:text="@string/track_separator" />
+                android:layout_marginEnd="@dimen/icon_5"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/track_time"

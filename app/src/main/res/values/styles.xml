@@ -125,4 +125,8 @@
         <item name="android:tint">@color/gray</item>
     </style>
 
+    <style name="track_separator">
+        <item name="android:tint">@color/gray</item>
+    </style>
+
 </resources>
