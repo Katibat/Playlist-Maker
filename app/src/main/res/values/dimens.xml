@@ -5,6 +5,7 @@
     <dimen name="icon_5">5dp</dimen>
     <dimen name="icon_6">6dp</dimen>
     <dimen name="icon_7">7dp</dimen>
+    <dimen name="icon_8">8dp</dimen>
     <dimen name="icon_9">9dp</dimen>
     <dimen name="icon_10">10dp</dimen>
     <dimen name="icon_12">12dp</dimen>
@@ -17,9 +18,11 @@
     <dimen name="icon_24">24dp</dimen>
     <dimen name="icon_28">28dp</dimen>
     <dimen name="icon_40">40dp</dimen>
+    <dimen name="icon_45">45dp</dimen>
     <dimen name="icon_48">48dp</dimen>
     <dimen name="icon_61">61dp</dimen>
     <dimen name="icon_300">300dp</dimen>
+    <dimen name="text_11">11sp</dimen>
     <dimen name="text_16">16sp</dimen>
     <dimen name="text_22">22sp</dimen>
 </resources>

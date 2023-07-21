@@ -6,6 +6,7 @@
     style="@style/mainLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -15,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/icon_16"
         android:layout_marginTop="@dimen/icon_14"
-        android:layout_marginBottom="@dimen/icon_16" />
+        android:layout_marginBottom="@dimen/icon_24" />
 
     <Button
         android:id="@+id/search"
@@ -23,9 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginBottom="@dimen/icon_8"
         android:layout_marginLeft="@dimen/icon_16"
         android:layout_marginRight="@dimen/icon_16"
-        android:layout_marginTop="@dimen/icon_40"
         android:layout_gravity="center"
         android:text="@string/search"
         app:icon="@drawable/search_vector" />
@@ -36,9 +37,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginBottom="@dimen/icon_8"
         android:layout_marginLeft="@dimen/icon_16"
         android:layout_marginRight="@dimen/icon_16"
-        android:layout_marginTop="@dimen/icon_40"
         android:layout_gravity="center"
         android:text="@string/media"
         app:icon="@drawable/media_vector" />
@@ -49,9 +50,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginBottom="@dimen/icon_8"
         android:layout_marginLeft="@dimen/icon_16"
         android:layout_marginRight="@dimen/icon_16"
-        android:layout_marginTop="@dimen/icon_40"
         android:layout_gravity="center"
         android:text="@string/settings"
         app:icon="@drawable/setting_vector" />

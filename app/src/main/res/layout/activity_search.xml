@@ -17,7 +17,7 @@
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:titleTextAppearance="@style/ToolbarTextAppearance.Title"
         style="@style/MyToolbar" />
-    ‹
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -42,7 +42,6 @@
                 android:drawableStart="@drawable/search_textedit_vector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/icon_24"
                 android:hint="@string/search"
                 tools:ignore="Autofill"/>
 
@@ -55,9 +54,19 @@
                 android:layout_gravity="end"
                 android:layout_marginTop="@dimen/icon_12"
                 android:layout_marginEnd="@dimen/icon_14"
-                tools:ignore="ContentDescription"
-                />
+                tools:ignore="ContentDescription" />
         </FrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            style="@style/recyclerView"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:paddingHorizontal="2dp"
+            android:paddingTop="30dp"
+            tools:listitem="@layout/track_view" />
 
     </LinearLayout>
 </LinearLayout>
