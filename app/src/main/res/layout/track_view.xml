@@ -10,6 +10,7 @@
         android:id="@+id/track_image"
         android:layout_width="@dimen/icon_45"
         android:layout_height="@dimen/icon_45"
+        style="@style/track_cardView"
         android:layout_marginStart="@dimen/icon_13"
         android:layout_marginTop="@dimen/icon_8"
         android:layout_marginEnd="@dimen/icon_8"

@@ -123,6 +123,12 @@
         <item name="android:tint">@color/gray</item>
     </style>
 
+    <style name="track_cardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="search_noConnectionImage">
         <item name="android:src">@drawable/search_no_connection_light</item>
         <item name="android:visibility">gone</item>

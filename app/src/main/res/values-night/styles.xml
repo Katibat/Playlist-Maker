@@ -131,6 +131,12 @@
         <item name="android:tint">@color/white</item>
     </style>
 
+    <style name="track_cardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:backgroundTint">@color/dark_theme_item</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="search_noConnectionImage">
         <item name="android:src">@drawable/search_no_connection_dark</item>
         <item name="android:visibility">gone</item>
