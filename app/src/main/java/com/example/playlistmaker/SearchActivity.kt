@@ -1,73 +1,69 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.text.*
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.track.Track
-import com.example.playlistmaker.track.TrackAdapter
+import androidx.core.widget.doOnTextChanged
+import androidx.recyclerview.widget.*
+import com.example.playlistmaker.track.*
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
     companion object {
-        const val SEARCH_EDIT_TEXT="SEARCH_EDIT_TEXT"
+        const val SEARCH_EDIT_TEXT = "SEARCH_EDIT_TEXT"
     }
 
     private var text: String = ""
-    val track: Track? = null
+    private val itunesBaseUrl = "https://itunes.apple.com"
+    private val tracksList = ArrayList<Track>()
+    private lateinit var trackAdapter : TrackAdapter
+    private val interceptor = HttpLoggingInterceptor()
+    private lateinit var searchEditText: EditText
+    private lateinit var placeholder: LinearLayout
+    private lateinit var placeholderNoConnection: ImageView
+    private lateinit var placeholderNothingFound: ImageView
+    private lateinit var placeholderError: TextView
+    private lateinit var updateButton: Button
 
-    private val trackList = mutableListOf(
-        Track(
-            "Smells Like Teen Spirit",
-            "Nirvana",
-            "5:01",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
-        ),
-        Track(
-            "Billie Jean",
-            "Michael Jackson",
-            "4:35",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
-        ),
-        Track(
-            "Stayin' Alive",
-            "Bee Gees",
-            "4:10",
-            "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
-        ),
-        Track(
-            "Whole Lotta Love",
-            "Led Zeppelin",
-            "5:33",
-            "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
-        ),
-        Track(
-            "Sweet Child O'Mine",
-            "Guns N' Roses",
-            "5:03",
-            "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-        )
-    )
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(interceptor)
+        .build()
 
-    @SuppressLint("MissingInflatedId")
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(itunesBaseUrl)
+        .client(client)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val tracksService = retrofit.create(TracksApi::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
+        searchEditText = findViewById(R.id.search)
         val clearButton = findViewById<ImageView>(R.id.clearButton)
-        val searchEditText = findViewById<EditText>(R.id.search)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        placeholder = findViewById(R.id.placeholder)
+        placeholderNoConnection = findViewById(R.id.noConnectionImage)
+        placeholderNothingFound = findViewById(R.id.nothingFoundImage)
+        placeholderError  = findViewById(R.id.errorMessage)
+        updateButton = findViewById(R.id.updateButton)
 
         // Recycler View
-        val trackAdapter = TrackAdapter(trackList)
+        trackAdapter = TrackAdapter(tracksList)
         recyclerView.adapter = trackAdapter
+
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         // Настроить Toolbar
         setSupportActionBar(toolbar)
@@ -77,30 +73,37 @@ class SearchActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
         }
 
-        clearButton.setOnClickListener {
-            val inputMethodManager =
-                getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(searchEditText.windowToken, 0)
-            searchEditText.setText("")
+        // найти track по введенному пользователем тексту
+        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                search()
+                true
+            }
+            false
         }
 
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        // кнопка очистить поиск
+        clearButton.setOnClickListener {
+            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(searchEditText.windowToken, 0)
+            searchEditText.setText("")
+            tracksList.clear()
+            placeholder.visibility = View.GONE
+            trackAdapter.notifyDataSetChanged()
+        }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                text = searchEditText.text.toString()
-                visibilityItem(s)
-            }
+        // кнопка обновить поиск
+        updateButton.setOnClickListener {
+            search()
+        }
 
-            private fun visibilityItem(s: CharSequence?) {
-                if (!s.isNullOrEmpty()) {
-                    clearButton.visibility = View.VISIBLE
-                } else {
-                    clearButton.visibility = View.GONE
-                }
-            }
-            override fun afterTextChanged(s: Editable?) {
+        // читать текст ввода
+        val simpleTextWatcher = searchEditText.doOnTextChanged { text, _, _, _ ->
+            this@SearchActivity.text = text.toString()
+            if (!text.isNullOrEmpty()) {
+                clearButton.visibility = View.VISIBLE
+            } else {
+                clearButton.visibility = View.GONE
             }
         }
         searchEditText.addTextChangedListener(simpleTextWatcher)
@@ -115,10 +118,66 @@ class SearchActivity : AppCompatActivity() {
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
         val searchEditText = findViewById<EditText>(R.id.search)
         super.onRestoreInstanceState(savedInstanceState)
         text = savedInstanceState.getString(SEARCH_EDIT_TEXT).toString()
         searchEditText.setText(text)
+    }
+
+    // поквзать сообщение об ошибке
+    private fun showMessage(text: String, additionalMessage: String) {
+        if (text.isNotEmpty()) {
+            placeholder.visibility = View.VISIBLE
+            placeholderNoConnection.visibility = View.GONE
+            placeholderNothingFound.visibility = View.VISIBLE
+            tracksList.clear()
+            trackAdapter.notifyDataSetChanged()
+            placeholderError.text = text
+            if (additionalMessage.isNotEmpty()) {
+                placeholderNothingFound.visibility = View.GONE
+                placeholderNoConnection.visibility = View.VISIBLE
+                updateButton.visibility = View.VISIBLE
+            } else {
+                updateButton.visibility = View.GONE
+            }
+        } else {
+            placeholder.visibility = View.GONE
+        }
+    }
+
+    private fun search() {
+        if (searchEditText.text.isNotEmpty()) {
+            tracksService.search(searchEditText.text.toString()).enqueue(object :
+                Callback<TracksResponse> {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<TracksResponse>,
+                    response: Response<TracksResponse>
+                ) {
+                    if (response.code() == 200) {
+                        tracksList.clear()
+                        if (response.body()?.results?.isNotEmpty() == true) {
+                            tracksList.addAll(response.body()?.results!!)
+                            trackAdapter.notifyDataSetChanged()
+                        }
+                        if (tracksList.isEmpty()) {
+                            showMessage(getString(R.string.nothing_found), "")
+                        } else {
+                            showMessage("", "")
+                        }
+                    } else {
+                        showMessage(
+                            getString(R.string.something_went_wrong),
+                            response.code().toString()
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                    showMessage(getString(R.string.something_went_wrong), t.message.toString())
+                }
+
+            })
+        }
     }
 }
