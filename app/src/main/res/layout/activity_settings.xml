@@ -19,7 +19,7 @@
         style="@style/MyToolbar" />
 ‹
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/llSettingsActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/icon_5"
@@ -50,7 +50,7 @@
             android:layout_height="match_parent" >
 
             <TextView
-                android:id="@+id/shareApp"
+                android:id="@+id/tvShareApp"
                 style="@style/settingsButtonText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
             <TextView
-                android:id="@+id/sendSupport"
+                android:id="@+id/tvSendSupport"
                 style="@style/settingsButtonText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
             <TextView
-                android:id="@+id/userAgreement"
+                android:id="@+id/tvUserAgreement"
                 style="@style/settingsButtonText"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"

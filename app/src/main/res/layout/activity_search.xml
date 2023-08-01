@@ -36,7 +36,7 @@
             tools:layout_editor_absoluteX="@dimen/icon_16">
 
             <EditText
-                android:id="@+id/search"
+                android:id="@+id/buttonSearch"
                 style="@style/searchEditText"
                 android:background="@drawable/ic_radius_background"
                 android:drawableStart="@drawable/search_textedit_vector"
@@ -48,7 +48,7 @@
                 tools:ignore="Autofill"/>
 
             <ImageView
-                android:id="@+id/clearButton"
+                android:id="@+id/ivClearButton"
                 android:src="@drawable/close_vector"
                 style="@style/searchCloseEditText"
                 android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
         </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/rvTracks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -82,28 +82,28 @@
             android:layout_marginEnd="@dimen/icon_24"
             tools:ignore="UseCompoundDrawables">
             <ImageView
-                android:id="@+id/noConnectionImage"
+                android:id="@+id/ivNoConnectionImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 style="@style/search_noConnectionImage"
                 tools:ignore="ContentDescription" />
             <ImageView
-                android:id="@+id/nothingFoundImage"
+                android:id="@+id/ivNothingFoundImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 style="@style/search_nothingFoundImage"
                 tools:ignore="ContentDescription" />
             <TextView
-                android:id="@+id/errorMessage"
+                android:id="@+id/tvErrorMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 style="@style/search_errorMessage"
                 android:layout_marginTop="@dimen/icon_20"/>
             <Button
-                android:id="@+id/updateButton"
+                android:id="@+id/buttonUpdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

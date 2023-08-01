@@ -14,10 +14,10 @@ import java.util.*
 class TrackViewHolder(parent: ViewGroup):
     RecyclerView.ViewHolder(LayoutInflater.from(parent.context)
         .inflate(R.layout.track_view, parent, false)) {
-    var trackName: TextView = itemView.findViewById(R.id.track_name)
-    var trackArtist: TextView = itemView.findViewById(R.id.track_artist)
-    var trackTime: TextView = itemView.findViewById(R.id.track_time)
-    private var trackImage: ImageView = itemView.findViewById(R.id.track_image)
+    var trackName: TextView = itemView.findViewById(R.id.tvTrackName)
+    var trackArtist: TextView = itemView.findViewById(R.id.tvTrackArtist)
+    var trackTime: TextView = itemView.findViewById(R.id.tvTrackTime)
+    private var trackImage: ImageView = itemView.findViewById(R.id.ivTrack)
 
     fun bind(track: Track) {
         trackName.text = track.trackName

@@ -7,7 +7,7 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/track_image"
+        android:id="@+id/ivTrack"
         android:layout_width="@dimen/icon_45"
         android:layout_height="@dimen/icon_45"
         style="@style/track_cardView"
@@ -27,7 +27,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/track_name"
+            android:id="@+id/tvTrackName"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             style="@style/track_name"
@@ -41,14 +41,14 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/track_artist"
+                android:id="@+id/tvTrackArtist"
                 style="@style/track_artist"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content" />
 
             <ImageView
-                android:id="@+id/track_separator"
+                android:id="@+id/ivTrackSeparator"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 style="@style/track_separator"
@@ -59,7 +59,7 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/track_time"
+                android:id="@+id/tvTrackTime"
                 style="@style/track_artist"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content" />
@@ -67,7 +67,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/icon_arrow"
+        android:id="@+id/ivIconArrow"
         style="@style/track_icon_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
