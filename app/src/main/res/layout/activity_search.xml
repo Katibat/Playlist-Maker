@@ -36,17 +36,19 @@
             tools:layout_editor_absoluteX="@dimen/icon_16">
 
             <EditText
-                android:id="@+id/search"
+                android:id="@+id/buttonSearch"
                 style="@style/searchEditText"
                 android:background="@drawable/ic_radius_background"
                 android:drawableStart="@drawable/search_textedit_vector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
                 android:hint="@string/search"
                 tools:ignore="Autofill"/>
 
             <ImageView
-                android:id="@+id/clearButton"
+                android:id="@+id/ivClearButton"
                 android:src="@drawable/close_vector"
                 style="@style/searchCloseEditText"
                 android:layout_width="wrap_content"
@@ -58,15 +60,58 @@
         </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/rvTracks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             style="@style/recyclerView"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:paddingHorizontal="2dp"
-            android:paddingTop="30dp"
+            android:paddingTop="@dimen/icon_20"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout"
             tools:listitem="@layout/track_view" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="110dp"
+            android:layout_marginStart="@dimen/icon_24"
+            android:layout_marginEnd="@dimen/icon_24"
+            tools:ignore="UseCompoundDrawables">
+            <ImageView
+                android:id="@+id/ivNoConnectionImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                style="@style/search_noConnectionImage"
+                tools:ignore="ContentDescription" />
+            <ImageView
+                android:id="@+id/ivNothingFoundImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                style="@style/search_nothingFoundImage"
+                tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/tvErrorMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                style="@style/search_errorMessage"
+                android:layout_marginTop="@dimen/icon_20"/>
+            <Button
+                android:id="@+id/buttonUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/icon_10"
+                android:text="@string/update"
+                style="@style/search_buttonUpdate"
+                app:cornerRadius="54dp" />
+        </LinearLayout>
+
+        </LinearLayout>
 </LinearLayout>

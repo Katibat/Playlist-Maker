@@ -19,7 +19,7 @@
         android:layout_marginBottom="@dimen/icon_24" />
 
     <Button
-        android:id="@+id/search"
+        android:id="@+id/buttonSearch"
         style="@style/mainButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -32,7 +32,7 @@
         app:icon="@drawable/search_vector" />
 
     <Button
-        android:id="@+id/media"
+        android:id="@+id/buttonMedia"
         style="@style/mainButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -45,7 +45,7 @@
         app:icon="@drawable/media_vector" />
 
     <Button
-        android:id="@+id/settings"
+        android:id="@+id/buttonSettings"
         style="@style/mainButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"

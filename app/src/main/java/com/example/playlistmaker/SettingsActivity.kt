@@ -18,9 +18,9 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
-        val shareApp = findViewById<TextView>(R.id.shareApp)
-        val sendSupport = findViewById<TextView>(R.id.sendSupport)
-        val userAgreement = findViewById<TextView>(R.id.userAgreement)
+        val shareApp = findViewById<TextView>(R.id.tvShareApp)
+        val sendSupport = findViewById<TextView>(R.id.tvSendSupport)
+        val userAgreement = findViewById<TextView>(R.id.tvUserAgreement)
         val themeSwitch = findViewById<Switch>(R.id.switchTheme)
 
         // Настройка Toolbar
