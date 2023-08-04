@@ -49,6 +49,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val tracksService = retrofit.create(TracksApi::class.java)
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
