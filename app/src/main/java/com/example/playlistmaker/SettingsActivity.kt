@@ -5,11 +5,10 @@ import android.content.Intent
 import android.content.Intent.*
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -21,7 +20,7 @@ class SettingsActivity : AppCompatActivity() {
         val shareApp = findViewById<TextView>(R.id.tvShareApp)
         val sendSupport = findViewById<TextView>(R.id.tvSendSupport)
         val userAgreement = findViewById<TextView>(R.id.tvUserAgreement)
-        val themeSwitch = findViewById<Switch>(R.id.switchTheme)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.switchTheme)
 
         // Настройка Toolbar
         setSupportActionBar(toolbar)
@@ -32,11 +31,11 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         // Настройка switch "Темная тема"
-        themeSwitch.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                true -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                false -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
+        if ((applicationContext as App).darkTheme) {
+            themeSwitcher.isChecked = true;
         }
 
         // Настройка кнопки "Поделиться приложением"

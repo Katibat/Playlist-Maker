@@ -1,117 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/settingsLinearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".SearchActivity">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:titleTextAppearance="@style/ToolbarTextAppearance.Title"
-        style="@style/MyToolbar" />
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        style="@style/settingsLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:ignore="MissingConstraints">
+        tools:context=".SearchActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/MyToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:titleTextAppearance="@style/ToolbarTextAppearance.Title" />
 
         <FrameLayout
             android:id="@+id/frameLayout"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             style="@style/settingsFrame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/icon_16"
             android:layout_marginEnd="@dimen/icon_16"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             tools:layout_editor_absoluteX="@dimen/icon_16">
 
             <EditText
                 android:id="@+id/buttonSearch"
                 style="@style/searchEditText"
-                android:background="@drawable/ic_radius_background"
-                android:drawableStart="@drawable/search_textedit_vector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/ic_radius_background"
+                android:drawableStart="@drawable/search_textedit_vector"
+                android:hint="@string/search"
                 android:imeOptions="actionDone"
                 android:singleLine="true"
-                android:hint="@string/search"
-                tools:ignore="Autofill"/>
+                tools:ignore="Autofill" />
 
             <ImageView
                 android:id="@+id/ivClearButton"
-                android:src="@drawable/close_vector"
                 style="@style/searchCloseEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="@dimen/icon_12"
                 android:layout_marginEnd="@dimen/icon_14"
+                android:src="@drawable/close_vector"
                 tools:ignore="ContentDescription" />
         </FrameLayout>
 
+        <TextView
+            android:id="@+id/tvTittleHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/user_search_history"
+            android:layout_marginTop="26dp"
+            style="@style/tvTittleHistory" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTracks"
+            style="@style/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            style="@style/recyclerView"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:paddingHorizontal="2dp"
             android:paddingTop="@dimen/icon_20"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@+id/frameLayout"
             tools:listitem="@layout/track_view" />
+
+        <Button
+            android:id="@+id/buttonClearHistory"
+            style="@style/search_buttonUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/icon_10"
+            android:text="@string/search_clear_history"
+            app:cornerRadius="54dp" />
 
         <LinearLayout
             android:id="@+id/placeholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="110dp"
             android:layout_marginStart="@dimen/icon_24"
+            android:layout_marginTop="110dp"
             android:layout_marginEnd="@dimen/icon_24"
+            android:orientation="vertical"
             tools:ignore="UseCompoundDrawables">
+
             <ImageView
                 android:id="@+id/ivNoConnectionImage"
+                style="@style/search_noConnectionImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                style="@style/search_noConnectionImage"
                 tools:ignore="ContentDescription" />
+
             <ImageView
                 android:id="@+id/ivNothingFoundImage"
+                style="@style/search_nothingFoundImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                style="@style/search_nothingFoundImage"
                 tools:ignore="ContentDescription" />
+
             <TextView
                 android:id="@+id/tvErrorMessage"
+                style="@style/search_errorMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                style="@style/search_errorMessage"
-                android:layout_marginTop="@dimen/icon_20"/>
+                android:layout_marginTop="@dimen/icon_20"
+                android:orientation="vertical" />
+
             <Button
                 android:id="@+id/buttonUpdate"
+                style="@style/search_buttonUpdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/icon_10"
                 android:text="@string/update"
-                style="@style/search_buttonUpdate"
                 app:cornerRadius="54dp" />
-        </LinearLayout>
 
         </LinearLayout>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>
