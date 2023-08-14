@@ -24,5 +24,6 @@
     <dimen name="icon_300">300dp</dimen>
     <dimen name="text_11">11sp</dimen>
     <dimen name="text_16">16sp</dimen>
+    <dimen name="text_19">19sp</dimen>
     <dimen name="text_22">22sp</dimen>
 </resources>

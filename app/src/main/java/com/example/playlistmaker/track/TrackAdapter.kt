@@ -2,14 +2,19 @@ package com.example.playlistmaker.track
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.SearchHistory.addTrackInHistoryList
 
-class TrackAdapter(private var tracksList: ArrayList<Track>) : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>() {
+    var tracksList = ArrayList<Track>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             TrackViewHolder = TrackViewHolder(parent)
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracksList[position])
+        holder.itemView.setOnClickListener {
+            addTrackInHistoryList(tracksList[position])
+        }
     }
 
     override fun getItemCount(): Int = tracksList.size
