@@ -28,7 +28,7 @@ class SearchActivity : AppCompatActivity() {
     private var historyList = ArrayList<Track>()
     private var trackAdapter: TrackAdapter? = null
     private val interceptor = HttpLoggingInterceptor()
-    private lateinit var searchEditText: EditText
+    private var searchEditText: EditText? = null
     private var placeholder: LinearLayout? = null
     private var placeholderNoConnection: ImageView? = null
     private var placeholderNothingFound: ImageView? = null
@@ -84,12 +84,12 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // фокусирование на вводе текста
-        searchEditText.setOnFocusChangeListener { _, hasFocus ->
+        searchEditText?.setOnFocusChangeListener { _, hasFocus ->
             focusVisibility(hasFocus)
         }
 
         // найти track по введенному пользователем тексту
-        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+        searchEditText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 search()
                 true
@@ -100,8 +100,8 @@ class SearchActivity : AppCompatActivity() {
         // кнопка очистить поиск
         clearButton.setOnClickListener {
             val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(searchEditText.windowToken, 0)
-            searchEditText.setText("")
+            inputMethodManager.hideSoftInputFromWindow(searchEditText?.windowToken, 0)
+            searchEditText?.setText("")
             tracksList.clear()
             placeholder?.visibility = View.GONE
             showHistory()
@@ -132,7 +132,7 @@ class SearchActivity : AppCompatActivity() {
                 clearButton.visibility = View.GONE
             }
         }
-        searchEditText.addTextChangedListener(simpleTextWatcher)
+        searchEditText?.addTextChangedListener(simpleTextWatcher)
     }
 
     // Сохранение строки для одного цикла жизни
@@ -173,8 +173,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun search() {
-        if (searchEditText.text.isNotEmpty()) {
-            tracksService.search(searchEditText.text.toString()).enqueue(object :
+        if (searchEditText?.text?.isNotEmpty() == true) {
+            tracksService.search(searchEditText?.text.toString()).enqueue(object :
                 Callback<TracksResponse> {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
@@ -224,7 +224,7 @@ class SearchActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun focusVisibility(hasFocus: Boolean) {
-        if (hasFocus && searchEditText.text?.isEmpty()!! && historyList.isNotEmpty()) {
+        if (hasFocus && searchEditText?.text?.isEmpty()!! && historyList.isNotEmpty()) {
             tittleHistory?.visibility = View.VISIBLE
             buttonClearHistory?.visibility = View.VISIBLE
         } else {

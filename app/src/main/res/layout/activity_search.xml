@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    style="@style/settingsLinearLayout"
+    android:orientation="vertical">
 
     <LinearLayout
         style="@style/settingsLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".SearchActivity">
+        tools:context=".SearchActivity"
+        tools:ignore="ScrollViewSize">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -25,7 +28,7 @@
             android:id="@+id/frameLayout"
             style="@style/settingsFrame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="@dimen/icon_16"
             android:layout_marginEnd="@dimen/icon_16"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
@@ -67,7 +70,7 @@
             android:id="@+id/rvTracks"
             style="@style/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingHorizontal="2dp"
             android:paddingTop="@dimen/icon_20"
@@ -88,7 +91,7 @@
         <LinearLayout
             android:id="@+id/placeholder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="@dimen/icon_24"
             android:layout_marginTop="110dp"
