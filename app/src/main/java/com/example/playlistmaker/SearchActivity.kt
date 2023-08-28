@@ -18,10 +18,6 @@ import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
-    companion object {
-        const val SEARCH_EDIT_TEXT = "SEARCH_EDIT_TEXT"
-        const val itunesBaseUrl = "https://itunes.apple.com"
-    }
 
     private var text: String = ""
     private val tracksList = ArrayList<Track>()
@@ -233,5 +229,10 @@ class SearchActivity : AppCompatActivity() {
         }
         trackAdapter?.tracksList = historyList
         trackAdapter?.notifyDataSetChanged()
+    }
+
+    companion object {
+        const val SEARCH_EDIT_TEXT = "SEARCH_EDIT_TEXT"
+        const val itunesBaseUrl = "https://itunes.apple.com"
     }
 }

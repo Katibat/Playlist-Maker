@@ -9,6 +9,7 @@ class App : Application() {
         const val PREFERENCES = "practicum_example_preferences"
         const val EDIT_TEXT_KEY = "key_for_edit_text"
         lateinit var sharedPrefs: SharedPreferences
+        const val TRACK = "track"
     }
 
     var darkTheme = false
