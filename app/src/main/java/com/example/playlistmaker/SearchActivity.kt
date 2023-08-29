@@ -8,9 +8,9 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.*
+import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.track.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,20 +18,12 @@ import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
-
+    private lateinit var binding: ActivitySearchBinding
     private var text: String = ""
     private val tracksList = ArrayList<Track>()
     private var historyList = ArrayList<Track>()
     private var trackAdapter: TrackAdapter? = null
     private val interceptor = HttpLoggingInterceptor()
-    private var searchEditText: EditText? = null
-    private var placeholder: LinearLayout? = null
-    private var placeholderNoConnection: ImageView? = null
-    private var placeholderNothingFound: ImageView? = null
-    private var placeholderError: TextView? = null
-    private var updateButton: Button? = null
-    private var tittleHistory: TextView? = null
-    private var buttonClearHistory: Button? = null
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(interceptor)
@@ -48,22 +40,12 @@ class SearchActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        searchEditText = findViewById(R.id.buttonSearch)
-        val clearButton = findViewById<ImageView>(R.id.ivClearButton)
-        val recyclerView = findViewById<RecyclerView>(R.id.rvTracks)
-        placeholder = findViewById(R.id.placeholder)
-        placeholderNoConnection = findViewById(R.id.ivNoConnectionImage)
-        placeholderNothingFound = findViewById(R.id.ivNothingFoundImage)
-        placeholderError = findViewById(R.id.tvErrorMessage)
-        updateButton = findViewById(R.id.buttonUpdate)
-        tittleHistory = findViewById(R.id.tvTittleHistory)
-        buttonClearHistory = findViewById(R.id.buttonClearHistory)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Recycler View
         trackAdapter = TrackAdapter()
-        recyclerView.adapter = trackAdapter
+        binding.rvTracks.adapter = trackAdapter
         trackAdapter!!.tracksList = tracksList
         historyList.clear()
         historyList = SearchHistory.getHistory()
@@ -71,8 +53,8 @@ class SearchActivity : AppCompatActivity() {
         // OkHTTP
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
-        // Настроить Toolbar
-        setSupportActionBar(toolbar)
+        // Настройка Toolbar
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             title = getString(R.string.search)
             setDisplayHomeAsUpEnabled(true)
@@ -80,12 +62,12 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // фокусирование на вводе текста
-        searchEditText?.setOnFocusChangeListener { _, hasFocus ->
+        binding.buttonSearch.setOnFocusChangeListener { _, hasFocus ->
             focusVisibility(hasFocus)
         }
 
         // найти track по введенному пользователем тексту
-        searchEditText?.setOnEditorActionListener { _, actionId, _ ->
+        binding.buttonSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 search()
                 true
@@ -94,23 +76,23 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // кнопка очистить поиск
-        clearButton.setOnClickListener {
+        binding.ivClearButton.setOnClickListener {
             val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(searchEditText?.windowToken, 0)
-            searchEditText?.setText("")
+            inputMethodManager.hideSoftInputFromWindow(binding.buttonSearch.windowToken, 0)
+            binding.buttonSearch.setText("")
             tracksList.clear()
-            placeholder?.visibility = View.GONE
+            binding.placeholder.visibility = View.GONE
             showHistory()
             trackAdapter?.notifyDataSetChanged()
         }
 
         // кнопка обновить поиск
-        updateButton?.setOnClickListener {
+        binding.buttonUpdate.setOnClickListener {
             search()
         }
 
         // кнопка очистить историю поиска
-        buttonClearHistory?.setOnClickListener {
+        binding.buttonClearHistory.setOnClickListener {
             SearchHistory.clearHistoryList()
             historyList.clear()
             goneHistoryButtons()
@@ -118,17 +100,17 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // читать текст ввода
-        val simpleTextWatcher = searchEditText?.doOnTextChanged { text, _, _, _ ->
+        val simpleTextWatcher = binding.buttonSearch.doOnTextChanged { text, _, _, _ ->
             this@SearchActivity.text = text.toString()
             if (!text.isNullOrEmpty()) {
-                clearButton.visibility = View.VISIBLE
+                binding.ivClearButton.visibility = View.VISIBLE
                 goneHistoryButtons()
                 trackAdapter?.tracksList = tracksList
             } else {
-                clearButton.visibility = View.GONE
+                binding.ivClearButton.visibility = View.GONE
             }
         }
-        searchEditText?.addTextChangedListener(simpleTextWatcher)
+        binding.buttonSearch.addTextChangedListener(simpleTextWatcher)
     }
 
     // Сохранение строки для одного цикла жизни
@@ -150,27 +132,27 @@ class SearchActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
-            placeholder?.visibility = View.VISIBLE
-            placeholderNoConnection?.visibility = View.GONE
-            placeholderNothingFound?.visibility = View.VISIBLE
+            binding.placeholder.visibility = View.VISIBLE
+            binding.ivNoConnectionImage.visibility = View.GONE
+            binding.ivNothingFoundImage.visibility = View.VISIBLE
             tracksList.clear()
             trackAdapter?.notifyDataSetChanged()
-            placeholderError?.text = text
+            binding.tvErrorMessage.text = text
             if (additionalMessage.isNotEmpty()) {
-                placeholderNothingFound?.visibility = View.GONE
-                placeholderNoConnection?.visibility = View.VISIBLE
-                updateButton?.visibility = View.VISIBLE
+                binding.ivNothingFoundImage.visibility = View.GONE
+                binding.ivNoConnectionImage.visibility = View.VISIBLE
+                binding.buttonUpdate.visibility = View.VISIBLE
             } else {
-                updateButton?.visibility = View.GONE
+                binding.buttonUpdate.visibility = View.GONE
             }
         } else {
-            placeholder?.visibility = View.GONE
+            binding.placeholder.visibility = View.GONE
         }
     }
 
     private fun search() {
-        if (searchEditText?.text?.isNotEmpty() == true) {
-            tracksService.search(searchEditText?.text.toString()).enqueue(object :
+        if (binding.buttonSearch.text?.isNotEmpty() == true) {
+            tracksService.search(binding.buttonSearch.text.toString()).enqueue(object :
                 Callback<TracksResponse> {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
@@ -205,14 +187,14 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun goneHistoryButtons() {
-        tittleHistory?.visibility = View.GONE
-        buttonClearHistory?.visibility = View.GONE
+        binding.tvTittleHistory.visibility = View.GONE
+        binding.buttonClearHistory.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showHistory() {
-        tittleHistory?.visibility = View.VISIBLE
-        buttonClearHistory?.visibility = View.VISIBLE
+        binding.tvTittleHistory.visibility = View.VISIBLE
+        binding.buttonClearHistory.visibility = View.VISIBLE
         historyList = SearchHistory.getHistory()
         trackAdapter?.tracksList = historyList
         trackAdapter?.notifyDataSetChanged()
@@ -220,12 +202,12 @@ class SearchActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun focusVisibility(hasFocus: Boolean) {
-        if (hasFocus && searchEditText?.text?.isEmpty()!! && historyList.isNotEmpty()) {
-            tittleHistory?.visibility = View.VISIBLE
-            buttonClearHistory?.visibility = View.VISIBLE
+        if (hasFocus && binding.buttonSearch.text?.isEmpty()!! && historyList.isNotEmpty()) {
+            binding.tvTittleHistory.visibility = View.VISIBLE
+            binding.buttonClearHistory.visibility = View.VISIBLE
         } else {
-            tittleHistory?.visibility = View.GONE
-            buttonClearHistory?.visibility = View.GONE
+            binding.tvTittleHistory.visibility = View.GONE
+            binding.buttonClearHistory.visibility = View.GONE
         }
         trackAdapter?.tracksList = historyList
         trackAdapter?.notifyDataSetChanged()

@@ -3,9 +3,9 @@ package com.example.playlistmaker.track
 import android.content.Intent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.App.Companion.TRACK
 import com.example.playlistmaker.AudioPlayerActivity
 import com.example.playlistmaker.SearchHistory.addTrackInHistoryList
+import com.example.playlistmaker.track.Track.Companion.TRACK
 
 class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
     var tracksList = ArrayList<Track>()

@@ -5,25 +5,20 @@ import android.content.Intent
 import android.content.Intent.*
 import android.net.Uri
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import com.google.android.material.switchmaterial.SwitchMaterial
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySettingsBinding
 
     @SuppressLint("MissingInflatedId", "UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        val shareApp = findViewById<TextView>(R.id.tvShareApp)
-        val sendSupport = findViewById<TextView>(R.id.tvSendSupport)
-        val userAgreement = findViewById<TextView>(R.id.tvUserAgreement)
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.switchTheme)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Настройка Toolbar
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             title = getString(R.string.settings)
             setDisplayHomeAsUpEnabled(true)
@@ -31,15 +26,15 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         // Настройка switch "Темная тема"
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+        binding.switchTheme.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
         }
         if ((applicationContext as App).darkTheme) {
-            themeSwitcher.isChecked = true;
+            binding.switchTheme.isChecked = true;
         }
 
         // Настройка кнопки "Поделиться приложением"
-        shareApp.setOnClickListener {
+        binding.tvShareApp.setOnClickListener {
             val sendIntent: Intent = Intent().apply {
                 action = ACTION_SEND
                 putExtra(EXTRA_TEXT, getString(R.string.url_android_developer))
@@ -50,7 +45,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         // Настройка кнопки "Написать в поддержку"
-        sendSupport.setOnClickListener {
+        binding.tvSendSupport.setOnClickListener {
             Intent().apply {
                 action = ACTION_SENDTO
                 data = Uri.parse("mailto:")
@@ -62,7 +57,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         // Настройка кнопки "Пользовательское соглашение"
-        userAgreement.setOnClickListener {
+        binding.tvUserAgreement.setOnClickListener {
             val sendIntent: Intent = Intent().apply {
                 action = ACTION_VIEW
                 data = Uri.parse(getString(R.string.url_oferta))
