@@ -5,11 +5,6 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 
 class App : Application() {
-    companion object {
-        const val PREFERENCES = "practicum_example_preferences"
-        const val EDIT_TEXT_KEY = "key_for_edit_text"
-        lateinit var sharedPrefs: SharedPreferences
-    }
 
     var darkTheme = false
 
@@ -32,5 +27,11 @@ class App : Application() {
         sharedPrefs.edit()
             .putBoolean(EDIT_TEXT_KEY, darkTheme)
             .apply()
+    }
+
+    companion object {
+        const val PREFERENCES = "practicum_example_preferences"
+        const val EDIT_TEXT_KEY = "key_for_edit_text"
+        lateinit var sharedPrefs: SharedPreferences
     }
 }

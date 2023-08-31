@@ -178,4 +178,48 @@
         <item name="android:visibility">gone</item>
     </style>
 
+    // AUDIO PLAYER
+
+    <style name="audio_player_track_name">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/dark_theme_item</item>
+        <item name="android:textSize">@dimen/text_22</item>
+    </style>
+
+    <style name="audio_player_track_artist">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/dark_theme_item</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="audio_player_time_track">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/dark_theme_item</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="audio_player_tittles">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="audio_player_track_content" >
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/dark_theme_item</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="audio_player_button_play" >
+        <item name="android:src">@drawable/audio_player_play</item>
+    </style>
+
+    <style name="audio_player_button_add" >
+        <item name="android:src">@drawable/audio_player_add_track</item>
+    </style>
+
+    <style name="audio_player_button_like" >
+        <item name="android:src">@drawable/audio_player_like</item>
+    </style>
+
 </resources>

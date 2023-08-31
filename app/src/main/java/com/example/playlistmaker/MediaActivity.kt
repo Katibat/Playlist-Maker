@@ -2,17 +2,18 @@ package com.example.playlistmaker
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.example.playlistmaker.databinding.ActivityMediaBinding
 
 class MediaActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMediaBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_media)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        binding = ActivityMediaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Настройка Toolbar
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             title = getString(R.string.media)
             setDisplayHomeAsUpEnabled(true)

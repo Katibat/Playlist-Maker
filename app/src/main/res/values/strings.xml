@@ -19,6 +19,11 @@
     <string name="update">Обновить</string>
     <string name="user_search_history">Вы искали</string>
     <string name="search_clear_history">Очистить историю</string>
+    <string name="player_duration">Длительность</string>
+    <string name="player_album">Альбом</string>
+    <string name="player_year">Год</string>
+    <string name="player_genre">Жанр</string>
+    <string name="player_country">Страна</string>
 
     // системные строки
     <string name="messages_header" />
