@@ -1,7 +1,6 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,8 +14,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.*
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.track.*
-import com.example.playlistmaker.track.Track.Companion.TRACK
-import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.*
@@ -27,7 +24,7 @@ class SearchActivity : AppCompatActivity() {
     private var text: String = ""
     private val tracksList = ArrayList<Track>()
     private var historyList = ArrayList<Track>()
-    private var trackAdapter: TrackAdapter? = null
+    private lateinit var trackAdapter: TrackAdapter
     private val interceptor = HttpLoggingInterceptor()
 
     private val client = OkHttpClient.Builder()
@@ -53,17 +50,19 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        trackAdapter = TrackAdapter {
-            if (clickDebounce()) {
-                val intent = Intent(this, AudioPlayerActivity::class.java)
-                intent.putExtra(TRACK, Gson().toJson(it))
-                startActivity(intent)
-            }
-        }
+//        trackAdapter = TrackAdapter {
+//            if(clickDebounce()) {
+//                val intent = Intent(this, AudioPlayerActivity::class.java)
+//                intent.putExtra(TRACK, Gson().toJson(it))
+//                startActivity(intent)
+//            }
+//        }
+
+        trackAdapter = TrackAdapter()
 
         // Recycler View
         binding.rvTracks.adapter = trackAdapter
-        trackAdapter!!.tracksList = tracksList
+        trackAdapter.tracksList = tracksList
         historyList.clear()
         historyList = SearchHistory.getHistory()
 
@@ -182,6 +181,7 @@ class SearchActivity : AppCompatActivity() {
                     if (response.code() == 200) {
                         binding.progressBar.visibility = View.GONE
                         tracksList.clear()
+                    }
                         if (response.body()?.results?.isNotEmpty() == true) {
                             binding.rvTracks.visibility = View.VISIBLE
                             tracksList.addAll(response.body()?.results!!)
@@ -195,7 +195,6 @@ class SearchActivity : AppCompatActivity() {
                             showMessage("", "")
                         }
                     }
-                }
 
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
                     binding.progressBar.visibility = View.GONE
