@@ -12,4 +12,5 @@
     <color name="light_gray">#959FAE</color>
     <color name="dark_theme_item">#1A1B22</color>
     <color name="switch_track">#E6E8EB</color>
+    <color name="progressBar">#6200EE</color>
 </resources>

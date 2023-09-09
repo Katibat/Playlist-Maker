@@ -59,6 +59,15 @@
                 tools:ignore="ContentDescription" />
         </FrameLayout>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="248dp"
+            android:indeterminateTint="@color/progressBar"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/tvTittleHistory"
             android:layout_width="match_parent"
