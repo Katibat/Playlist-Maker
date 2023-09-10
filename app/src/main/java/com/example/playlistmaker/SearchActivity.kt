@@ -61,7 +61,6 @@ class SearchActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-//        trackAdapter = TrackAdapter()
 
         // Recycler View
         trackAdapter.tracksList = tracksList

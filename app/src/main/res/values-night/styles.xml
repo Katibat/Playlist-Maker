@@ -220,6 +220,7 @@
 
     <style name="audio_player_button_play" >
         <item name="android:src">@drawable/audio_player_play_dark</item>
+        <item name="android:tint">@color/white</item>
     </style>
 
     <style name="audio_player_button_add" >

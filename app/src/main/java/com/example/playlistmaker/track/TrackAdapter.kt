@@ -4,7 +4,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.SearchHistory.addTrackInHistoryList
 
-//class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 class TrackAdapter(private val clickListener: TrackClickListener) :
         RecyclerView.Adapter<TrackViewHolder>() {
     var tracksList = ArrayList<Track>()
@@ -19,16 +18,6 @@ class TrackAdapter(private val clickListener: TrackClickListener) :
             clickListener.onTrackClick(tracksList[position])
         }
     }
-
-//    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-//        holder.bind(tracksList[position])
-//        holder.itemView.setOnClickListener {
-//            addTrackInHistoryList(tracksList[position])
-//            val intent = Intent(it.context, AudioPlayerActivity::class.java)
-//            intent.putExtra(TRACK, tracksList[position])
-//            it.context.startActivity(intent)
-//        }
-//    }
 
     override fun getItemCount(): Int = tracksList.size
 

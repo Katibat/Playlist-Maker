@@ -21,12 +21,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     private var mediaPlayer = MediaPlayer()
     private val handler = Handler(Looper.getMainLooper())
     private val runnable = createUpdateTimerTrack()
-//    private val runnable: Runnable by lazy {
-//        Runnable {
-//            binding.tvDurationTrack.text = getTrackTimeMillis(mediaPlayer.currentPosition.toLong())
-//            handler.postDelayed(runnable, DELAY)
-//        }
-//    }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,16 +37,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
         val track = intent.getParcelableExtra<Track>(TRACK)!!
-//        val track =
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//                intent.getParcelableExtra(TRACK, Track::class.java)
-//            } else {
-//                @Suppress("DEPRECATION") intent.getSerializableExtra(TRACK)
-//            } as Track
-
-//        val json = intent.getStringExtra(TRACK)!!
-//        val track = Gson().fromJson(json, Track::class.java)
-        if (track != null) {
+        if (track != null) { // обработать ошибку NullPointerException
             playTrack(track)
             if (track.previewUrl?.isNotEmpty() == true) {
                 preparePlayer(track.previewUrl)
@@ -119,7 +104,11 @@ class AudioPlayerActivity : AppCompatActivity() {
             playerState = STATE_PREPARED
         }
         mediaPlayer.setOnCompletionListener {
-            binding.ivPlayTrack.setImageResource(R.drawable.audio_player_play)
+            if (!(applicationContext as App).darkTheme) {
+                binding.ivPlayTrack.setImageResource(R.drawable.audio_player_play)
+            } else {
+                binding.ivPlayTrack.setImageResource(R.drawable.audio_player_play_dark)
+            }
             playerState = STATE_PREPARED
             binding.tvDurationTrack.setText(R.string.player_start_play_time)
             handler.removeCallbacks(runnable)
@@ -129,7 +118,11 @@ class AudioPlayerActivity : AppCompatActivity() {
     private fun startPlayer(track: Track) {
         if (track.previewUrl?.isNotEmpty() == true) {
             mediaPlayer.start()
+            if (!(applicationContext as App).darkTheme) {
             binding.ivPlayTrack.setImageResource(R.drawable.audio_player_pause)
+            } else {
+                binding.ivPlayTrack.setImageResource(R.drawable.audio_player_pause_dark)
+            }
             playerState = STATE_PLAYING
             handler.post(runnable)
         }
@@ -137,7 +130,11 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun pausePlayer() {
         mediaPlayer.pause()
-        binding.ivPlayTrack.setImageResource(R.drawable.audio_player_play)
+        if (!(applicationContext as App).darkTheme) {
+            binding.ivPlayTrack.setImageResource(R.drawable.audio_player_play)
+        } else {
+            binding.ivPlayTrack.setImageResource(R.drawable.audio_player_play_dark)
+        }
         playerState = STATE_PAUSED
         handler.removeCallbacks(runnable)
     }
