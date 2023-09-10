@@ -24,6 +24,7 @@
     <string name="player_year">Год</string>
     <string name="player_genre">Жанр</string>
     <string name="player_country">Страна</string>
+    <string name="player_start_play_time">00:00</string>
 
     // системные строки
     <string name="messages_header" />

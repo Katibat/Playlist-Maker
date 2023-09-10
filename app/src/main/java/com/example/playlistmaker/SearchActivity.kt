@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,6 +15,8 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.*
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.track.*
+import com.example.playlistmaker.track.Track.Companion.TRACK
+import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.*
@@ -50,19 +53,19 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        trackAdapter = TrackAdapter {
-//            if(clickDebounce()) {
-//                val intent = Intent(this, AudioPlayerActivity::class.java)
-//                intent.putExtra(TRACK, Gson().toJson(it))
-//                startActivity(intent)
-//            }
-//        }
-
-        trackAdapter = TrackAdapter()
+        trackAdapter = TrackAdapter {
+            SearchHistory.addTrackInHistoryList(it)
+            if (clickDebounce()) {
+                val intent = Intent(this, AudioPlayerActivity::class.java)
+                    .apply { putExtra(TRACK, it) }
+                startActivity(intent)
+            }
+        }
+//        trackAdapter = TrackAdapter()
 
         // Recycler View
-        binding.rvTracks.adapter = trackAdapter
         trackAdapter.tracksList = tracksList
+        binding.rvTracks.adapter = trackAdapter
         historyList.clear()
         historyList = SearchHistory.getHistory()
 
@@ -99,7 +102,7 @@ class SearchActivity : AppCompatActivity() {
             tracksList.clear()
             binding.placeholder.visibility = View.GONE
             showHistory()
-            trackAdapter?.notifyDataSetChanged()
+            trackAdapter.notifyDataSetChanged()
         }
 
         // кнопка обновить поиск
@@ -112,7 +115,7 @@ class SearchActivity : AppCompatActivity() {
             SearchHistory.clearHistoryList()
             historyList.clear()
             goneHistoryButtons()
-            trackAdapter?.notifyDataSetChanged()
+            trackAdapter.notifyDataSetChanged()
         }
 
         // читать текст ввода
@@ -122,7 +125,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.ivClearButton.visibility = View.VISIBLE
                 searchDebounce()
                 goneHistoryButtons()
-                trackAdapter?.tracksList = tracksList
+                trackAdapter.tracksList = tracksList
             } else {
                 binding.ivClearButton.visibility = View.GONE
             }
@@ -153,7 +156,7 @@ class SearchActivity : AppCompatActivity() {
             binding.ivNoConnectionImage.visibility = View.GONE
             binding.ivNothingFoundImage.visibility = View.VISIBLE
             tracksList.clear()
-            trackAdapter?.notifyDataSetChanged()
+            trackAdapter.notifyDataSetChanged()
             binding.tvErrorMessage.text = text
             if (additionalMessage.isNotEmpty()) {
                 binding.ivNothingFoundImage.visibility = View.GONE
@@ -170,9 +173,10 @@ class SearchActivity : AppCompatActivity() {
     private fun search() {
         if (binding.buttonSearch.text?.isNotEmpty() == true) {
             binding.progressBar.visibility = View.VISIBLE
-            binding.placeholder.visibility = View.GONE
-            tracksService.search(binding.buttonSearch.text.toString()).enqueue(object :
-                Callback<TracksResponse> {
+            binding.rvTracks.visibility = View.GONE
+            binding.ivNothingFoundImage.visibility = View.GONE
+            tracksService.search(binding.buttonSearch.text.toString())
+                .enqueue(object : Callback<TracksResponse> {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(
                     call: Call<TracksResponse>,
@@ -180,25 +184,26 @@ class SearchActivity : AppCompatActivity() {
                 ) {
                     if (response.code() == 200) {
                         binding.progressBar.visibility = View.GONE
+                        binding.rvTracks.visibility = View.VISIBLE
                         tracksList.clear()
                     }
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            binding.rvTracks.visibility = View.VISIBLE
-                            tracksList.addAll(response.body()?.results!!)
-                            trackAdapter?.notifyDataSetChanged()
-                        }
-                        if (tracksList.isEmpty()) {
-                            binding.progressBar.visibility = View.GONE
-                            binding.ivNothingFoundImage.visibility = View.VISIBLE
-                            showMessage(getString(R.string.nothing_found), "")
-                        } else {
-                            showMessage("", "")
-                        }
+                    if (response.body()?.results?.isNotEmpty() == true) {
+                        binding.rvTracks.visibility = View.VISIBLE
+                        tracksList.addAll(response.body()?.results!!)
+                        trackAdapter.notifyDataSetChanged()
                     }
+                    if (tracksList.isEmpty()) {
+                        showMessage(getString(R.string.nothing_found), "")
+                        binding.progressBar.visibility = View.GONE
+                        binding.ivNothingFoundImage.visibility = View.VISIBLE
+                    } else {
+                        showMessage("", "")
+                    }
+                }
 
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-                    binding.progressBar.visibility = View.GONE
                     showMessage(getString(R.string.something_went_wrong), t.message.toString())
+                    binding.progressBar.visibility = View.GONE
                 }
             })
         }
@@ -218,8 +223,8 @@ class SearchActivity : AppCompatActivity() {
             binding.tvTittleHistory.visibility = View.VISIBLE
             binding.buttonClearHistory.visibility = View.VISIBLE
             historyList = SearchHistory.getHistory()
-            trackAdapter?.tracksList = historyList
-            trackAdapter?.notifyDataSetChanged()
+            trackAdapter.tracksList = historyList
+            trackAdapter.notifyDataSetChanged()
         }
     }
 
@@ -232,11 +237,11 @@ class SearchActivity : AppCompatActivity() {
             binding.tvTittleHistory.visibility = View.GONE
             binding.buttonClearHistory.visibility = View.GONE
         }
-        trackAdapter?.tracksList = historyList
-        trackAdapter?.notifyDataSetChanged()
+        trackAdapter.tracksList = historyList
+        trackAdapter.notifyDataSetChanged()
     }
 
-    private fun clickDebounce() : Boolean {
+    private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
@@ -248,6 +253,14 @@ class SearchActivity : AppCompatActivity() {
     private fun searchDebounce() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun startPlayer(track: Track) {
+        val intent = Intent(this, AudioPlayerActivity::class.java)
+            .apply {
+                putExtra(TRACK, Gson().toJson(track))
+            }
+        startActivity(intent)
     }
 
     companion object {
