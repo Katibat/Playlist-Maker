@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.*
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.track.*
 import com.example.playlistmaker.track.Track.Companion.TRACK
-import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.*
@@ -135,8 +134,6 @@ class SearchActivity : AppCompatActivity() {
     // Сохранение строки для одного цикла жизни
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val searchEditText = findViewById<EditText>(R.id.buttonSearch).text.toString()
-        outState.putString(SEARCH_EDIT_TEXT, searchEditText)
         outState.putString(SEARCH_EDIT_TEXT, text)
     }
 
@@ -252,14 +249,6 @@ class SearchActivity : AppCompatActivity() {
     private fun searchDebounce() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-    }
-
-    private fun startPlayer(track: Track) {
-        val intent = Intent(this, AudioPlayerActivity::class.java)
-            .apply {
-                putExtra(TRACK, Gson().toJson(track))
-            }
-        startActivity(intent)
     }
 
     companion object {
