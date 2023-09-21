@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <Switch
                 android:id="@+id/switchTheme"
                 style="@style/switchTheme"
                 android:layout_width="match_parent"

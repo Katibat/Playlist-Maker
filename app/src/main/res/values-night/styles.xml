@@ -73,8 +73,8 @@
     </style>
 
     <style name="switchTheme">
-        <item name="android:thumbTint">@color/system_PM</item>
-        <item name="android:trackTint">@color/switch_track</item>
+        <item name="android:thumbTint">@color/switch_thumb_dark</item>
+        <item name="android:trackTint">@color/switch_track_dark</item>
         <item name="android:layout_marginEnd">@dimen/icon_6</item>
         <item name="android:paddingBottom">@dimen/icon_7</item>
     </style>
@@ -220,6 +220,7 @@
 
     <style name="audio_player_button_play" >
         <item name="android:src">@drawable/audio_player_play_dark</item>
+        <item name="android:tint">@color/white</item>
     </style>
 
     <style name="audio_player_button_add" >

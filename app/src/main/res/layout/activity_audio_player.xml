@@ -39,7 +39,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="82dp"
         android:layout_marginBottom="@dimen/icon_24"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toStartOf="@+id/left_guideline"
         app:layout_constraintStart_toEndOf="@+id/right_guideline"
         app:layout_constraintBottom_toTopOf="@+id/tvTittleTrackName"
