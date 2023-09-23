@@ -14,8 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.*
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.track.*
-import com.example.playlistmaker.track.Track.Companion.TRACK
+import com.example.playlistmaker.player.data.dto.TracksResponse
+import com.example.playlistmaker.player.data.network.TracksApi
+import com.example.playlistmaker.player.domain.models.Track
+import com.example.playlistmaker.player.domain.models.Track.Companion.TRACK
+import com.example.playlistmaker.player.presentation.AudioPlayerActivity
+import com.example.playlistmaker.player.presentation.TrackAdapter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.*

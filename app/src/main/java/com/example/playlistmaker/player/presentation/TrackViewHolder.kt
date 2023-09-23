@@ -1,4 +1,4 @@
-package com.example.playlistmaker.track
+package com.example.playlistmaker.player.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,8 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.App.Companion.getTrackTimeMillis
 import com.example.playlistmaker.R
+import com.example.playlistmaker.player.domain.models.Track
+import com.example.playlistmaker.utils.App.Companion.getTrackTimeMillis
 
 class TrackViewHolder(parent: ViewGroup):
     RecyclerView.ViewHolder(

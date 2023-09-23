@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.playlistmaker.utils.App
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
