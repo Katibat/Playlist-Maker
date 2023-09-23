@@ -132,6 +132,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.ivClearButton.visibility = View.GONE
             }
         }
+
         binding.buttonSearch.addTextChangedListener(simpleTextWatcher)
     }
 
@@ -142,13 +143,13 @@ class SearchActivity : AppCompatActivity() {
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        val searchEditText = findViewById<EditText>(R.id.buttonSearch)
         super.onRestoreInstanceState(savedInstanceState)
+        val searchEditText = findViewById<EditText>(R.id.buttonSearch)
         text = savedInstanceState.getString(SEARCH_EDIT_TEXT).toString()
         searchEditText.setText(text)
     }
 
-    // показать сообщение об ошибке
+        // показать сообщение об ошибке
     @SuppressLint("NotifyDataSetChanged")
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
