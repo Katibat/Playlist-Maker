@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken
 
 object SearchHistory {
     private const val HISTORY = "history"
-    private const val SIZE = 10
+    private const val SIZE_PAGE = 10
 
     fun getHistory(): ArrayList<Track> {
         var historyList = ArrayList<Track>()
@@ -24,7 +24,7 @@ object SearchHistory {
         if (historyList.contains(track)) {
             historyList.remove(track)
         }
-        if (historyList.size >= SIZE) {
+        if (historyList.size >= SIZE_PAGE) {
             historyList.removeAt(historyList.size - 1)
         }
         historyList.add(0, track)
