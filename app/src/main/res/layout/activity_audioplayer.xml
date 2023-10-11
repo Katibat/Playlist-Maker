@@ -6,7 +6,7 @@
     style="@style/settingsLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".player.presentation.AudioPlayerActivity">
+    tools:context=".player.ui.PlayerActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
