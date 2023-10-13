@@ -20,8 +20,8 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
     private val statePlayerLiveData = MutableLiveData<StatePlayer>()
     fun getStatePlayerLiveData(): LiveData<StatePlayer> = statePlayerLiveData
 
-    private val currentTimerLiveData = MutableLiveData<Long>()
-    fun getCurrentTimerLiveData(): LiveData<Long> = currentTimerLiveData
+    private val currentTimeLiveData = MutableLiveData<Long>()
+    fun getCurrentTimeLiveData(): LiveData<Long> = currentTimeLiveData
 
     init {
         interactor.switchedStatePlayer { state ->
@@ -44,24 +44,19 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
         }
     }
 
-    fun play() {
+    fun onStart() {
         interactor.startPlayer()
         handler.post(runnable)
         statePlayerLiveData.postValue(StatePlayer.PLAYING)
     }
 
-    fun pause() {
+    fun onPause() {
         handler.removeCallbacks(runnable)
         interactor.pausePlayer()
         statePlayerLiveData.postValue(StatePlayer.PAUSED)
     }
 
-    fun destroy() {
-        handler.removeCallbacks(runnable)
-    }
-
-    fun release() {
-        interactor.release()
+    fun onDestroy() {
         handler.removeCallbacks(runnable)
     }
 
@@ -74,7 +69,7 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
         return object : Runnable {
             override fun run() {
                 val position = interactor.getPosition()
-                currentTimerLiveData.postValue(position)
+                currentTimeLiveData.postValue(position)
                 handler.postDelayed(this, DELAY_MILLIS)
             }
         }

@@ -1,5 +1,6 @@
-package com.example.playlistmaker.player.ui
+package com.example.playlistmaker.search.ui
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -8,7 +9,8 @@ import com.example.playlistmaker.databinding.TrackViewBinding
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.utils.App.Companion.getTrackTimeMillis
 
-class TrackViewHolder(private val binding: TrackViewBinding): RecyclerView.ViewHolder(binding.root) {
+class TrackViewHolder(item: View) : RecyclerView.ViewHolder(item) {
+    private val binding = TrackViewBinding.bind(item)
 
     fun bind(track: Track) {
         binding.tvTrackName.text = track.trackName

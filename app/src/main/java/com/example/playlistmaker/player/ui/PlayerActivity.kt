@@ -9,9 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivityAudioplayerBinding
-import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.util.StatePlayer
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.Track.Companion.TRACK
@@ -21,9 +19,7 @@ import java.util.*
 
 class PlayerActivity : AppCompatActivity() {
     private var binding: ActivityAudioplayerBinding? = null
-
-    private val interactor: PlayerInteractor = Creator.providePlayerInteractor()
-    private lateinit var viewModel: PlayerViewModel
+    private var viewModel: PlayerViewModel? = null
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +47,7 @@ class PlayerActivity : AppCompatActivity() {
                 intent.getParcelableExtra(TRACK)
             } as Track
 
-        viewModel.getStatePlayerLiveData().observe(this) { state ->
+        viewModel?.getStatePlayerLiveData()?.observe(this) { state ->
             when(state) {
                 StatePlayer.PAUSED -> setPlayIcon()
                 StatePlayer.PLAYING -> setPauseIcon()
@@ -62,16 +58,16 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.getCurrentTimerLiveData().observe(this) { time ->
+        viewModel?.getCurrentTimeLiveData()?.observe(this) { time ->
             binding?.tvDurationTrack?.text = getTrackTimeMillis(time)
         }
 
         if (track.previewUrl?.isNotEmpty() == true) {
-            viewModel.prepare(track.previewUrl)
+            viewModel?.prepare(track.previewUrl)
         }
 
         binding?.ivPlayTrack?.setOnClickListener {
-            viewModel.changePlayerState()
+            viewModel?.changePlayerState()
         }
 
         showTrack(track)
@@ -102,17 +98,22 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        interactor.pausePlayer()
+        viewModel?.onPause()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel?.onStart()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.destroy()
+        viewModel?.onDestroy()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.onResume()
+        viewModel?.onResume()
     }
 
     override fun onSupportNavigateUp(): Boolean {

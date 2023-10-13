@@ -1,14 +1,13 @@
 package com.example.playlistmaker.search.data.network
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import com.example.playlistmaker.player.data.dto.Response
-import com.example.playlistmaker.player.data.dto.TracksRequest
+import com.example.playlistmaker.search.domain.models.NetworkError
+import com.example.playlistmaker.search.domain.models.Track
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkClient(private val context: Context) : NetworkClient {
+class RetrofitNetworkClient : NetworkClient {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(IMDB_BASE_URL)
@@ -17,34 +16,31 @@ class RetrofitNetworkClient(private val context: Context) : NetworkClient {
 
     private val imdbService = retrofit.create(TracksApi::class.java)
 
-    override fun doRequest(dto: Any): Response {
-        if (!isConnected()) {
-            return Response().apply { resultCode = -1 }
-        }
-
-        return if (dto is TracksRequest) {
-            val response = imdbService.search(dto.expression).execute()
-
-            val body = response.body() ?: Response()
-
-            body.apply { resultCode = response.code() }
-        } else {
-            Response().apply { resultCode = BAD_REQUEST_HTTP_CODE }
-        }
-    }
-
-    private fun isConnected(): Boolean {
-        val connectivityManager = context.getSystemService(
-            Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (capabilities != null) {
-            when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
+    override fun doRequest(query: String,
+                           onSuccess: (List<Track>) -> Unit,
+                           onError: (NetworkError) -> Unit) {
+        imdbService.search(query).enqueue(object : Callback<TracksResponse> {
+            override fun onResponse(
+                call: Call<TracksResponse>,
+                response: retrofit2.Response<TracksResponse>,
+            ) {
+                when (response.code()) {
+                    OK_HTTP_CODE -> {
+                        if (response.body()?.results?.isNotEmpty() == true) {
+                            onSuccess.invoke(response.body()?.results!!)
+                        } else {
+                            onError.invoke(NetworkError.NOTHING_FOUND)
+                        }
+                    }
+                    else ->
+                        onError.invoke(NetworkError.NO_CONNECTION)
+                }
             }
-        }
-        return false
+
+            override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                onError.invoke(NetworkError.NO_CONNECTION)
+            }
+        })
     }
 
     companion object {
