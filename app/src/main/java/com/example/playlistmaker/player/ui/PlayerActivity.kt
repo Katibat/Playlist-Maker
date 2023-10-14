@@ -3,6 +3,7 @@ package com.example.playlistmaker.player.ui
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -91,8 +92,8 @@ class PlayerActivity : AppCompatActivity() {
                 .load(track.getCoverArtwork())
                 .placeholder(R.drawable.placeholder)
                 .centerCrop()
-                .transform(RoundedCorners(2))
-                .into(ivImagePlayer)
+                .transform(RoundedCorners(8))
+                .into(ivImagePlayer as ImageView)
         }
     }
 

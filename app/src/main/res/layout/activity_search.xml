@@ -77,8 +77,7 @@
                 android:id="@+id/rv_search_track"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/icon_16"
-                android:paddingTop="@dimen/icon_24"
+                android:paddingTop="@dimen/icon_8"
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/track_view" />

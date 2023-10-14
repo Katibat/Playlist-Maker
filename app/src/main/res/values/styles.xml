@@ -83,7 +83,7 @@
         <item name="android:backgroundTint">@color/switch_track</item>
         <item name="android:inputType">text</item>
         <item name="android:textColorHint">@color/gray</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/dark_theme_item</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:singleLine">true</item>
     </style>
