@@ -57,10 +57,6 @@ class SearchViewModel(val interactor: SearchInteractor) : ViewModel() {
         interactor.saveHistory(historyList)
     }
 
-    fun getHistoryList(): List<Track> {
-        return interactor.getHistory()
-    }
-
     fun clearHistory() {
         historyList.clear()
         searchTrackStatusLiveData.postValue(StateSearch.SearchHistory(historyList))
