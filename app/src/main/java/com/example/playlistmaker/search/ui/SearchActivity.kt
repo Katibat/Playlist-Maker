@@ -2,6 +2,8 @@ package com.example.playlistmaker.search.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +23,8 @@ class SearchActivity : AppCompatActivity() {
     private var querySearchText = ""
     private var trackAdapter = TrackAdapter { startAdapter(it) }
     private var historyAdapter = TrackAdapter { startAdapter(it) }
+    private val handler = Handler(Looper.getMainLooper())
+    private var isClickAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -174,16 +178,28 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun startAdapter(track: Track) {
-        if (viewModel?.clickDebounce() == true) {
+        if (clickDebounce()) {
             viewModel?.addTrackInHistoryList(track)
             val intent = Intent(this, PlayerActivity::class.java)
                 .apply { putExtra(TRACK, track) }
-            viewModel?.clickDebounce()
+            clickDebounce()
             startActivity(intent)
         }
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true },
+                CLICK_DEBOUNCE_DELAY_MILLIS
+            )
+        }
+        return current
+    }
+
     companion object {
         private const val SEARCH_QUERY = "search_query"
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
     }
 }

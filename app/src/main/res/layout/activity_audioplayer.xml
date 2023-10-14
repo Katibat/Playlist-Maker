@@ -35,8 +35,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvImagePlayer"
-        android:layout_width="340dp"
-        android:layout_height="342dp"
+        android:layout_width="312dp"
+        android:layout_height="312dp"
         android:layout_marginTop="82dp"
         android:layout_marginBottom="@dimen/icon_24"
         app:cardCornerRadius="@dimen/icon_8"

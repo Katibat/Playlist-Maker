@@ -44,6 +44,8 @@
                 android:hint="@string/search"
                 android:imeOptions="actionDone"
                 android:singleLine="true"
+                android:cursorVisible="true"
+                android:textCursorDrawable="@drawable/search_et_cursor"
                 android:visibility="visible"
                 tools:ignore="Autofill" />
 
