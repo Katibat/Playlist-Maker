@@ -35,12 +35,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="395dp" />
+            app:layout_constraintGuide_end="16dp" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvImagePlayer"
             android:layout_width="0dp"
-            android:layout_height="312dp"
+            android:layout_height="0dp"
             android:scaleType="centerCrop"
             app:cardCornerRadius="@dimen/icon_8"
             android:layout_marginTop="26dp"
@@ -54,8 +54,8 @@
 
             <ImageView
                 android:id="@+id/ivImagePlayer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="1:1"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
@@ -132,8 +132,9 @@
             android:id="@+id/tvDurationTrack"
             style="@style/audio_player_time_track"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="16dp"
             android:layout_marginTop="@dimen/icon_4"
+            android:gravity="center_vertical"
             android:text="0:00"
             app:layout_constraintBottom_toTopOf="@+id/tvDurationTittle"
             app:layout_constraintEnd_toEndOf="parent"
@@ -261,7 +262,7 @@
             android:layout_width="@dimen/icon_0"
             android:layout_height="32dp"
             android:layout_alignBaseline="@id/tvCountryContent"
-            android:layout_marginBottom="@dimen/icon_28"
+            android:layout_marginBottom="@dimen/icon_20"
             android:layout_weight="0"
             android:gravity="center_vertical"
             android:text="@string/player_country"
