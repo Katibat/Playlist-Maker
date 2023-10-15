@@ -10,8 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/settingsLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".player.ui.PlayerActivity">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -29,14 +28,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/icon_16" />
+            app:layout_constraintGuide_begin="16dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/right_guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/icon_16" />
+            app:layout_constraintGuide_begin="395dp" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvImagePlayer"
@@ -45,6 +44,8 @@
             android:scaleType="centerCrop"
             app:cardCornerRadius="@dimen/icon_8"
             android:layout_marginTop="26dp"
+            android:layout_marginStart="@dimen/icon_8"
+            android:layout_marginEnd="@dimen/icon_8"
             app:layout_constraintBottom_toTopOf="@+id/tvTittleTrackName"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@+id/right_guideline"
@@ -53,8 +54,8 @@
 
             <ImageView
                 android:id="@+id/ivImagePlayer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="1:1"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
