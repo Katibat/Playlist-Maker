@@ -83,6 +83,7 @@ class SearchActivity : AppCompatActivity() {
             binding?.ivClearButton?.visibility = clearButtonVisibility(text)
             text?.let {
                 viewModel?.searchDebounce(it.toString())
+                querySearchText = it.toString()
             }
         }
     }
