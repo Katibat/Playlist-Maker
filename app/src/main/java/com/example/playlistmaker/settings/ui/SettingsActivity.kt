@@ -5,10 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
     private var binding: ActivitySettingsBinding? = null
-    private var viewModel: SettingsViewModel? = null
+    private val viewModel by viewModel<SettingsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,30 +24,27 @@ class SettingsActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
         }
 
-        viewModel = ViewModelProvider(this,
-            SettingsViewModel.getViewModelFactory(this))[SettingsViewModel::class.java]
-
         // Настройка switch "Темная тема"
         binding?.switchTheme?.setOnCheckedChangeListener { _, checked ->
-            viewModel!!.switchTheme(checked)
+            viewModel.switchTheme(checked)
         }
-        viewModel?.themeSettingsState?.observe(this) { theme ->
+        viewModel.themeSettingsState.observe(this) { theme ->
             binding?.switchTheme?.isChecked = theme.switchTheme
         }
 
         // Настройка кнопки "Поделиться приложением"
         binding?.tvShareApp?.setOnClickListener {
-            viewModel?.shareApp()
+            viewModel.shareApp()
         }
 
         // Настройка кнопки "Написать в поддержку"
         binding?.tvSendSupport?.setOnClickListener {
-            viewModel?.sendEmailToSupport()
+            viewModel.sendEmailToSupport()
         }
 
         // Настройка кнопки "Пользовательское соглашение"
         binding?.tvUserAgreement?.setOnClickListener {
-            viewModel?.openUserAgreement()
+            viewModel.openUserAgreement()
         }
     }
 }

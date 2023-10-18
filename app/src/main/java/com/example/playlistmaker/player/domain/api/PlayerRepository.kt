@@ -7,7 +7,6 @@ interface PlayerRepository {
     fun start()
     fun pause()
     fun stop()
-    fun release()
     fun getPosition() : Long
     fun switchedStatePlayer(callback: (StatePlayer) -> Unit)
 }

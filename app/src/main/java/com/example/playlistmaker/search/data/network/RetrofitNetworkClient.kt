@@ -7,7 +7,7 @@ import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitNetworkClient : NetworkClient {
+class RetrofitNetworkClient(private val tracksApi: TracksApi) : NetworkClient {
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(IMDB_BASE_URL)
@@ -45,7 +45,6 @@ class RetrofitNetworkClient : NetworkClient {
 
     companion object {
         const val IMDB_BASE_URL = "https://itunes.apple.com"
-        private const val BAD_REQUEST_HTTP_CODE = 400
         const val OK_HTTP_CODE = 200
     }
 }

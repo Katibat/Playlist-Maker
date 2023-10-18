@@ -9,17 +9,17 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.search.domain.models.NetworkError
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.Track.Companion.TRACK
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
     private var binding: ActivitySearchBinding? = null
-    private var viewModel: SearchViewModel? = null
+    private val viewModel by viewModel<SearchViewModel>()
     private var querySearchText = ""
     private var trackAdapter = TrackAdapter { startAdapter(it) }
     private var historyAdapter = TrackAdapter { startAdapter(it) }
@@ -39,12 +39,8 @@ class SearchActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
         }
 
-        // Инициализация ViewModel
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory(this)
-        )[SearchViewModel::class.java]
-        viewModel?.getSearchTrackStatusLiveData()?.observe(this) {
+        // Получить актуальное состояние из LiveData()
+        viewModel.getSearchTrackStatusLiveData().observe(this) {
             render(it)
         }
 
@@ -54,7 +50,7 @@ class SearchActivity : AppCompatActivity() {
 
         // кнопка очистить поиск
         binding?.ivClearButton?.setOnClickListener {
-            viewModel?.clearSearchText()
+            viewModel.clearSearchText()
             binding?.etButtonSearch?.text?.clear()
             hideImageView()
             val view = this.currentFocus
@@ -67,12 +63,12 @@ class SearchActivity : AppCompatActivity() {
 
         // кнопка очистить историю поиска
         binding?.buttonClearHistory?.setOnClickListener {
-            viewModel?.clearHistory()
+            viewModel.clearHistory()
         }
 
         // кнопка обновить поиск
         binding?.buttonUpdate?.setOnClickListener {
-            viewModel?.search(querySearchText)
+            viewModel.search(querySearchText)
         }
 
         // фокусирование на вводе текста
@@ -82,7 +78,7 @@ class SearchActivity : AppCompatActivity() {
         binding?.etButtonSearch?.doOnTextChanged { text, _, _, _ ->
             binding?.ivClearButton?.visibility = clearButtonVisibility(text)
             text?.let {
-                viewModel?.searchDebounce(it.toString())
+                viewModel.searchDebounce(it.toString())
                 querySearchText = it.toString()
             }
         }
@@ -99,7 +95,7 @@ class SearchActivity : AppCompatActivity() {
         querySearchText = savedInstanceState.getString(SEARCH_QUERY, "")
         if (querySearchText.isNotEmpty()) {
             binding?.etButtonSearch?.setText(querySearchText)
-            viewModel?.search(querySearchText)
+            viewModel.search(querySearchText)
         }
     }
 
@@ -180,7 +176,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun startAdapter(track: Track) {
         if (clickDebounce()) {
-            viewModel?.addTrackInHistoryList(track)
+            viewModel.addTrackInHistoryList(track)
             val intent = Intent(this, PlayerActivity::class.java)
                 .apply { putExtra(TRACK, track) }
             clickDebounce()
