@@ -3,18 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:fillViewport="true"
     android:layout_height="match_parent"
-    style="@style/settingsLinearLayout"
-    android:orientation="vertical">
+    android:layout_width="match_parent">
 
     <LinearLayout
         style="@style/settingsLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".SearchActivity"
-        tools:ignore="ScrollViewSize">
+        tools:context=".search.ui.SearchActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -29,14 +27,15 @@
             android:id="@+id/frameLayout"
             style="@style/settingsFrame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/icon_16"
             android:layout_marginEnd="@dimen/icon_16"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             tools:layout_editor_absoluteX="@dimen/icon_16">
 
             <EditText
-                android:id="@+id/buttonSearch"
+                android:id="@+id/etButtonSearch"
                 style="@style/searchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,6 +44,9 @@
                 android:hint="@string/search"
                 android:imeOptions="actionDone"
                 android:singleLine="true"
+                android:cursorVisible="true"
+                android:textCursorDrawable="@drawable/search_et_cursor"
+                android:visibility="visible"
                 tools:ignore="Autofill" />
 
             <ImageView
@@ -56,94 +58,147 @@
                 android:layout_marginTop="@dimen/icon_14"
                 android:layout_marginEnd="@dimen/icon_14"
                 android:src="@drawable/close_vector"
+                android:visibility="gone"
                 tools:ignore="ContentDescription" />
         </FrameLayout>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="248dp"
-            android:indeterminateTint="@color/progressBar_tint"
-            android:outlineAmbientShadowColor="@color/progressBar_shadow"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tvTittleHistory"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/user_search_history"
-            android:layout_marginTop="26dp"
-            style="@style/tvTittleHistory" />
+            android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTracks"
-            style="@style/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingHorizontal="2dp"
-            android:paddingTop="@dimen/icon_20"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout"
-            tools:listitem="@layout/track_view" />
-
-        <Button
-            android:id="@+id/buttonClearHistory"
-            style="@style/search_buttonUpdate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/icon_10"
-            android:text="@string/search_clear_history"
-            app:cornerRadius="54dp" />
-
-        <LinearLayout
-            android:id="@+id/placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="@dimen/icon_24"
-            android:layout_marginTop="110dp"
-            android:layout_marginEnd="@dimen/icon_24"
-            android:orientation="vertical"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:id="@+id/ivNoConnectionImage"
-                style="@style/search_noConnectionImage"
+            <ProgressBar
+                android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                tools:ignore="ContentDescription" />
+                android:indeterminateTint="@color/progressBar_tint"
+                android:outlineAmbientShadowColor="@color/progressBar_shadow"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_search_track"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/icon_8"
+                android:visibility="visible"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/track_view" />
 
             <ImageView
                 android:id="@+id/ivNothingFoundImage"
                 style="@style/search_nothingFoundImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="110dp"
+                android:visibility="gone"
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/tvErrorMessage"
+                android:id="@+id/tvNothingFound"
                 style="@style/search_errorMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/icon_20"
-                android:orientation="vertical" />
-
-            <Button
-                android:id="@+id/buttonUpdate"
-                style="@style/search_buttonUpdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/icon_10"
-                android:text="@string/update"
-                app:cornerRadius="54dp" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="236dp"
+                android:text="@string/nothing_found"
+                android:visibility="gone" />
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/placeholder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="102dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:id="@+id/ivNoConnectionImage"
+                    style="@style/search_noConnectionImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="gone"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/tvNoConnection"
+                    style="@style/search_errorMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/icon_8"
+                    android:text="@string/something_went_wrong"
+                    android:textAlignment="center"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tvErrorMessage"
+                    style="@style/search_errorMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="102dp"
+                    android:textAlignment="center"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/buttonUpdate"
+                    style="@style/search_buttonUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/icon_8"
+                    android:text="@string/update"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    app:cornerRadius="54dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llSearchHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+
+                <TextView
+                    android:id="@+id/tvTittleHistory"
+                    style="@style/tvTittleHistory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/icon_24"
+                    android:text="@string/user_search_history"
+                    android:textAlignment="center"
+                    app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTracksHistory"
+                    style="@style/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/icon_8"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:ignore="InefficientWeight"
+                    tools:listitem="@layout/track_view" />
+
+                <Button
+                    android:id="@+id/buttonClearHistory"
+                    style="@style/search_buttonUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/icon_16"
+                    android:text="@string/search_clear_history"
+                    android:textAlignment="center"
+                    app:cornerRadius="54dp" />
+            </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 </ScrollView>

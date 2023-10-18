@@ -83,7 +83,7 @@
         <item name="android:backgroundTint">@color/switch_track</item>
         <item name="android:inputType">text</item>
         <item name="android:textColorHint">@color/gray</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/dark_theme_item</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:singleLine">true</item>
     </style>
@@ -95,6 +95,7 @@
 
     <style name="recyclerView">
         <item name="android:background">@color/white</item>
+        <item name="android:paddingHorizontal" tools:ignore="NewApi">16dp</item>
     </style>
 
     <style name="track_name">
@@ -143,7 +144,8 @@
         <item name="android:textSize">@dimen/text_19</item>
         <item name="android:textColor">@color/dark_theme_item</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textAlignment">center</item>
         <item name="android:lineHeight" tools:ignore="NewApi">24dp</item>
         <item name="android:textFontWeight" tools:ignore="NewApi">400</item>
     </style>
@@ -221,5 +223,4 @@
     <style name="audio_player_button_like" >
         <item name="android:src">@drawable/audio_player_like</item>
     </style>
-
 </resources>
