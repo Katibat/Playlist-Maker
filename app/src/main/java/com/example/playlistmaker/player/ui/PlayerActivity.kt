@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -16,11 +15,13 @@ import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.Track.Companion.TRACK
 import com.example.playlistmaker.utils.App
 import com.example.playlistmaker.utils.App.Companion.getTrackTimeMillis
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
+@Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
 class PlayerActivity : AppCompatActivity() {
     private var binding: ActivityAudioplayerBinding? = null
-    private var viewModel: PlayerViewModel? = null
+    private val viewModel by viewModel<PlayerViewModel>()
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,10 +37,6 @@ class PlayerActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
         }
 
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory())[PlayerViewModel::class.java]
-
         val track =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.getParcelableExtra(TRACK, Track::class.java)
@@ -48,7 +45,7 @@ class PlayerActivity : AppCompatActivity() {
                 intent.getParcelableExtra(TRACK)
             } as Track
 
-        viewModel?.getStatePlayerLiveData()?.observe(this) { state ->
+        viewModel.getStatePlayerLiveData().observe(this) { state ->
             when(state) {
                 StatePlayer.PAUSED -> setPlayIcon()
                 StatePlayer.PLAYING -> setPauseIcon()
@@ -59,16 +56,16 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        viewModel?.getCurrentTimeLiveData()?.observe(this) { time ->
+        viewModel.getCurrentTimeLiveData().observe(this) { time ->
             binding?.tvDurationTrack?.text = getTrackTimeMillis(time)
         }
 
         if (track.previewUrl?.isNotEmpty() == true) {
-            viewModel?.prepare(track.previewUrl)
+            viewModel.prepare(track.previewUrl)
         }
 
         binding?.ivPlayTrack?.setOnClickListener {
-            viewModel?.changePlayerState()
+            viewModel.changePlayerState()
         }
 
         showTrack(track)
@@ -99,22 +96,22 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        viewModel?.onPause()
+        viewModel.onPause()
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel?.onStart()
+        viewModel.onStart()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel?.onDestroy()
+        viewModel.onDestroy()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel?.onResume()
+        viewModel.onResume()
     }
 
     override fun onSupportNavigateUp(): Boolean {

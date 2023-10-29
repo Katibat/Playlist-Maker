@@ -4,8 +4,7 @@ import android.media.MediaPlayer
 import com.example.playlistmaker.player.domain.api.PlayerRepository
 import com.example.playlistmaker.player.domain.util.StatePlayer
 
-class PlayerRepositoryImpl : PlayerRepository {
-    private var mediaPlayer = MediaPlayer()
+class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerRepository {
     private var playerStatePlayer = StatePlayer.DEFAULT
 
     override fun prepare(url: String, onChangeState: (s: StatePlayer) -> Unit) {
@@ -33,10 +32,6 @@ class PlayerRepositoryImpl : PlayerRepository {
 
     override fun stop() {
         mediaPlayer.stop()
-        mediaPlayer.release()
-    }
-
-    override fun release() {
         mediaPlayer.release()
     }
 
