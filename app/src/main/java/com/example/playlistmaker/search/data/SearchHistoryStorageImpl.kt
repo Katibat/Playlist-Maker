@@ -28,6 +28,6 @@ class SearchHistoryStorageImpl
     }
 
     companion object {
-        const val HISTORY = "history"
+        private const val HISTORY = "history"
     }
 }

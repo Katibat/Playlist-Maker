@@ -1,18 +1,18 @@
 package com.example.playlistmaker.main.ui
 
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.main.domain.api.MainInteractor
+import com.example.playlistmaker.main.domain.api.NavigatorMain
 
-class MainViewModel(val interactor: MainInteractor) : ViewModel() {
+class MainViewModel(val navigator: NavigatorMain) : ViewModel() {
     fun openSearchScreen() {
-        interactor.openSearchScreen()
+        navigator.openSearchScreen()
     }
 
     fun openMediaScreen() {
-        interactor.openMediaScreen()
+        navigator.openMediaScreen()
     }
 
     fun openSettingScreen() {
-        interactor.openSettingScreen()
+        navigator.openSettingScreen()
     }
 }

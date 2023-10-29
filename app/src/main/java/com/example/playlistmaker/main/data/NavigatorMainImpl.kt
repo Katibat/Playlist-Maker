@@ -2,12 +2,12 @@ package com.example.playlistmaker.main.data
 
 import android.content.Context
 import android.content.Intent
-import com.example.playlistmaker.main.domain.api.InternalNavigator
+import com.example.playlistmaker.main.domain.api.NavigatorMain
 import com.example.playlistmaker.media.ui.MediaActivity
 import com.example.playlistmaker.search.ui.SearchActivity
 import com.example.playlistmaker.settings.ui.SettingsActivity
 
-class InternalNavigatorImpl(private val context: Context) : InternalNavigator {
+class NavigatorMainImpl(private val context: Context) : NavigatorMain {
     override fun openSearchScreen() {
         context.startActivity(Intent(context, SearchActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))

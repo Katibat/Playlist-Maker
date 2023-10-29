@@ -1,6 +1,6 @@
 package com.example.playlistmaker.main.domain.api
 
-interface MainInteractor {
+interface NavigatorMain {
     fun openSearchScreen()
     fun openMediaScreen()
     fun openSettingScreen()
