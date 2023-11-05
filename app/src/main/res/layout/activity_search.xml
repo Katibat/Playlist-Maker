@@ -154,8 +154,7 @@
                     android:layout_marginTop="@dimen/icon_8"
                     android:text="@string/update"
                     android:textAlignment="center"
-                    android:visibility="gone"
-                    app:cornerRadius="54dp" />
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <LinearLayout

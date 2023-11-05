@@ -6,16 +6,32 @@
     style="@style/settingsLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".media.ui.MediaActivity" >
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:minHeight="?attr/actionBarSize"
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:titleTextAppearance="@style/ToolbarTextAppearance.Title"
         style="@style/MyToolbar"
+        android:visibility="visible"
         tools:ignore="MissingConstraints" />
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        style="@style/media_tablayout"
+        android:visibility="visible"
+        app:tabMode="fixed"
+        app:tabIndicatorFullWidth="false"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"/>
 </LinearLayout>

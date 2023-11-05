@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        style="@style/search_nothingFoundImage"
+        android:visibility="visible"
+        android:layout_marginTop="106dp" />
+
+    <TextView android:id="@+id/tv_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        style="@style/media_fragment"
+        android:layout_marginTop="242dp"
+        android:text="@string/media_favorite_tracks_error"/>
+</FrameLayout>
