@@ -234,7 +234,7 @@
         <item name="tabSelectedTextColor">@color/dark_theme_item</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAlignment">center</item>
-        <item name="tabIndicator">@drawable/tablayout_indicator_light</item>
+        <item name="tabIndicator">@drawable/tablayout_indicator</item>
         <item name="tabTextAppearance">@style/MyCustomTextAppearance</item>
     </style>
 

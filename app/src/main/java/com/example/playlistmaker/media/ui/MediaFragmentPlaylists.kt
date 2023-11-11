@@ -10,7 +10,7 @@ import com.example.playlistmaker.databinding.MediaFragmentPlaylistsBinding
 class MediaFragmentPlaylists : Fragment() {
 
     private var _binding: MediaFragmentPlaylistsBinding? = null
-    private val binding get() = _binding
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -20,6 +20,11 @@ class MediaFragmentPlaylists : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
