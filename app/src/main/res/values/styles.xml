@@ -161,6 +161,7 @@
         <item name="android:paddingTop">@dimen/icon_10</item>
         <item name="android:paddingBottom">@dimen/icon_10</item>
         <item name="android:visibility">gone</item>
+        <item name="cornerRadius">54dp</item>
     </style>
 
     <style name="tvSearchHistory">
@@ -222,5 +223,30 @@
 
     <style name="audio_player_button_like" >
         <item name="android:src">@drawable/audio_player_like</item>
+    </style>
+
+    <style name="media_tablayout" >
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/dark_theme_item</item>
+        <item name="background">@color/white</item>
+        <item name="tabIndicatorColor">@color/dark_theme_item</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="tabSelectedTextColor">@color/dark_theme_item</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="tabIndicator">@drawable/tablayout_indicator</item>
+        <item name="tabTextAppearance">@style/MyCustomTextAppearance</item>
+    </style>
+
+    <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="media_fragment" >
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="background">@color/white</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textAlignment">center</item>
     </style>
 </resources>

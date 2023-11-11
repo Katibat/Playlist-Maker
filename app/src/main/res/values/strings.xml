@@ -23,6 +23,11 @@
     <string name="player_genre">Жанр</string>
     <string name="player_country">Страна</string>
     <string name="player_start_play_time">00:00</string>
+    <string name="media_favorite_tracks_title">Избранные треки</string>
+    <string name="media_playlist_title">Плейлисты</string>
+    <string name="media_add_new_playlist">Новый плейлист</string>
+    <string name="media_favorite_tracks_error">Ваша медиатека пуста</string>
+    <string name="media_playlist_error">Вы не создали \n ни одного плейлиста</string>
 
     // системные строки
     <string name="messages_header" />
