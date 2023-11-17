@@ -3,7 +3,6 @@ package com.example.playlistmaker.utils
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.di.mainModule
 import com.example.playlistmaker.di.mediaModule
 import com.example.playlistmaker.di.playerModule
 import com.example.playlistmaker.di.searchModule
@@ -23,7 +22,6 @@ class App : Application() {
         startKoin {
             androidContext(this@App)
             modules(listOf(
-                mainModule,
                 mediaModule,
                 playerModule,
                 searchModule,

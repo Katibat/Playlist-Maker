@@ -1,34 +1,33 @@
 package com.example.playlistmaker.settings.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
-    private var binding: ActivitySettingsBinding? = null
+class SettingsFragment : Fragment() {
+    private var binding: FragmentSettingsBinding? = null
     private val viewModel by viewModel<SettingsViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding?.root
+    }
 
-        // Настройка Toolbar
-        setSupportActionBar(binding?.toolbar)
-        supportActionBar?.apply {
-            title = getString(R.string.settings)
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // Настройка switch "Темная тема"
         binding?.switchTheme?.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked)
         }
-        viewModel.themeSettingsState.observe(this) { theme ->
+        viewModel.themeSettingsState.observe(viewLifecycleOwner) { theme ->
             binding?.switchTheme?.isChecked = theme.switchTheme
         }
 
@@ -46,5 +45,9 @@ class SettingsActivity : AppCompatActivity() {
         binding?.tvUserAgreement?.setOnClickListener {
             viewModel.openUserAgreement()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 }

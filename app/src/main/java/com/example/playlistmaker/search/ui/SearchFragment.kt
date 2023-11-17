@@ -4,43 +4,42 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import androidx.fragment.app.Fragment
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.search.domain.models.NetworkError
 import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.domain.models.Track.Companion.TRACK
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
-    private var binding: ActivitySearchBinding? = null
+class SearchFragment : Fragment() {
+    private var binding: FragmentSearchBinding? = null
     private val viewModel by viewModel<SearchViewModel>()
     private var querySearchText = ""
-    private var trackAdapter = TrackAdapter { startAdapter(it) }
-    private var historyAdapter = TrackAdapter { startAdapter(it) }
+    private val trackAdapter by lazy { TrackAdapter { startAdapter(it) } }
+    private val historyAdapter by lazy { TrackAdapter { startAdapter(it) } }
     private val handler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding?.root
+    }
 
-        // Настройка Toolbar
-        setSupportActionBar(binding?.toolbar)
-        supportActionBar?.apply {
-            title = getString(R.string.search)
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // Получить актуальное состояние из LiveData()
-        viewModel.getSearchTrackStatusLiveData().observe(this) {
+        viewModel.getSearchTrackStatusLiveData().observe(viewLifecycleOwner) {
             render(it)
         }
 
@@ -53,12 +52,9 @@ class SearchActivity : AppCompatActivity() {
             viewModel.clearSearchText()
             binding?.etButtonSearch?.text?.clear()
             hideImageView()
-            val view = this.currentFocus
-            if (view != null) {
-                val inputMethodManager =
-                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-            }
+            val inputMethodManager = requireActivity().getSystemService(
+                AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
 
         // кнопка очистить историю поиска
@@ -84,19 +80,14 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
     // Сохранение строки для одного цикла жизни
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_QUERY, querySearchText)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        querySearchText = savedInstanceState.getString(SEARCH_QUERY, "")
-        if (querySearchText.isNotEmpty()) {
-            binding?.etButtonSearch?.setText(querySearchText)
-            viewModel.search(querySearchText)
-        }
     }
 
     private fun render(state: StateSearch) {
@@ -177,8 +168,8 @@ class SearchActivity : AppCompatActivity() {
     private fun startAdapter(track: Track) {
         if (clickDebounce()) {
             viewModel.addTrackInHistoryList(track)
-            val intent = Intent(this, PlayerActivity::class.java)
-                .apply { putExtra(TRACK, track) }
+            val intent = Intent(requireContext(), PlayerActivity::class.java)
+                .apply { putExtra(Track.TRACK, track) }
             clickDebounce()
             startActivity(intent)
         }
@@ -188,7 +179,8 @@ class SearchActivity : AppCompatActivity() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true },
+            handler.postDelayed(
+                { isClickAllowed = true },
                 CLICK_DEBOUNCE_DELAY_MILLIS
             )
         }
