@@ -19,6 +19,15 @@ class RootActivity : AppCompatActivity() {
         findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
 
+
+
+        // Toolbar
+//        val navController = findNavController()
+//        val appBarConfiguration = AppBarConfiguration(navController.graph)
+//
+//        view.findViewById<Toolbar>(R.id.toolbar)
+//            .setupWithNavController(navController, appBarConfiguration)
+
         binding?.bottomNavigationView?.setupWithNavController(navController)
     }
 }

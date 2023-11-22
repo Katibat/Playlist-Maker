@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".root.ui.RootActivity">
 
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar" />-->
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/rootFragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"

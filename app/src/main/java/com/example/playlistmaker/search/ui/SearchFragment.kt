@@ -9,9 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.search.domain.models.NetworkError
@@ -19,7 +24,8 @@ import com.example.playlistmaker.search.domain.models.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
-    private var binding: FragmentSearchBinding? = null
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
     private val viewModel by viewModel<SearchViewModel>()
     private var querySearchText = ""
     private val trackAdapter by lazy { TrackAdapter { startAdapter(it) } }
@@ -30,9 +36,9 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding?.root
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,13 +50,13 @@ class SearchFragment : Fragment() {
         }
 
         // Recycler View
-        binding?.rvSearchTrack?.adapter = trackAdapter
-        binding?.rvTracksHistory?.adapter = historyAdapter
+        binding.rvSearchTrack.adapter = trackAdapter
+        binding.rvTracksHistory.adapter = historyAdapter
 
         // кнопка очистить поиск
-        binding?.ivClearButton?.setOnClickListener {
+        binding.ivClearButton.setOnClickListener {
             viewModel.clearSearchText()
-            binding?.etButtonSearch?.text?.clear()
+            binding.etButtonSearch.text?.clear()
             hideImageView()
             val inputMethodManager = requireActivity().getSystemService(
                 AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -58,21 +64,21 @@ class SearchFragment : Fragment() {
         }
 
         // кнопка очистить историю поиска
-        binding?.buttonClearHistory?.setOnClickListener {
+        binding.buttonClearHistory.setOnClickListener {
             viewModel.clearHistory()
         }
 
         // кнопка обновить поиск
-        binding?.buttonUpdate?.setOnClickListener {
+        binding.buttonUpdate.setOnClickListener {
             viewModel.search(querySearchText)
         }
 
         // фокусирование на вводе текста
-        binding?.etButtonSearch?.requestFocus()
+        binding.etButtonSearch.requestFocus()
 
         // читать текст ввода
-        binding?.etButtonSearch?.doOnTextChanged { text, _, _, _ ->
-            binding?.ivClearButton?.visibility = clearButtonVisibility(text)
+        binding.etButtonSearch.doOnTextChanged { text, _, _, _ ->
+            binding.ivClearButton.visibility = clearButtonVisibility(text)
             text?.let {
                 viewModel.searchDebounce(it.toString())
                 querySearchText = it.toString()
@@ -82,12 +88,24 @@ class SearchFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        _binding = null
     }
 
     // Сохранение строки для одного цикла жизни
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_QUERY, querySearchText)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            querySearchText = savedInstanceState.getString(SEARCH_QUERY, "")
+        }
+        if (querySearchText.isNotEmpty()) {
+            binding.etButtonSearch.setText(querySearchText)
+            viewModel.search(querySearchText)
+        }
     }
 
     private fun render(state: StateSearch) {
@@ -103,58 +121,58 @@ class SearchFragment : Fragment() {
         hideImageView()
         historyAdapter.tracksList = tracksList as ArrayList
         if (historyAdapter.tracksList.isNotEmpty()) {
-            binding?.llSearchHistory?.isVisible = true
-            binding?.tvTittleHistory?.isVisible = true
-            binding?.buttonClearHistory?.isVisible = true
+            binding.llSearchHistory.isVisible = true
+            binding.tvTittleHistory.isVisible = true
+            binding.buttonClearHistory.isVisible = true
         }
     }
 
     private fun showLoading() {
         hideImageView()
-        binding?.progressBar?.isVisible = true
+        binding.progressBar.isVisible = true
     }
 
     private fun showSearchResult(tracksList: List<Track>) {
         hideImageView()
         trackAdapter.clearTracks()
         trackAdapter.tracksList = tracksList as ArrayList
-        binding?.rvSearchTrack?.isVisible = true
+        binding.rvSearchTrack.isVisible = true
     }
 
     private fun showErrorMessage(error: NetworkError) {
         hideImageView()
         when (error) {
             NetworkError.NOTHING_FOUND -> {
-                binding?.rvSearchTrack?.isVisible = false
-                binding?.placeholder?.isVisible = false
-                binding?.progressBar?.isVisible = false
-                binding?.ivNothingFoundImage?.isVisible = true
-                binding?.tvNothingFound?.isVisible = true
+                binding.rvSearchTrack.isVisible = false
+                binding.placeholder.isVisible = false
+                binding.progressBar.isVisible = false
+                binding.ivNothingFoundImage.isVisible = true
+                binding.tvNothingFound.isVisible = true
             }
 
             NetworkError.NO_CONNECTION -> {
-                binding?.rvSearchTrack?.isVisible = false
-                binding?.ivNothingFoundImage?.isVisible = false
-                binding?.tvNothingFound?.isVisible = false
-                binding?.llSearchHistory?.isVisible = false
-                binding?.progressBar?.isVisible = false
-                binding?.placeholder?.isVisible = true
-                binding?.ivNoConnectionImage?.isVisible = true
-                binding?.tvNoConnection?.isVisible = true
-                binding?.buttonUpdate?.isVisible = true
+                binding.rvSearchTrack.isVisible = false
+                binding.ivNothingFoundImage.isVisible = false
+                binding.tvNothingFound.isVisible = false
+                binding.llSearchHistory.isVisible = false
+                binding.progressBar.isVisible = false
+                binding.placeholder.isVisible = true
+                binding.ivNoConnectionImage.isVisible = true
+                binding.tvNoConnection.isVisible = true
+                binding.buttonUpdate.isVisible = true
             }
         }
     }
 
     private fun hideImageView() {
-        binding?.ivNothingFoundImage?.isVisible = false
-        binding?.tvNothingFound?.isVisible = false
-        binding?.ivNoConnectionImage?.isVisible = false
-        binding?.tvNoConnection?.isVisible = false
-        binding?.buttonUpdate?.isVisible = false
-        binding?.llSearchHistory?.isVisible = false
-        binding?.progressBar?.isVisible = false
-        binding?.rvSearchTrack?.isVisible = false
+        binding.ivNothingFoundImage.isVisible = false
+        binding.tvNothingFound.isVisible = false
+        binding.ivNoConnectionImage.isVisible = false
+        binding.tvNoConnection.isVisible = false
+        binding.buttonUpdate.isVisible = false
+        binding.llSearchHistory.isVisible = false
+        binding.progressBar.isVisible = false
+        binding.rvSearchTrack.isVisible = false
     }
 
     private fun clearButtonVisibility(char: CharSequence?): Int {
