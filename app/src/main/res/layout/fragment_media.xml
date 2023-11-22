@@ -7,18 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".media.ui.MediaActivity" >
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:minHeight="?attr/actionBarSize"
-        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:titleTextAppearance="@style/ToolbarTextAppearance.Title"
-        style="@style/MyToolbar"
-        android:visibility="visible"
-        tools:ignore="MissingConstraints" />
+    tools:context=".media.ui.MediaFragment" >
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
