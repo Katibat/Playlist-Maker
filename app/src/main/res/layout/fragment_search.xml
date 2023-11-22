@@ -14,16 +14,6 @@
         android:orientation="vertical"
         tools:context=".search.ui.SearchFragment">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/MyToolbar"
-            app:title="@string/search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:titleTextAppearance="@style/ToolbarTextAppearance.Title" />
-
         <FrameLayout
             android:id="@+id/frameLayout"
             style="@style/settingsFrame"
