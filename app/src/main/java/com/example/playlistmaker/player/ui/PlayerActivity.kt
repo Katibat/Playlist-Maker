@@ -45,7 +45,11 @@ class PlayerActivity : AppCompatActivity() {
                 intent.getParcelableExtra(TRACK)
             } as Track
 
-        viewModel.getStatePlayerLiveData().observe(this) { state ->
+        viewModel.observeCurrentTimeLiveData().observe(this) { time ->
+            binding?.tvDurationTrack?.text = getTrackTimeMillis(time)
+        }
+
+        viewModel.observePlayerState().observe(this) { state ->
             when(state) {
                 StatePlayer.PAUSED -> setPlayIcon()
                 StatePlayer.PLAYING -> setPauseIcon()
@@ -56,13 +60,7 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.getCurrentTimeLiveData().observe(this) { time ->
-            binding?.tvDurationTrack?.text = getTrackTimeMillis(time)
-        }
-
-        if (track.previewUrl?.isNotEmpty() == true) {
-            viewModel.prepare(track.previewUrl)
-        }
+        track.previewUrl?.let { viewModel.prepare(it) }
 
         binding?.ivPlayTrack?.setOnClickListener {
             viewModel.changePlayerState()
@@ -73,6 +71,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun showTrack(track: Track) {
         binding?.apply {
+            tvDurationTrack.text = getString(R.string.player_start_play_time)
             tvTittleTrackName.text = track.trackName
             tvTittleTrackArtist.text = track.artistName
             tvDurationContent.text = getTrackTimeMillis(track.trackTimeMillis)
@@ -106,7 +105,6 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.onDestroy()
     }
 
     override fun onResume() {

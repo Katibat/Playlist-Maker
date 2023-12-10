@@ -1,28 +1,31 @@
 package com.example.playlistmaker.player.ui
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.R
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.util.StatePlayer
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
 
-    private val handler = Handler(Looper.getMainLooper())
-    private val runnable = createUpdateTimerTrack()
+    private var timerJob: Job? = null
 
-    private val statePlayerLiveData = MutableLiveData<StatePlayer>()
-    fun getStatePlayerLiveData(): LiveData<StatePlayer> = statePlayerLiveData
+    private val playerState = MutableLiveData<StatePlayer>()
+    fun observePlayerState(): LiveData<StatePlayer> = playerState
 
-    private val currentTimeLiveData = MutableLiveData<Long>()
-    fun getCurrentTimeLiveData(): LiveData<Long> = currentTimeLiveData
+    private val currentTimeLiveData = MutableLiveData(0L)
+    fun observeCurrentTimeLiveData(): LiveData<Long> = currentTimeLiveData
 
     init {
         interactor.switchedStatePlayer { state ->
-            statePlayerLiveData.postValue(state)
-            if (state == StatePlayer.DEFAULT) handler.removeCallbacks(runnable)
+            playerState.postValue(state)
+            if (state == StatePlayer.DEFAULT) timerJob?.cancel()
         }
     }
 
@@ -30,73 +33,70 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
         interactor.preparePlayer(url) { state ->
             when (state) {
                 StatePlayer.PREPARED, StatePlayer.DEFAULT -> {
-                    statePlayerLiveData.postValue(StatePlayer.PREPARED)
-                    handler.removeCallbacks(runnable)
+                    playerState.postValue(StatePlayer.PREPARED)
+                    timerJob?.cancel()
+                    currentTimeLiveData.postValue(R.string.player_start_play_time.toLong())
                 }
                 else -> {
-                    handler.removeCallbacks(runnable)
+                    timerJob?.cancel()
                 }
+            }
+        }
+    }
+
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (isActive) {
+                delay(DELAY_MILLIS)
+                currentTimeLiveData.postValue(interactor.getPosition())
             }
         }
     }
 
     fun onStart() {
         interactor.startPlayer()
-        handler.post(runnable)
-        statePlayerLiveData.postValue(StatePlayer.PLAYING)
+        playerState.postValue(StatePlayer.PLAYING)
+        startTimer()
     }
 
     fun onPause() {
-        handler.removeCallbacks(runnable)
         interactor.pausePlayer()
-        statePlayerLiveData.postValue(StatePlayer.PAUSED)
-    }
-
-    fun onDestroy() {
-        handler.removeCallbacks(runnable)
+        playerState.postValue(StatePlayer.PAUSED)
+        timerJob?.cancel()
     }
 
     fun onResume() {
-        handler.removeCallbacks(runnable)
-        statePlayerLiveData.postValue(StatePlayer.PAUSED)
-    }
-
-    private fun createUpdateTimerTrack(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                val position = interactor.getPosition()
-                currentTimeLiveData.postValue(position)
-                handler.postDelayed(this, DELAY_MILLIS)
-            }
-        }
+        playerState.postValue(StatePlayer.PAUSED)
+        timerJob?.cancel()
     }
 
     fun changePlayerState() {
         interactor.switchedStatePlayer { state ->
             when (state) {
                 StatePlayer.PLAYING -> {
-                    handler.removeCallbacks(runnable)
-                    handler.post(runnable)
-                    statePlayerLiveData.postValue(StatePlayer.PLAYING)
+                    startTimer()
+                    currentTimeLiveData.postValue(interactor.getPosition())
+                    playerState.postValue(StatePlayer.PLAYING)
                 }
                 StatePlayer.PAUSED -> {
-                    handler.removeCallbacks(runnable)
-                    statePlayerLiveData.postValue(StatePlayer.PAUSED)
+                    playerState.postValue(StatePlayer.PAUSED)
+                    timerJob?.cancel()
                 }
                 StatePlayer.PREPARED -> {
-                    handler.removeCallbacks(runnable)
-                    handler.post(runnable)
-                    statePlayerLiveData.postValue(StatePlayer.PREPARED)
+                    timerJob?.cancel()
+                    startTimer()
+                    playerState.postValue(StatePlayer.PREPARED)
+                    currentTimeLiveData.postValue(R.string.player_start_play_time.toLong())
                 }
                 else -> {
-                    handler.removeCallbacks(runnable)
-                    statePlayerLiveData.postValue(StatePlayer.DEFAULT)
+                    timerJob?.cancel()
+                    playerState.postValue(StatePlayer.DEFAULT)
                 }
             }
         }
     }
 
     companion object {
-        private const val DELAY_MILLIS = 1000L
+        private const val DELAY_MILLIS = 300L
     }
 }
