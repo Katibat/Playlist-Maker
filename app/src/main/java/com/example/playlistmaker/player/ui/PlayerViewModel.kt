@@ -35,7 +35,6 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
                 StatePlayer.PREPARED, StatePlayer.DEFAULT -> {
                     playerState.postValue(StatePlayer.PREPARED)
                     timerJob?.cancel()
-                    currentTimeLiveData.postValue(R.string.player_start_play_time.toLong())
                 }
                 else -> {
                     timerJob?.cancel()
