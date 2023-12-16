@@ -35,6 +35,7 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
                 StatePlayer.PREPARED, StatePlayer.DEFAULT -> {
                     playerState.postValue(StatePlayer.PREPARED)
                     timerJob?.cancel()
+                    currentTimeLiveData.postValue(DEFAULT_TIMES)
                 }
                 else -> {
                     timerJob?.cancel()
@@ -85,7 +86,7 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
                     timerJob?.cancel()
                     startTimer()
                     playerState.postValue(StatePlayer.PREPARED)
-                    currentTimeLiveData.postValue(R.string.player_start_play_time.toLong())
+                    currentTimeLiveData.postValue(DEFAULT_TIMES)
                 }
                 else -> {
                     timerJob?.cancel()
@@ -97,5 +98,6 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
 
     companion object {
         private const val DELAY_MILLIS = 300L
+        private const val DEFAULT_TIMES = 0L
     }
 }
