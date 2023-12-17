@@ -11,12 +11,12 @@ import org.koin.dsl.module
 
 val playerModule = module {
 
-    single {
+    single<MediaPlayer> {
         MediaPlayer()
     }
 
     single<PlayerRepository> {
-        PlayerRepositoryImpl(mediaPlayer = get())
+        PlayerRepositoryImpl()
     }
 
     single<PlayerInteractor> {

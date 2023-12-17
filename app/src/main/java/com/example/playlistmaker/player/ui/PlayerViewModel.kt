@@ -12,7 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
+class PlayerViewModel(private val interactor: PlayerInteractor) : ViewModel() {
 
     private var timerJob: Job? = null
 
@@ -30,18 +30,8 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
     }
 
     fun prepare(url: String) {
-        interactor.preparePlayer(url) { state ->
-            when (state) {
-                StatePlayer.PREPARED, StatePlayer.DEFAULT -> {
-                    playerState.postValue(StatePlayer.PREPARED)
-                    timerJob?.cancel()
-                    currentTimeLiveData.postValue(DEFAULT_TIMES)
-                }
-                else -> {
-                    timerJob?.cancel()
-                }
-            }
-        }
+        timerJob?.cancel()
+        interactor.preparePlayer(url)
     }
 
     private fun startTimer() {
@@ -55,49 +45,52 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
 
     fun onStart() {
         interactor.startPlayer()
-        playerState.postValue(StatePlayer.PLAYING)
         startTimer()
     }
 
     fun onPause() {
         interactor.pausePlayer()
-        playerState.postValue(StatePlayer.PAUSED)
         timerJob?.cancel()
     }
 
-    fun onResume() {
-        playerState.postValue(StatePlayer.PAUSED)
+    fun onReset() {
+        interactor.resetPlayer()
         timerJob?.cancel()
     }
 
-    fun changePlayerState() {
-        interactor.switchedStatePlayer { state ->
-            when (state) {
-                StatePlayer.PLAYING -> {
-                    startTimer()
-                    currentTimeLiveData.postValue(interactor.getPosition())
-                    playerState.postValue(StatePlayer.PLAYING)
-                }
-                StatePlayer.PAUSED -> {
-                    playerState.postValue(StatePlayer.PAUSED)
-                    timerJob?.cancel()
-                }
-                StatePlayer.PREPARED -> {
-                    timerJob?.cancel()
-                    startTimer()
-                    playerState.postValue(StatePlayer.PREPARED)
-                    currentTimeLiveData.postValue(DEFAULT_TIMES)
-                }
-                else -> {
-                    timerJob?.cancel()
-                    playerState.postValue(StatePlayer.DEFAULT)
-                }
-            }
-        }
-    }
+//    fun onResume() {
+//        playerState.postValue(StatePlayer.PAUSED)
+//        timerJob?.cancel()
+//    }
+
+//    fun changePlayerState() {
+//        interactor.switchedStatePlayer { state ->
+//            when (state) {
+//                StatePlayer.PLAYING -> {
+//                    startTimer()
+//                    currentTimeLiveData.postValue(interactor.getPosition())
+//                    playerState.postValue(StatePlayer.PLAYING)
+//                }
+//                StatePlayer.PAUSED -> {
+//                    playerState.postValue(StatePlayer.PAUSED)
+//                    timerJob?.cancel()
+//                }
+//                StatePlayer.PREPARED -> {
+//                    timerJob?.cancel()
+//                    startTimer()
+//                    playerState.postValue(StatePlayer.PREPARED)
+//                    currentTimeLiveData.postValue(DEFAULT_TIMES)
+//                }
+//                else -> {
+//                    timerJob?.cancel()
+//                    playerState.postValue(StatePlayer.DEFAULT)
+//                }
+//            }
+//        }
+//    }
 
     companion object {
         private const val DELAY_MILLIS = 300L
-        private const val DEFAULT_TIMES = 0L
+//        private const val DEFAULT_TIMES = 0L
     }
 }

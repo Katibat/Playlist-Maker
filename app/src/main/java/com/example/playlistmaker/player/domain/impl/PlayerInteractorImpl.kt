@@ -7,8 +7,8 @@ import com.example.playlistmaker.player.domain.util.StatePlayer
 class PlayerInteractorImpl(private val repository: PlayerRepository) :
     PlayerInteractor {
 
-    override fun preparePlayer(url: String, onChangeState: (s: StatePlayer) -> Unit) {
-        repository.prepare(url, onChangeState)
+    override fun preparePlayer(url: String) {
+        repository.prepare(url)
     }
 
     override fun startPlayer() {
@@ -19,8 +19,8 @@ class PlayerInteractorImpl(private val repository: PlayerRepository) :
         repository.pause()
     }
 
-    override fun stopPlayer() {
-        repository.stop()
+    override fun resetPlayer() {
+        repository.reset()
     }
 
     override fun getPosition(): Long = repository.getPosition()

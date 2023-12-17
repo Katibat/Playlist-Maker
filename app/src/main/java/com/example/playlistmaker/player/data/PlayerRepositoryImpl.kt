@@ -4,51 +4,38 @@ import android.media.MediaPlayer
 import com.example.playlistmaker.player.domain.api.PlayerRepository
 import com.example.playlistmaker.player.domain.util.StatePlayer
 
-class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerRepository {
-    private var playerStatePlayer = StatePlayer.PREPARED
+class PlayerRepositoryImpl : PlayerRepository {
+    private var mediaPlayer: MediaPlayer = MediaPlayer()
+    private var playerStateCallback: ((StatePlayer) -> Unit)? = null
 
-    override fun prepare(url: String, onChangeState: (s: StatePlayer) -> Unit) {
-        mediaPlayer.setOnPreparedListener {
-            playerStatePlayer = StatePlayer.PREPARED
-            onChangeState(StatePlayer.PREPARED)
-        }
-        mediaPlayer.setOnCompletionListener {
-            playerStatePlayer = StatePlayer.PREPARED
-            onChangeState(StatePlayer.PREPARED)
-        }
-        mediaPlayer.reset()
+    override fun prepare(url: String) {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playerStateCallback?.invoke(StatePlayer.PREPARED)
+        }
+        mediaPlayer.setOnCompletionListener {
+            playerStateCallback?.invoke(StatePlayer.DEFAULT)
+        }
     }
 
     override fun start() {
         mediaPlayer.start()
-        playerStatePlayer = StatePlayer.PLAYING
+        playerStateCallback?.invoke(StatePlayer.PLAYING)
     }
 
     override fun pause() {
         mediaPlayer.pause()
-        playerStatePlayer = StatePlayer.PAUSED
+        playerStateCallback?.invoke(StatePlayer.PAUSED)
     }
 
-    override fun stop() {
-        mediaPlayer.stop()
-        mediaPlayer.release()
+    override fun reset() {
+        mediaPlayer.reset()
     }
 
     override fun getPosition() = mediaPlayer.currentPosition.toLong()
 
     override fun switchedStatePlayer(callback: (StatePlayer) -> Unit) {
-        when (playerStatePlayer) {
-            StatePlayer.PLAYING -> {
-                pause()
-                callback(StatePlayer.PAUSED)
-            }
-
-            StatePlayer.PREPARED, StatePlayer.PAUSED, StatePlayer.DEFAULT -> {
-                start()
-                callback(StatePlayer.PLAYING)
-            }
-        }
+        playerStateCallback = callback
     }
 }

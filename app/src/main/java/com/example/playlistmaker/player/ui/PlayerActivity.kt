@@ -45,25 +45,37 @@ class PlayerActivity : AppCompatActivity() {
                 intent.getParcelableExtra(TRACK)
             } as Track
 
-        viewModel.observeCurrentTimeLiveData().observe(this) { time ->
-            binding?.tvDurationTrack?.text = getTrackTimeMillis(time)
-        }
+        track.previewUrl?.let { viewModel.prepare(it) }
 
         viewModel.observePlayerState().observe(this) { state ->
-            when(state) {
-                StatePlayer.PAUSED -> setPlayIcon()
-                StatePlayer.PLAYING -> setPauseIcon()
-                StatePlayer.PREPARED, StatePlayer.DEFAULT -> {
-                    setPlayIcon()
-                    binding?.tvDurationTrack?.text = getString(R.string.player_start_play_time)
+            binding?.ivPlayTrack?.setOnClickListener {
+                when (state) {
+                    StatePlayer.PAUSED -> {
+                        viewModel.onStart()
+                        setPauseIcon()
+                    }
+
+                    StatePlayer.PLAYING -> {
+                        viewModel.onPause()
+                        setPlayIcon()
+                    }
+
+                    StatePlayer.PREPARED -> {
+                        viewModel.onStart()
+                        setPauseIcon()
+                    }
+
+                    StatePlayer.DEFAULT -> {
+                        viewModel.onStart()
+                        setPauseIcon()
+                        binding?.tvDurationTrack?.text = getString(R.string.player_start_play_time)
+                    }
                 }
             }
         }
 
-        track.previewUrl?.let { viewModel.prepare(it) }
-
-        binding?.ivPlayTrack?.setOnClickListener {
-            viewModel.changePlayerState()
+        viewModel.observeCurrentTimeLiveData().observe(this) { time ->
+            binding?.tvDurationTrack?.text = getTrackTimeMillis(time)
         }
 
         showTrack(track)
@@ -71,7 +83,6 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun showTrack(track: Track) {
         binding?.apply {
-            tvDurationTrack.text = getString(R.string.player_start_play_time)
             tvTittleTrackName.text = track.trackName
             tvTittleTrackArtist.text = track.artistName
             tvDurationContent.text = getTrackTimeMillis(track.trackTimeMillis)
@@ -98,24 +109,20 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.onPause()
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.onStart()
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        viewModel.onStart()
+//    }
 
     override fun onDestroy() {
         super.onDestroy()
+        viewModel.onReset()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.onResume()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        viewModel.onResume()
+//    }
 
     private fun setPlayIcon() {
         if (!(applicationContext as App).darkTheme) {
