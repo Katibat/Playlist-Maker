@@ -6,7 +6,6 @@ interface PlayerInteractor {
     fun preparePlayer(url: String)
     fun startPlayer()
     fun pausePlayer()
-
     fun resetPlayer()
     fun getPosition() : Long
     fun switchedStatePlayer(callback: (StatePlayer) -> Unit)

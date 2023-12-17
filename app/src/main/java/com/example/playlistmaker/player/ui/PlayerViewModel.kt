@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.R
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.util.StatePlayer
 import kotlinx.coroutines.Job
@@ -58,39 +57,7 @@ class PlayerViewModel(private val interactor: PlayerInteractor) : ViewModel() {
         timerJob?.cancel()
     }
 
-//    fun onResume() {
-//        playerState.postValue(StatePlayer.PAUSED)
-//        timerJob?.cancel()
-//    }
-
-//    fun changePlayerState() {
-//        interactor.switchedStatePlayer { state ->
-//            when (state) {
-//                StatePlayer.PLAYING -> {
-//                    startTimer()
-//                    currentTimeLiveData.postValue(interactor.getPosition())
-//                    playerState.postValue(StatePlayer.PLAYING)
-//                }
-//                StatePlayer.PAUSED -> {
-//                    playerState.postValue(StatePlayer.PAUSED)
-//                    timerJob?.cancel()
-//                }
-//                StatePlayer.PREPARED -> {
-//                    timerJob?.cancel()
-//                    startTimer()
-//                    playerState.postValue(StatePlayer.PREPARED)
-//                    currentTimeLiveData.postValue(DEFAULT_TIMES)
-//                }
-//                else -> {
-//                    timerJob?.cancel()
-//                    playerState.postValue(StatePlayer.DEFAULT)
-//                }
-//            }
-//        }
-//    }
-
     companion object {
         private const val DELAY_MILLIS = 300L
-//        private const val DEFAULT_TIMES = 0L
     }
 }

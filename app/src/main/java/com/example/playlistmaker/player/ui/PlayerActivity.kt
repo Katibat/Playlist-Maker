@@ -109,20 +109,10 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.onPause()
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        viewModel.onStart()
-//    }
-
     override fun onDestroy() {
         super.onDestroy()
         viewModel.onReset()
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        viewModel.onResume()
-//    }
 
     private fun setPlayIcon() {
         if (!(applicationContext as App).darkTheme) {
