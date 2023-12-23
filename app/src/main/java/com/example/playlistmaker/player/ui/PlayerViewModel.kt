@@ -42,34 +42,6 @@ class PlayerViewModel(private val interactor: PlayerInteractor) : ViewModel() {
         }
     }
 
-    fun changePlayerState() {
-        interactor.switchedStatePlayer { state ->
-            when (state) {
-                StatePlayer.PLAYING -> {
-                    startTimer()
-                    currentTimeLiveData.postValue(interactor.getPosition())
-                    playerState.postValue(StatePlayer.PLAYING)
-                }
-
-                StatePlayer.PAUSED -> {
-                    playerState.postValue(StatePlayer.PAUSED)
-                    timerJob?.cancel()
-                }
-
-                StatePlayer.PREPARED -> {
-                    timerJob?.cancel()
-                    startTimer()
-                    playerState.postValue(StatePlayer.PREPARED)
-                    currentTimeLiveData.postValue(DEFAULT_TIMER)
-                }
-                StatePlayer.DEFAULT -> {
-                    timerJob?.cancel()
-                    playerState.postValue(StatePlayer.DEFAULT)
-                }
-            }
-        }
-    }
-
     fun onStart() {
         interactor.startPlayer()
         startTimer()
@@ -80,17 +52,11 @@ class PlayerViewModel(private val interactor: PlayerInteractor) : ViewModel() {
         timerJob?.cancel()
     }
 
-    fun onReset() {
-        interactor.resetPlayer()
-        timerJob?.cancel()
-    }
-
     fun onResume() {
-        playerState.postValue(StatePlayer.PAUSED)
+        interactor.resumePlayer()
     }
 
     companion object {
         private const val DELAY_MILLIS = 300L
-        private const val DEFAULT_TIMER = 0L
     }
 }

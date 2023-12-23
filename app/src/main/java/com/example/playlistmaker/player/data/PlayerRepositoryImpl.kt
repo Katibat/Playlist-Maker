@@ -12,8 +12,9 @@ class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerReposit
             playerStateCallback?.invoke(StatePlayer.PREPARED)
         }
         mediaPlayer.setOnCompletionListener {
-            playerStateCallback?.invoke(StatePlayer.DEFAULT)
+            playerStateCallback?.invoke(StatePlayer.PREPARED)
         }
+        mediaPlayer.reset()
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
     }
@@ -28,8 +29,8 @@ class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerReposit
         playerStateCallback?.invoke(StatePlayer.PAUSED)
     }
 
-    override fun reset() {
-        mediaPlayer.reset()
+    override fun resume() {
+        playerStateCallback?.invoke(StatePlayer.PAUSED)
     }
 
     override fun getPosition() = mediaPlayer.currentPosition.toLong()

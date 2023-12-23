@@ -22,7 +22,7 @@ class SearchRepositoryImpl(private val client: NetworkClient,
                 with(response as TracksResponse) {
                     val data = results.map {
                         Track(
-                          it.trackId,
+                            it.trackId,
                             it.trackName,
                             it.artistName,
                             it.trackTimeMillis,

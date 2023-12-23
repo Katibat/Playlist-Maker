@@ -48,37 +48,34 @@ class PlayerActivity : AppCompatActivity() {
         track.previewUrl?.let { viewModel.prepare(it) }
 
         viewModel.observePlayerState().observe(this) { state ->
-            when (state) {
-                StatePlayer.PAUSED -> {
-                    viewModel.onStart()
-                    setPauseIcon()
-                }
+            binding?.ivPlayTrack?.setOnClickListener {
+                when (state) {
+                    StatePlayer.PAUSED -> {
+                        viewModel.onStart()
+                        setPauseIcon()
+                    }
 
-                StatePlayer.PLAYING -> {
-                    viewModel.onPause()
-                    setPlayIcon()
-                }
+                    StatePlayer.PLAYING -> {
+                        viewModel.onPause()
+                        setPlayIcon()
+                    }
 
-                StatePlayer.PREPARED -> {
-                    viewModel.onStart()
-                    setPauseIcon()
-                    binding?.tvDurationTrack?.text = getString(R.string.player_start_play_time)
-                }
+                    StatePlayer.PREPARED -> {
+                        viewModel.onStart()
+                        setPauseIcon()
+                    }
 
-                StatePlayer.DEFAULT -> {
-                    viewModel.onStart()
-                    setPauseIcon()
-                    binding?.tvDurationTrack?.text = getString(R.string.player_start_play_time)
+                    StatePlayer.DEFAULT -> {
+                        viewModel.onStart()
+                        setPauseIcon()
+                        binding?.tvDurationTrack?.text = getString(R.string.player_start_play_time)
+                    }
                 }
             }
         }
 
         viewModel.observeCurrentTimeLiveData().observe(this) { time ->
             binding?.tvDurationTrack?.text = getTrackTimeMillis(time)
-        }
-
-        binding?.ivPlayTrack?.setOnClickListener {
-            viewModel.changePlayerState()
         }
 
         showTrack(track)
@@ -110,11 +107,7 @@ class PlayerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.onReset()
+        setPlayIcon()
     }
 
     override fun onResume() {
