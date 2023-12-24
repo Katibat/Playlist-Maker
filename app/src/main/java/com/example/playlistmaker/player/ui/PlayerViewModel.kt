@@ -48,8 +48,10 @@ class PlayerViewModel(private val interactor: PlayerInteractor) : ViewModel() {
     }
 
     fun onPause() {
-        interactor.pausePlayer()
-        timerJob?.cancel()
+        if (playerState.value == StatePlayer.PLAYING) {
+            interactor.pausePlayer()
+            timerJob?.cancel()
+        }
     }
 
     fun onResume() {
