@@ -12,7 +12,7 @@ class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerReposit
             playerStateCallback?.invoke(StatePlayer.PREPARED)
         }
         mediaPlayer.setOnCompletionListener {
-            playerStateCallback?.invoke(StatePlayer.PREPARED)
+            playerStateCallback?.invoke(StatePlayer.DEFAULT)
         }
         mediaPlayer.reset()
         mediaPlayer.setDataSource(url)

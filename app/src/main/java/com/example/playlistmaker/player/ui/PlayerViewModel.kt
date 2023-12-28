@@ -15,7 +15,7 @@ class PlayerViewModel(private val interactor: PlayerInteractor) : ViewModel() {
 
     private var timerJob: Job? = null
 
-    private val playerState = MutableLiveData<StatePlayer>()
+    private val playerState = MutableLiveData(StatePlayer.DEFAULT)
     fun observePlayerState(): LiveData<StatePlayer> = playerState
 
     private val currentTimeLiveData = MutableLiveData(0L)
@@ -24,7 +24,11 @@ class PlayerViewModel(private val interactor: PlayerInteractor) : ViewModel() {
     init {
         interactor.switchedStatePlayer { state ->
             playerState.postValue(state)
-            if (state == StatePlayer.DEFAULT) timerJob?.cancel()
+            if (state == StatePlayer.DEFAULT) {
+                timerJob?.cancel()
+                currentTimeLiveData.postValue(0L)
+            }
+            if (state == StatePlayer.PREPARED) currentTimeLiveData.postValue(0L)
         }
     }
 

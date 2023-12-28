@@ -67,7 +67,7 @@ class PlayerActivity : AppCompatActivity() {
 
                     StatePlayer.DEFAULT -> {
                         viewModel.onStart()
-                        setPauseIcon()
+                        setPlayIcon()
                         binding?.tvDurationTrack?.text = getString(R.string.player_start_play_time)
                     }
                 }
