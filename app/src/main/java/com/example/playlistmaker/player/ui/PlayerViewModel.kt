@@ -11,11 +11,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class PlayerViewModel(private val interactor: PlayerInteractor) : ViewModel() {
+class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
 
     private var timerJob: Job? = null
 
-    private val playerState = MutableLiveData(StatePlayer.DEFAULT)
+    private val playerState = MutableLiveData<StatePlayer>()
     fun observePlayerState(): LiveData<StatePlayer> = playerState
 
     private val currentTimeLiveData = MutableLiveData(0L)
@@ -24,17 +24,21 @@ class PlayerViewModel(private val interactor: PlayerInteractor) : ViewModel() {
     init {
         interactor.switchedStatePlayer { state ->
             playerState.postValue(state)
-            if (state == StatePlayer.DEFAULT) {
-                timerJob?.cancel()
-                currentTimeLiveData.postValue(0L)
-            }
-            if (state == StatePlayer.PREPARED) currentTimeLiveData.postValue(0L)
+            if (state == StatePlayer.DEFAULT) timerJob?.cancel()
         }
     }
 
     fun prepare(url: String) {
-        timerJob?.cancel()
-        interactor.preparePlayer(url)
+        interactor.preparePlayer(url) { state ->
+            when (state) {
+                StatePlayer.PREPARED, StatePlayer.DEFAULT -> {
+                    playerState.postValue(StatePlayer.PREPARED)
+                    timerJob?.cancel()
+                    currentTimeLiveData.postValue(DEFAULT_TIMER)
+                }
+                else -> {}
+            }
+        }
     }
 
     private fun startTimer() {
@@ -48,21 +52,53 @@ class PlayerViewModel(private val interactor: PlayerInteractor) : ViewModel() {
 
     fun onStart() {
         interactor.startPlayer()
+        playerState.postValue(StatePlayer.PLAYING)
         startTimer()
     }
 
     fun onPause() {
-        if (playerState.value == StatePlayer.PLAYING) {
-            interactor.pausePlayer()
-            timerJob?.cancel()
-        }
+        interactor.pausePlayer()
+        playerState.postValue(StatePlayer.PAUSED)
+        timerJob?.cancel()
     }
 
     fun onResume() {
-        interactor.resumePlayer()
+        playerState.postValue(StatePlayer.PAUSED)
+        timerJob?.cancel()
+    }
+
+    fun onStop() {
+        interactor.stopPlayer()
+    }
+
+    fun changePlayerState() {
+        interactor.switchedStatePlayer { state ->
+            when (state) {
+                StatePlayer.PLAYING -> {
+                    startTimer()
+                    currentTimeLiveData.postValue(interactor.getPosition())
+                    playerState.postValue(StatePlayer.PLAYING)
+                }
+                StatePlayer.PAUSED -> {
+                    playerState.postValue(StatePlayer.PAUSED)
+                    timerJob?.cancel()
+                }
+                StatePlayer.PREPARED -> {
+                    timerJob?.cancel()
+                    startTimer()
+                    playerState.postValue(StatePlayer.PREPARED)
+                    currentTimeLiveData.postValue(DEFAULT_TIMER)
+                }
+                else -> {
+                    timerJob?.cancel()
+                    playerState.postValue(StatePlayer.DEFAULT)
+                }
+            }
+        }
     }
 
     companion object {
         private const val DELAY_MILLIS = 300L
+        private const val DEFAULT_TIMER = 300L
     }
 }

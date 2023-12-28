@@ -12,11 +12,11 @@ class SearchInteractorImpl(private val repository: SearchRepository) : SearchInt
     override fun searchTrack(expression: String): Flow<Pair<List<Track>?, String?>> {
         return repository.searchTrack(expression).map { result ->
             when(result) {
-                is Resource.Success<*> -> {
+                is Resource.Success -> {
                     Pair(result.data, null)
                 }
 
-                is Resource.Error<*> -> {
+                is Resource.Error -> {
                     Pair(null, result.message)
                 }
             }

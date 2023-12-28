@@ -5,14 +5,16 @@ import com.example.playlistmaker.player.domain.api.PlayerRepository
 import com.example.playlistmaker.player.domain.util.StatePlayer
 
 class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerRepository {
-    private var playerStateCallback: ((StatePlayer) -> Unit)? = null
+    private var playerStatePlayer = StatePlayer.PREPARED
 
-    override fun prepare(url: String) {
+    override fun prepare(url: String, onChangeState: (s: StatePlayer) -> Unit) {
         mediaPlayer.setOnPreparedListener {
-            playerStateCallback?.invoke(StatePlayer.PREPARED)
+            playerStatePlayer = StatePlayer.PREPARED
+            onChangeState(StatePlayer.PREPARED)
         }
         mediaPlayer.setOnCompletionListener {
-            playerStateCallback?.invoke(StatePlayer.DEFAULT)
+            playerStatePlayer = StatePlayer.PREPARED
+            onChangeState(StatePlayer.PREPARED)
         }
         mediaPlayer.reset()
         mediaPlayer.setDataSource(url)
@@ -21,21 +23,32 @@ class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerReposit
 
     override fun start() {
         mediaPlayer.start()
-        playerStateCallback?.invoke(StatePlayer.PLAYING)
+        playerStatePlayer = StatePlayer.PLAYING
     }
 
     override fun pause() {
         mediaPlayer.pause()
-        playerStateCallback?.invoke(StatePlayer.PAUSED)
+        playerStatePlayer = StatePlayer.PAUSED
     }
 
-    override fun resume() {
-        playerStateCallback?.invoke(StatePlayer.PAUSED)
+    override fun stop() {
+        mediaPlayer.stop()
+        mediaPlayer.release()
     }
 
     override fun getPosition() = mediaPlayer.currentPosition.toLong()
 
     override fun switchedStatePlayer(callback: (StatePlayer) -> Unit) {
-        playerStateCallback = callback
+        when (playerStatePlayer) {
+            StatePlayer.PLAYING -> {
+                pause()
+                callback(StatePlayer.PAUSED)
+            }
+
+            StatePlayer.PREPARED, StatePlayer.PAUSED, StatePlayer.DEFAULT -> {
+                start()
+                callback(StatePlayer.PLAYING)
+            }
+        }
     }
 }

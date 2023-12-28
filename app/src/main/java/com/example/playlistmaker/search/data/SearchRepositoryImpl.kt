@@ -15,10 +15,10 @@ class SearchRepositoryImpl(private val client: NetworkClient,
     override fun searchTrack(expression : String) : Flow<Resource<List<Track>>> = flow {
         val response = client.doRequest(TracksRequest(expression))
         when (response.resultCode) {
-            -1 -> {
+            NO_CONNECTION -> {
                 emit(Resource.Error("Проверьте подключение к интернету"))
             }
-            200 -> {
+            OK_HTTP_CODE -> {
                 with(response as TracksResponse) {
                     val data = results.map {
                         Track(
@@ -51,5 +51,10 @@ class SearchRepositoryImpl(private val client: NetworkClient,
 
     override fun clearHistory() {
         storage.clearHistoryList()
+    }
+
+    companion object {
+        private const val NO_CONNECTION = -1
+        private const val OK_HTTP_CODE = 200
     }
 }
