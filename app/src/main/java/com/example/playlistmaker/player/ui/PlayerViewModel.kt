@@ -43,7 +43,8 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
 
     fun onStart() {
         if (statePlayerLiveData.value == StatePlayer.PREPARED ||
-            statePlayerLiveData.value == StatePlayer.DEFAULT) {
+            statePlayerLiveData.value == StatePlayer.DEFAULT
+        ) {
             currentTimeLiveData.postValue(DEFAULT_TIMER)
         } else {
             currentTimeLiveData.postValue(interactor.getPosition())
@@ -58,9 +59,6 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
             interactor.pausePlayer()
             statePlayerLiveData.postValue(StatePlayer.PAUSED)
         }
-        timerJob?.cancel()
-        currentTimeLiveData.postValue(interactor.getPosition())
-        statePlayerLiveData.postValue(StatePlayer.PAUSED)
     }
 
     fun onResume() {
@@ -70,7 +68,6 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
             interactor.pausePlayer()
             statePlayerLiveData.postValue(StatePlayer.PAUSED)
         }
-            statePlayerLiveData.postValue(StatePlayer.PAUSED)
     }
 
     private fun startTimer() {
