@@ -3,7 +3,6 @@ package com.example.playlistmaker.player.ui
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -45,11 +44,7 @@ class PlayerActivity : AppCompatActivity() {
                 intent.getParcelableExtra(TRACK)
             } as Track
 
-        viewModel.observeCurrentTimeLiveData().observe(this) { time ->
-            binding?.tvDurationTrack?.text = getTrackTimeMillis(time)
-        }
-
-        viewModel.observePlayerState().observe(this) { state ->
+        viewModel.observeStatePlayer().observe(this) { state ->
             when(state) {
                 StatePlayer.PAUSED -> setPlayIcon()
                 StatePlayer.PLAYING -> setPauseIcon()
@@ -58,6 +53,10 @@ class PlayerActivity : AppCompatActivity() {
                     binding?.tvDurationTrack?.text = getString(R.string.player_start_play_time)
                 }
             }
+        }
+
+        viewModel.observeCurrentTime().observe(this) { time ->
+            binding?.tvDurationTrack?.text = getTrackTimeMillis(time)
         }
 
         track.previewUrl?.let { viewModel.prepare(it) }
@@ -71,7 +70,6 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun showTrack(track: Track) {
         binding?.apply {
-            tvDurationTrack.text = getString(R.string.player_start_play_time)
             tvTittleTrackName.text = track.trackName
             tvTittleTrackArtist.text = track.artistName
             tvDurationContent.text = getTrackTimeMillis(track.trackTimeMillis)
@@ -89,28 +87,23 @@ class PlayerActivity : AppCompatActivity() {
                 .placeholder(R.drawable.placeholder)
                 .centerCrop()
                 .transform(RoundedCorners(8))
-                .into(ivImagePlayer as ImageView)
+                .into(ivImagePlayer)
         }
     }
 
     override fun onPause() {
-        super.onPause()
         viewModel.onPause()
+        super.onPause()
     }
 
     override fun onStart() {
-        super.onStart()
         viewModel.onStart()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.onStop()
+        super.onStart()
     }
 
     override fun onResume() {
-        super.onResume()
         viewModel.onResume()
+        super.onResume()
     }
 
     private fun setPlayIcon() {

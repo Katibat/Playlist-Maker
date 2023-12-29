@@ -5,18 +5,18 @@ import com.example.playlistmaker.player.domain.api.PlayerRepository
 import com.example.playlistmaker.player.domain.util.StatePlayer
 
 class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerRepository {
-    private var playerStatePlayer = StatePlayer.PREPARED
+    private var playerStatePlayer = StatePlayer.DEFAULT
 
     override fun prepare(url: String, onChangeState: (s: StatePlayer) -> Unit) {
+        mediaPlayer.reset()
         mediaPlayer.setOnPreparedListener {
             playerStatePlayer = StatePlayer.PREPARED
             onChangeState(StatePlayer.PREPARED)
         }
         mediaPlayer.setOnCompletionListener {
-            playerStatePlayer = StatePlayer.PREPARED
-            onChangeState(StatePlayer.PREPARED)
+            playerStatePlayer = StatePlayer.DEFAULT
+            onChangeState(StatePlayer.DEFAULT)
         }
-        mediaPlayer.reset()
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
     }
@@ -31,23 +31,18 @@ class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerReposit
         playerStatePlayer = StatePlayer.PAUSED
     }
 
-    override fun stop() {
-        mediaPlayer.stop()
-        mediaPlayer.release()
-    }
-
     override fun getPosition() = mediaPlayer.currentPosition.toLong()
 
     override fun switchedStatePlayer(callback: (StatePlayer) -> Unit) {
         when (playerStatePlayer) {
             StatePlayer.PLAYING -> {
                 pause()
-                callback(StatePlayer.PAUSED)
+                callback(playerStatePlayer)
             }
 
             StatePlayer.PREPARED, StatePlayer.PAUSED, StatePlayer.DEFAULT -> {
                 start()
-                callback(StatePlayer.PLAYING)
+                callback(playerStatePlayer)
             }
         }
     }

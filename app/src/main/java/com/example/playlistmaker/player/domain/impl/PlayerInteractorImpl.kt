@@ -19,14 +19,6 @@ class PlayerInteractorImpl(private val repository: PlayerRepository) :
         repository.pause()
     }
 
-    override fun stopPlayer() {
-        repository.stop()
-    }
-
-//    override fun resumePlayer() {
-//        repository.resume()
-//    }
-
     override fun getPosition(): Long = repository.getPosition()
 
     override fun switchedStatePlayer(callback: (StatePlayer) -> Unit) {
