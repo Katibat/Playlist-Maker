@@ -71,6 +71,10 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
     }
 
     private fun startTimer() {
+        if (statePlayerLiveData.value == StatePlayer.DEFAULT ||
+            statePlayerLiveData.value == StatePlayer.PREPARED) {
+            currentTimeLiveData.postValue(DEFAULT_TIMER)
+        }
         timerJob = viewModelScope.launch {
             while (isActive) {
                 delay(DELAY_MILLIS)
@@ -95,14 +99,15 @@ class PlayerViewModel(val interactor: PlayerInteractor) : ViewModel() {
 
                 StatePlayer.PREPARED -> {
                     timerJob?.cancel()
-                    statePlayerLiveData.postValue(StatePlayer.PREPARED)
                     currentTimeLiveData.postValue(DEFAULT_TIMER)
+                    statePlayerLiveData.postValue(StatePlayer.PREPARED)
                 }
 
                 StatePlayer.DEFAULT -> {
                     timerJob?.cancel()
-                    statePlayerLiveData.postValue(StatePlayer.DEFAULT)
                     currentTimeLiveData.postValue(DEFAULT_TIMER)
+                    statePlayerLiveData.postValue(StatePlayer.DEFAULT)
+
                 }
             }
         }
