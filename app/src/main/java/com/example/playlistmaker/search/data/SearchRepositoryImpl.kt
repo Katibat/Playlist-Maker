@@ -1,5 +1,6 @@
 package com.example.playlistmaker.search.data
 
+import com.example.playlistmaker.R
 import com.example.playlistmaker.search.data.network.NetworkClient
 import com.example.playlistmaker.search.data.network.TracksRequest
 import com.example.playlistmaker.search.data.network.TracksResponse
@@ -15,10 +16,10 @@ class SearchRepositoryImpl(private val client: NetworkClient,
     override fun searchTrack(expression : String) : Flow<Resource<List<Track>>> = flow {
         val response = client.doRequest(TracksRequest(expression))
         when (response.resultCode) {
-            NO_CONNECTION -> {
-                emit(Resource.Error("Проверьте подключение к интернету"))
+            -1 -> {
+                emit(Resource.Error(R.string.search_no_connection.toString()))
             }
-            OK_HTTP_CODE -> {
+            200 -> {
                 with(response as TracksResponse) {
                     val data = results.map {
                         Track(
@@ -37,7 +38,7 @@ class SearchRepositoryImpl(private val client: NetworkClient,
                 }
             }
             else -> {
-                emit(Resource.Error("Ошибка сервера"))
+                emit(Resource.Error(R.string.search_internal_server_error.toString()))
             }
         }
     }
@@ -51,10 +52,5 @@ class SearchRepositoryImpl(private val client: NetworkClient,
 
     override fun clearHistory() {
         storage.clearHistoryList()
-    }
-
-    companion object {
-        private const val NO_CONNECTION = -1
-        private const val OK_HTTP_CODE = 200
     }
 }

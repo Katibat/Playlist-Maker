@@ -28,6 +28,8 @@
     <string name="media_add_new_playlist">Новый плейлист</string>
     <string name="media_favorite_tracks_error">Ваша медиатека пуста</string>
     <string name="media_playlist_error">Вы не создали \n ни одного плейлиста</string>
+    <string name="search_no_connection">Проверьте подключение к интернету</string>
+    <string name="search_internal_server_error">Ошибка сервера</string>
 
     // системные строки
     <string name="messages_header" />
