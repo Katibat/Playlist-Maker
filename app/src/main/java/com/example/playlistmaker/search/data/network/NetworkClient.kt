@@ -1,8 +1,7 @@
 package com.example.playlistmaker.search.data.network
 
-import com.example.playlistmaker.search.domain.models.NetworkError
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.player.data.dto.Response
 
 interface NetworkClient {
-    fun doRequest(query: String, onSuccess: (List<Track>) -> Unit, onError: (NetworkError) -> Unit)
+    suspend fun doRequest(dto: Any): Response
 }

@@ -26,7 +26,7 @@ val searchModule = module {
     }
 
     single<NetworkClient> {
-        RetrofitNetworkClient(tracksApi = get())
+        RetrofitNetworkClient(tracksApi = get(), context = get())
     }
 
     single<SearchHistoryStorage> {
