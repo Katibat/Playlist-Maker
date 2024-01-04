@@ -3,9 +3,9 @@ package com.example.playlistmaker.player.ui
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -15,6 +15,7 @@ import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.Track.Companion.TRACK
 import com.example.playlistmaker.utils.App
 import com.example.playlistmaker.utils.App.Companion.getTrackTimeMillis
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -45,8 +46,18 @@ class PlayerActivity : AppCompatActivity() {
                 intent.getParcelableExtra(TRACK)
             } as Track
 
-        viewModel.getStatePlayerLiveData().observe(this) { state ->
-            when(state) {
+       viewModel.checkIsFavorite(track.trackId)
+
+        viewModel.observeFavorite().observe(this) { isFavorite ->
+            if (isFavorite) {
+                setLikeFavoriteIcon()
+            } else {
+                setLikeIcon()
+            }
+        }
+
+        viewModel.observeStatePlayer().observe(this) { state ->
+            when (state) {
                 StatePlayer.PAUSED -> setPlayIcon()
                 StatePlayer.PLAYING -> setPauseIcon()
                 StatePlayer.PREPARED, StatePlayer.DEFAULT -> {
@@ -56,17 +67,17 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.getCurrentTimeLiveData().observe(this) { time ->
+        viewModel.observeCurrentTime().observe(this) { time ->
             binding?.tvDurationTrack?.text = getTrackTimeMillis(time)
         }
 
-        if (track.previewUrl?.isNotEmpty() == true) {
-            viewModel.prepare(track.previewUrl)
-        }
+        track.previewUrl?.let { viewModel.prepare(it) }
 
         binding?.ivPlayTrack?.setOnClickListener {
             viewModel.changePlayerState()
         }
+
+        binding?.ivLikeTrack?.setOnClickListener { viewModel.onFavoriteClicked(track = track) }
 
         showTrack(track)
     }
@@ -90,33 +101,23 @@ class PlayerActivity : AppCompatActivity() {
                 .placeholder(R.drawable.placeholder)
                 .centerCrop()
                 .transform(RoundedCorners(8))
-                .into(ivImagePlayer as ImageView)
+                .into(ivImagePlayer)
         }
     }
 
     override fun onPause() {
-        super.onPause()
         viewModel.onPause()
+        super.onPause()
     }
 
     override fun onStart() {
-        super.onStart()
         viewModel.onStart()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.onDestroy()
+        super.onStart()
     }
 
     override fun onResume() {
-        super.onResume()
         viewModel.onResume()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
+        super.onResume()
     }
 
     private fun setPlayIcon() {
@@ -132,6 +133,22 @@ class PlayerActivity : AppCompatActivity() {
             binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_pause)
         } else {
             binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_pause_dark)
+        }
+    }
+
+    private fun setLikeFavoriteIcon() {
+        if (!(applicationContext as App).darkTheme) {
+            binding?.ivLikeTrack?.setImageResource(R.drawable.audio_player_like_favorite_dark)
+        } else {
+            binding?.ivLikeTrack?.setImageResource(R.drawable.audio_player_like_favorite)
+        }
+    }
+
+    private fun setLikeIcon() {
+        if (!(applicationContext as App).darkTheme) {
+            binding?.ivLikeTrack?.setImageResource(R.drawable.audio_player_like_dark)
+        } else {
+            binding?.ivLikeTrack?.setImageResource(R.drawable.audio_player_like)
         }
     }
 }

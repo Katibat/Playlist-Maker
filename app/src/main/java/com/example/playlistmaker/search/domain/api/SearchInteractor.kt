@@ -1,10 +1,10 @@
 package com.example.playlistmaker.search.domain.api
 
-import com.example.playlistmaker.search.domain.models.NetworkError
 import com.example.playlistmaker.search.domain.models.Track
+import kotlinx.coroutines.flow.Flow
 
 interface SearchInteractor {
-    fun searchTrack(query: String, onSuccess: (List<Track>) -> Unit, onError: (NetworkError) -> Unit)
+    fun searchTrack(expression : String) : Flow<Pair<List<Track>?, String?>>
     fun saveHistory(tracksList: List<Track>)
     fun getHistory(): List<Track>
     fun clearHistory()

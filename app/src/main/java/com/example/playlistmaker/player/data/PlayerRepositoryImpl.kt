@@ -8,16 +8,17 @@ class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerReposit
     private var playerStatePlayer = StatePlayer.DEFAULT
 
     override fun prepare(url: String, onChangeState: (s: StatePlayer) -> Unit) {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
+        mediaPlayer.reset()
         mediaPlayer.setOnPreparedListener {
             playerStatePlayer = StatePlayer.PREPARED
             onChangeState(StatePlayer.PREPARED)
         }
         mediaPlayer.setOnCompletionListener {
-            playerStatePlayer = StatePlayer.PREPARED
-            onChangeState(StatePlayer.PREPARED)
+            playerStatePlayer = StatePlayer.DEFAULT
+            onChangeState(StatePlayer.DEFAULT)
         }
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
     }
 
     override fun start() {
@@ -30,23 +31,18 @@ class PlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : PlayerReposit
         playerStatePlayer = StatePlayer.PAUSED
     }
 
-    override fun stop() {
-        mediaPlayer.stop()
-        mediaPlayer.release()
-    }
-
     override fun getPosition() = mediaPlayer.currentPosition.toLong()
 
     override fun switchedStatePlayer(callback: (StatePlayer) -> Unit) {
         when (playerStatePlayer) {
             StatePlayer.PLAYING -> {
                 pause()
-                callback(StatePlayer.PAUSED)
+                callback(playerStatePlayer)
             }
 
             StatePlayer.PREPARED, StatePlayer.PAUSED, StatePlayer.DEFAULT -> {
                 start()
-                callback(StatePlayer.PLAYING)
+                callback(playerStatePlayer)
             }
         }
     }

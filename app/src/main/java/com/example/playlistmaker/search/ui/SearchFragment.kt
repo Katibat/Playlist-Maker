@@ -9,14 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
-import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.search.domain.models.NetworkError
@@ -30,8 +25,6 @@ class SearchFragment : Fragment() {
     private var querySearchText = ""
     private val trackAdapter by lazy { TrackAdapter { startAdapter(it) } }
     private val historyAdapter by lazy { TrackAdapter { startAdapter(it) } }
-    private val handler = Handler(Looper.getMainLooper())
-    private var isClickAllowed = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +38,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Получить актуальное состояние из LiveData()
-        viewModel.getSearchTrackStatusLiveData().observe(viewLifecycleOwner) {
+        viewModel.observeSearchState().observe(viewLifecycleOwner) {
             render(it)
         }
 
@@ -184,29 +177,16 @@ class SearchFragment : Fragment() {
     }
 
     private fun startAdapter(track: Track) {
-        if (clickDebounce()) {
+        if (viewModel.clickDebounce()) {
             viewModel.addTrackInHistoryList(track)
             val intent = Intent(requireContext(), PlayerActivity::class.java)
                 .apply { putExtra(Track.TRACK, track) }
-            clickDebounce()
+            viewModel.clickDebounce()
             startActivity(intent)
         }
     }
 
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed(
-                { isClickAllowed = true },
-                CLICK_DEBOUNCE_DELAY_MILLIS
-            )
-        }
-        return current
-    }
-
     companion object {
         private const val SEARCH_QUERY = "search_query"
-        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
     }
 }
