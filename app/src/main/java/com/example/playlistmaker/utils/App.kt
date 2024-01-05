@@ -8,6 +8,7 @@ import com.example.playlistmaker.di.playerModule
 import com.example.playlistmaker.di.searchModule
 import com.example.playlistmaker.di.settingsModule
 import com.example.playlistmaker.di.sharingModule
+import com.example.playlistmaker.di.DBModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 import java.text.SimpleDateFormat
@@ -26,7 +27,8 @@ class App : Application() {
                 playerModule,
                 searchModule,
                 settingsModule,
-                sharingModule))
+                sharingModule,
+                DBModule))
         }
         sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
         darkTheme = sharedPrefs.getBoolean(EDIT_TEXT_KEY, false)

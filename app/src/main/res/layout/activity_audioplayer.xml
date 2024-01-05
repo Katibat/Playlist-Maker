@@ -117,7 +117,7 @@
 
         <ImageView
             android:id="@+id/ivLikeTrack"
-            style="@style/audio_player_button_like"
+            android:src="@drawable/audio_player_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/ivAddTrack"
