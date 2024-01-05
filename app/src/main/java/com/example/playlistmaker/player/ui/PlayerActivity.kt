@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -13,9 +12,7 @@ import com.example.playlistmaker.databinding.ActivityAudioplayerBinding
 import com.example.playlistmaker.player.domain.util.StatePlayer
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.Track.Companion.TRACK
-import com.example.playlistmaker.utils.App
 import com.example.playlistmaker.utils.App.Companion.getTrackTimeMillis
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -46,14 +43,10 @@ class PlayerActivity : AppCompatActivity() {
                 intent.getParcelableExtra(TRACK)
             } as Track
 
-       viewModel.checkIsFavorite(track.trackId)
+        viewModel.checkIsFavorite(track.trackId)
 
         viewModel.observeFavorite().observe(this) { isFavorite ->
-            if (isFavorite) {
-                setLikeFavoriteIcon()
-            } else {
-                setLikeIcon()
-            }
+            setLikeIcon(isFavorite)
         }
 
         viewModel.observeStatePlayer().observe(this) { state ->
@@ -121,32 +114,16 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun setPlayIcon() {
-        if (!(applicationContext as App).darkTheme) {
-            binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_play)
-        } else {
-            binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_play_dark)
-        }
+        binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_play)
     }
 
     private fun setPauseIcon() {
-        if (!(applicationContext as App).darkTheme) {
-            binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_pause)
-        } else {
-            binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_pause_dark)
-        }
+        binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_pause)
     }
 
-    private fun setLikeFavoriteIcon() {
-        if (!(applicationContext as App).darkTheme) {
-            binding?.ivLikeTrack?.setImageResource(R.drawable.audio_player_like_favorite_dark)
-        } else {
+    private fun setLikeIcon(isFavorite: Boolean) {
+        if (isFavorite) {
             binding?.ivLikeTrack?.setImageResource(R.drawable.audio_player_like_favorite)
-        }
-    }
-
-    private fun setLikeIcon() {
-        if (!(applicationContext as App).darkTheme) {
-            binding?.ivLikeTrack?.setImageResource(R.drawable.audio_player_like_dark)
         } else {
             binding?.ivLikeTrack?.setImageResource(R.drawable.audio_player_like)
         }

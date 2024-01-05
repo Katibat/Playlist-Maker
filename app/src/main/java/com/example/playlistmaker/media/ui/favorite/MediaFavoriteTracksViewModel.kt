@@ -1,17 +1,16 @@
-package com.example.playlistmaker.db.ui
+package com.example.playlistmaker.media.ui.favorite
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.db.domain.FavoriteTracksInteractor
-import com.example.playlistmaker.db.util.FavoriteTrackState
+import com.example.playlistmaker.media.domain.api.FavoriteTracksInteractor
+import com.example.playlistmaker.media.util.FavoriteTrackState
 import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class FavoriteTrackViewModel(
+class MediaFavoriteTracksViewModel(
     private val interactor: FavoriteTracksInteractor
 ) : ViewModel() {
 

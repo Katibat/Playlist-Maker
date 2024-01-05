@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media.ui
+package com.example.playlistmaker.media.ui.favorite
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,8 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.MediaFragmentFavoriteTracksBinding
-import com.example.playlistmaker.db.ui.FavoriteTrackViewModel
-import com.example.playlistmaker.db.util.FavoriteTrackState
+import com.example.playlistmaker.media.util.FavoriteTrackState
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.TrackAdapter
@@ -19,7 +18,7 @@ class MediaFragmentFavoriteTracks : Fragment() {
 
     private var _binding: MediaFragmentFavoriteTracksBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<FavoriteTrackViewModel>()
+    private val viewModel by viewModel<MediaFavoriteTracksViewModel>()
     private val favoriteTrackAdapter by lazy { TrackAdapter { startAdapter(it) } }
 
     override fun onCreateView(
