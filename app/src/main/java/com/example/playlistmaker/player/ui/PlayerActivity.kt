@@ -42,8 +42,8 @@ class PlayerActivity : AppCompatActivity() {
                 @Suppress("DEPRECATION")
                 intent.getParcelableExtra(TRACK)
             } as Track
-
-        viewModel.checkIsFavorite(track.trackId)
+      
+      viewModel.checkIsFavorite(track.trackId)
 
         viewModel.observeFavorite().observe(this) { isFavorite ->
             setLikeIcon(isFavorite)

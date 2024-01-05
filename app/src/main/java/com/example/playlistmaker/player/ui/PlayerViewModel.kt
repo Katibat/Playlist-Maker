@@ -26,7 +26,7 @@ class PlayerViewModel(
 
     private val currentTimeLiveData = MutableLiveData<Long>()
     fun observeCurrentTime(): LiveData<Long> = currentTimeLiveData
-
+  
     private val favoriteLiveData = MutableLiveData<Boolean>()
     fun observeFavorite(): LiveData<Boolean> = favoriteLiveData
 
@@ -82,7 +82,7 @@ class PlayerViewModel(
 
     private fun startTimer() {
         if (statePlayerLiveData.value == StatePlayer.DEFAULT ||
-            statePlayerLiveData.value == StatePlayer.PREPARED
+             statePlayerLiveData.value == StatePlayer.PREPARED
         ) {
             currentTimeLiveData.postValue(DEFAULT_TIMER)
         }
