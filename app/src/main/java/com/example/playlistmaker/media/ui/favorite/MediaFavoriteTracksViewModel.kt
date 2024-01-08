@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.media.domain.api.FavoriteTracksInteractor
+import com.example.playlistmaker.favorite.domain.api.FavoriteTracksInteractor
 import com.example.playlistmaker.media.util.FavoriteTrackState
 import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.delay
@@ -30,11 +30,12 @@ class MediaFavoriteTracksViewModel(
     }
 
     private fun processResult(tracks: List<Track>) {
-        if (tracks.isEmpty()) {
-            renderState(FavoriteTrackState.Empty)
+        val actualState = if (tracks.isEmpty()) {
+            FavoriteTrackState.Empty
         } else {
-            renderState(FavoriteTrackState.Content(tracks))
+            FavoriteTrackState.Content(tracks)
         }
+        renderState(actualState)
     }
 
     private fun renderState(state: FavoriteTrackState) {

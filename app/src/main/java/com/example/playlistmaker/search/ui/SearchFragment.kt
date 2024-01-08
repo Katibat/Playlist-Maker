@@ -2,8 +2,6 @@ package com.example.playlistmaker.search.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +50,8 @@ class SearchFragment : Fragment() {
             binding.etButtonSearch.text?.clear()
             hideImageView()
             val inputMethodManager = requireActivity().getSystemService(
-                AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+                AppCompatActivity.INPUT_METHOD_SERVICE
+            ) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
 
@@ -114,9 +113,11 @@ class SearchFragment : Fragment() {
         hideImageView()
         historyAdapter.tracksList = tracksList as ArrayList
         if (historyAdapter.tracksList.isNotEmpty()) {
-            binding.llSearchHistory.isVisible = true
-            binding.tvTittleHistory.isVisible = true
-            binding.buttonClearHistory.isVisible = true
+            with(binding) {
+                llSearchHistory.isVisible = true
+                tvTittleHistory.isVisible = true
+                buttonClearHistory.isVisible = true
+            }
         }
     }
 
@@ -136,36 +137,42 @@ class SearchFragment : Fragment() {
         hideImageView()
         when (error) {
             NetworkError.NOTHING_FOUND -> {
-                binding.rvSearchTrack.isVisible = false
-                binding.placeholder.isVisible = false
-                binding.progressBar.isVisible = false
-                binding.ivNothingFoundImage.isVisible = true
-                binding.tvNothingFound.isVisible = true
+                with(binding) {
+                    rvSearchTrack.isVisible = false
+                    placeholder.isVisible = false
+                    progressBar.isVisible = false
+                    ivNothingFoundImage.isVisible = true
+                    tvNothingFound.isVisible = true
+                }
             }
 
             NetworkError.NO_CONNECTION -> {
-                binding.rvSearchTrack.isVisible = false
-                binding.ivNothingFoundImage.isVisible = false
-                binding.tvNothingFound.isVisible = false
-                binding.llSearchHistory.isVisible = false
-                binding.progressBar.isVisible = false
-                binding.placeholder.isVisible = true
-                binding.ivNoConnectionImage.isVisible = true
-                binding.tvNoConnection.isVisible = true
-                binding.buttonUpdate.isVisible = true
+                with(binding) {
+                    rvSearchTrack.isVisible = false
+                    ivNothingFoundImage.isVisible = false
+                    tvNothingFound.isVisible = false
+                    llSearchHistory.isVisible = false
+                    progressBar.isVisible = false
+                    placeholder.isVisible = true
+                    ivNoConnectionImage.isVisible = true
+                    tvNoConnection.isVisible = true
+                    buttonUpdate.isVisible = true
+                }
             }
         }
     }
 
     private fun hideImageView() {
-        binding.ivNothingFoundImage.isVisible = false
-        binding.tvNothingFound.isVisible = false
-        binding.ivNoConnectionImage.isVisible = false
-        binding.tvNoConnection.isVisible = false
-        binding.buttonUpdate.isVisible = false
-        binding.llSearchHistory.isVisible = false
-        binding.progressBar.isVisible = false
-        binding.rvSearchTrack.isVisible = false
+        with(binding) {
+            ivNothingFoundImage.isVisible = false
+            tvNothingFound.isVisible = false
+            ivNoConnectionImage.isVisible = false
+            tvNoConnection.isVisible = false
+            buttonUpdate.isVisible = false
+            llSearchHistory.isVisible = false
+            progressBar.isVisible = false
+            rvSearchTrack.isVisible = false
+        }
     }
 
     private fun clearButtonVisibility(char: CharSequence?): Int {
