@@ -12,7 +12,6 @@ import com.example.playlistmaker.databinding.ActivityAudioplayerBinding
 import com.example.playlistmaker.player.domain.util.StatePlayer
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.domain.models.Track.Companion.TRACK
-import com.example.playlistmaker.utils.App
 import com.example.playlistmaker.utils.App.Companion.getTrackTimeMillis
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -43,9 +42,15 @@ class PlayerActivity : AppCompatActivity() {
                 @Suppress("DEPRECATION")
                 intent.getParcelableExtra(TRACK)
             } as Track
+      
+      viewModel.checkIsFavorite(track.trackId)
+
+        viewModel.observeFavorite().observe(this) { isFavorite ->
+            setLikeIcon(isFavorite)
+        }
 
         viewModel.observeStatePlayer().observe(this) { state ->
-            when(state) {
+            when (state) {
                 StatePlayer.PAUSED -> setPlayIcon()
                 StatePlayer.PLAYING -> setPauseIcon()
                 StatePlayer.PREPARED, StatePlayer.DEFAULT -> {
@@ -64,6 +69,8 @@ class PlayerActivity : AppCompatActivity() {
         binding?.ivPlayTrack?.setOnClickListener {
             viewModel.changePlayerState()
         }
+
+        binding?.ivLikeTrack?.setOnClickListener { viewModel.onFavoriteClicked(track = track) }
 
         showTrack(track)
     }
@@ -107,18 +114,18 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun setPlayIcon() {
-        if (!(applicationContext as App).darkTheme) {
-            binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_play)
-        } else {
-            binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_play_dark)
-        }
+        binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_play)
     }
 
     private fun setPauseIcon() {
-        if (!(applicationContext as App).darkTheme) {
-            binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_pause)
+        binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_pause)
+    }
+
+    private fun setLikeIcon(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding?.ivLikeTrack?.setImageResource(R.drawable.audio_player_like_favorite)
         } else {
-            binding?.ivPlayTrack?.setImageResource(R.drawable.audio_player_pause_dark)
+            binding?.ivLikeTrack?.setImageResource(R.drawable.audio_player_like)
         }
     }
 }

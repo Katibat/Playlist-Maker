@@ -1,11 +1,12 @@
-package com.example.playlistmaker.search.domain.models
+package com.example.playlistmaker.db.data
 
-import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data class Track (
+@Entity(tableName = "track_table")
+data class TrackEntity(
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "track_id")
     val trackId: Int, // уникальный идентификатор трека
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
@@ -16,12 +17,5 @@ data class Track (
     val primaryGenreName: String, // Жанр трека
     val country: String, // Страна исполнителя
     val previewUrl: String?, // Ссылка на отрывок трека (может приходить нулевой)
-    var isFavorite: Boolean = false // Индикатор добавления трека в избранное
-) : Parcelable {
-
-    fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
-
-    companion object {
-        const val TRACK = "track"
-    }
-}
+    val timestamp: Long // Время добавления в избранное для сортировки
+)
