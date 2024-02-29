@@ -18,7 +18,7 @@
         tools:ignore="MissingConstraints" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/rootFragmentContainerView"
+        android:id="@+id/fcvRootConteiner"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -28,6 +28,18 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/llDivider"
+        android:layout_height="0.5dp"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/switch_track"
+        android:background="@color/switch_track"
+        app:layout_constraintTop_toBottomOf="@id/fcvRootConteiner"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

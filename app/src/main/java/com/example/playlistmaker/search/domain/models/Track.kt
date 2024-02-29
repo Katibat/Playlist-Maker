@@ -1,11 +1,10 @@
 package com.example.playlistmaker.search.domain.models
 
 import android.os.Parcelable
-import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Track (
+data class Track(
     val trackId: Int, // уникальный идентификатор трека
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
@@ -15,7 +14,7 @@ data class Track (
     val releaseDate: String, // Год релиза трека
     val primaryGenreName: String, // Жанр трека
     val country: String, // Страна исполнителя
-    val previewUrl: String?, // Ссылка на отрывок трека (может приходить нулевой)
+    val previewUrl: String, // Ссылка на отрывок трека (может приходить нулевой)
     var isFavorite: Boolean = false // Индикатор добавления трека в избранное
 ) : Parcelable {
 

@@ -6,23 +6,63 @@
     app:startDestination="@id/mediaFragment">
 
     <fragment
-        android:id="@+id/mediaFragment"
-        android:name="com.example.playlistmaker.media.ui.MediaFragment"
-        android:label="@string/media"
-        tools:layout="@layout/fragment_media" />
+        android:id="@+id/searchFragment"
+        android:name="com.example.playlistmaker.search.ui.SearchFragment"
+        android:label="@string/search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_playerActivity"
+            app:destination="@id/playerActivity" />
+    </fragment>
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.playlistmaker.settings.ui.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
+
     <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.example.playlistmaker.search.ui.SearchFragment"
-        android:label="@string/search"
-        tools:layout="@layout/fragment_search"/>
+        android:id="@+id/mediaFragment"
+        android:name="com.example.playlistmaker.media.ui.MediaFragment"
+        android:label="@string/media"
+        tools:layout="@layout/fragment_media">
+        <action
+            android:id="@+id/action_mediaFragment_to_mediaFragmentFavoriteTracks"
+            app:destination="@id/mediaFragmentFavoriteTracks" />
+        <action
+            android:id="@+id/action_mediaFragment_to_mediaFragmentPlaylist"
+            app:destination="@id/mediaFragmentPlaylist" />
+    </fragment>
+
     <activity
         android:id="@+id/playerActivity"
         android:name="com.example.playlistmaker.player.ui.PlayerActivity"
-        android:label="activity_audioplayer"
+        android:label="PlayerActivity"
         tools:layout="@layout/activity_audioplayer" />
+
+    <fragment
+        android:id="@+id/mediaFragmentFavoriteTracks"
+        android:name="com.example.playlistmaker.media.ui.favorite.MediaFragmentFavoriteTracks"
+        android:label="MediaFragmentFavoriteTracks"
+        tools:layout="@layout/media_fragment_favorite_tracks">
+        <action
+            android:id="@+id/action_mediaFragmentPlaylist_to_playerActivity"
+            app:destination="@id/playerActivity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mediaFragmentPlaylist"
+        android:name="com.example.playlistmaker.media.ui.playlist.MediaFragmentPlaylist"
+        android:label="MediaFragmentPlaylist"
+        tools:layout="@layout/media_fragment_playlists">
+        <action
+            android:id="@+id/action_mediaFragmentPlaylist_to_playlistCreateFragment"
+            app:destination="@id/playlistCreateFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playlistCreateFragment"
+        android:name="com.example.playlistmaker.playlist.ui.PlaylistCreateFragment"
+        android:label="PlaylistCreateFragment"
+        tools:layout="@layout/media_fragment_create_playlist" />
 </navigation>

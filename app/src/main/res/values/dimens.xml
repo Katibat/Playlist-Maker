@@ -28,7 +28,9 @@
     <dimen name="icon_84">84dp</dimen>
     <dimen name="icon_300">300dp</dimen>
     <dimen name="text_11">11sp</dimen>
+    <dimen name="text_12">12sp</dimen>
     <dimen name="text_16">16sp</dimen>
     <dimen name="text_19">19sp</dimen>
     <dimen name="text_22">22sp</dimen>
+    <dimen name="radius_image_playlist">2dp</dimen>
 </resources>

@@ -53,7 +53,7 @@ class App : Application() {
         const val PREFERENCES = "practicum_example_preferences"
         const val EDIT_TEXT_KEY = "key_for_edit_text"
         lateinit var sharedPrefs: SharedPreferences
-        fun getTrackTimeMillis(millis : Long): String? =
+        fun getTrackTimeMillis(millis: Long?): String? =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(millis)
     }
 }

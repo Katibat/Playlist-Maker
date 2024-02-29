@@ -1,0 +1,5 @@
+<resources>
+    <declare-styleable name="CustomEditText">
+        <attr name="state_not_empty" format="boolean" />
+    </declare-styleable>
+</resources>

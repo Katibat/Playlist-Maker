@@ -45,7 +45,7 @@ class MediaFavoriteTracksViewModel(
     fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
-           viewModelScope.launch {
+            viewModelScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY_MILLIS)
                 isClickAllowed = true
             }
