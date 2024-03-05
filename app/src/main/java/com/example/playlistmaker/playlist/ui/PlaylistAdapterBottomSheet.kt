@@ -8,39 +8,36 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.PlaylistViewSmallBinding
+import com.example.playlistmaker.databinding.PlaylistViewBottomSheetBinding
 import com.example.playlistmaker.media.domain.models.Playlist
 
 class PlaylistsAdapterBottomSheet(
-    private val context: Context,
     private val playlistsList: MutableList<Playlist>,
-    private val listener: Listener
+    private val clickListener: Listener
 ) : RecyclerView.Adapter<PlaylistsAdapterBottomSheet.PlaylistHolderSmall>() {
 
-    inner class PlaylistHolderSmall(private val binding: PlaylistViewSmallBinding) :
+    inner class PlaylistHolderSmall(private val binding: PlaylistViewBottomSheetBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private val cornerRadius =
-            context.resources.getDimensionPixelSize(R.dimen.radius_image_playlist)
 
         @SuppressLint("SetTextI18n")
         fun bind(playlist: Playlist) {
             binding.apply {
-                playlistName.text = playlist.name
-                numberOfTracks.text = "${playlist.countTracks} " +
+                tvPlaylistNameBS.text = playlist.name
+                countTracksBS.text = "${playlist.countTracks} " +
                         getTrackWordForm(playlist.countTracks ?: 0)
                 Glide.with(root.context)
                     .load(playlist.imageUrl)
-                    .transform(RoundedCorners(cornerRadius))
+                    .transform(RoundedCorners(2))
                     .placeholder(R.drawable.placeholder)
-                    .into(playlistCoverImage)
-                root.setOnClickListener { listener.onClick(playlist) }
+                    .into(playlistImageBS)
+                root.setOnClickListener { clickListener.onClick(playlist) }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistHolderSmall {
         val binding =
-            PlaylistViewSmallBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            PlaylistViewBottomSheetBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PlaylistHolderSmall(binding)
     }
 

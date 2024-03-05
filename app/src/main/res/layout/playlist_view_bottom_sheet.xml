@@ -7,10 +7,10 @@
     android:orientation="horizontal">
 
     <ImageView
+        android:id="@+id/playlistImageBS"
         tools:srcCompat="@tools:sample/backgrounds/scenic"
         android:background="@drawable/rounded_playlist_cover_small"
         android:clipToOutline="true"
-        android:id="@+id/playlistCoverImage"
         android:layout_width="@dimen/icon_45"
         android:layout_height="@dimen/icon_45"
         android:layout_marginTop="@dimen/icon_8"
@@ -25,7 +25,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/playlistName"
+            android:id="@+id/tvPlaylistNameBS"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_marginTop="14dp"
@@ -34,7 +34,7 @@
             style="@style/playlist_view_small_name" />
 
         <TextView
-            android:id="@+id/numberOfTracks"
+            android:id="@+id/countTracksBS"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_marginStart="8dp"

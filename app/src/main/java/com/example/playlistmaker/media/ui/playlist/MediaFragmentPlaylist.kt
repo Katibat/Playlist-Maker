@@ -34,7 +34,7 @@ class MediaFragmentPlaylist : Fragment() {
         binding.rvPlaylists.adapter = adapter
 
         binding.buttonCreateNewPlaylist.setOnClickListener {
-            navigateToNewFragment()
+            findNavController().navigate(R.id.playlistCreateFragment, null)
         }
 
         return binding.root
@@ -45,13 +45,14 @@ class MediaFragmentPlaylist : Fragment() {
 
         val layoutManager = GridLayoutManager(context, 2)
         binding.rvPlaylists.layoutManager = layoutManager
-        binding.rvPlaylists.addItemDecoration(GridSpacingItemDecoration(2, 8, 16))
+//        binding.rvPlaylists.addItemDecoration(GridSpacingItemDecoration(2, 8, 16))
 
         viewModel.observeStatePlaylist().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is PlaylistState.Content -> showContent(state.playlist)
                 is PlaylistState.Empty -> showEmpty()
                 is PlaylistState.Loading -> {}
+                else -> {}
             }
         }
 
@@ -72,10 +73,6 @@ class MediaFragmentPlaylist : Fragment() {
         binding.tvNotFound.isVisible = false
 
         adapter?.updateData(playlists)
-    }
-
-    private fun navigateToNewFragment() {
-        findNavController().navigate(R.id.playlistCreateFragment)
     }
 
     override fun onDestroyView() {

@@ -15,10 +15,6 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".player.ui.PlayerActivity"
-            android:parentActivityName=".player.ui.PlayerActivity"
-            android:exported="false" />
-        <activity
             android:name=".root.ui.RootActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">

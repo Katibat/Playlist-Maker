@@ -35,6 +35,12 @@ class RootActivity : AppCompatActivity(), BackNavigationListenerRoot {
             ) {
                 binding?.toolbar?.navigationIcon = null
             }
+            if (destination.id == R.id.playerFragment) {
+                binding?.toolbar?.title = null
+            }
+            if (destination.id == R.id.playlistCreateFragment) {
+                binding?.toolbar?.title = getString(R.string.media_add_new_playlist)
+            }
         }
 
         binding?.bottomNavigationView?.setupWithNavController(navController)

@@ -1,17 +1,19 @@
 package com.example.playlistmaker.media.ui.favorite
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentFavoriteTracksBinding
 import com.example.playlistmaker.media.util.FavoriteTrackState
-import com.example.playlistmaker.player.ui.PlayerActivity
+import com.example.playlistmaker.player.ui.PlayerFragment
 import com.example.playlistmaker.search.domain.models.Track
 import com.example.playlistmaker.search.ui.TrackAdapter
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaFragmentFavoriteTracks : Fragment() {
@@ -56,10 +58,11 @@ class MediaFragmentFavoriteTracks : Fragment() {
 
     private fun startAdapter(track: Track) {
         if (viewModel.clickDebounce()) {
-            val intent = Intent(requireContext(), PlayerActivity::class.java)
-                .apply { putExtra(Track.TRACK, track) }
-            viewModel.clickDebounce()
-            startActivity(intent)
+            val trackJson = Gson().toJson(track)
+            findNavController().navigate(
+                R.id.action_mediaFragmentFavoriteTracks_to_playerFragment,
+                PlayerFragment.createArgs(trackJson)
+            )
         }
     }
 

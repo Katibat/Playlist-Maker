@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.PlaylistViewBinding
 import com.example.playlistmaker.media.domain.models.Playlist
 
 class PlaylistsAdapter(
     private val playlists: MutableList<Playlist>,
-    private val listener: Listener
+    private val clickListener: Listener
 ) : RecyclerView.Adapter<PlaylistsAdapter.PlaylistHolder>() {
 
     inner class PlaylistHolder(private val binding: PlaylistViewBinding) :
@@ -19,14 +20,15 @@ class PlaylistsAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(playlist: Playlist) {
             binding.apply {
-                playlistName.text = playlist.name
-                numberOfTracks.text = "${playlist.countTracks.toString()} " +
+                tvPlaylistName.text = playlist.name
+                tvCountTracks.text = "${playlist.countTracks.toString()} " +
                         getTrackWordForm(playlist.countTracks ?: 0)
                 Glide.with(root.context)
                     .load(playlist.imageUrl)
                     .placeholder(R.drawable.placeholder)
-                    .into(playlistcover)
-                root.setOnClickListener { listener.onClick(playlist) }
+                    .transform(RoundedCorners(8))
+                    .into(ivPlaylist)
+                root.setOnClickListener { clickListener.onClick(playlist) }
             }
         }
     }

@@ -13,29 +13,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentCreatePlaylistBinding
-import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.playlist.domain.api.PlaylistImageStorage
 import com.example.playlistmaker.root.ui.RootActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import java.io.FileOutputStream
 
 class PlaylistCreateFragment : Fragment() {
     private var _binding: MediaFragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: PlaylistCreateViewModel by viewModel {
-        parametersOf(requireActivity() as AppCompatActivity)
-    }
+    private val viewModel by viewModel<PlaylistCreateViewModel>()
     private var isImageSelected = false
     private var urlImageForNewPlaylist: String? = null
 
@@ -48,6 +46,34 @@ class PlaylistCreateFragment : Fragment() {
 
     private var backNavigationListenerRoot: BackNavigationListenerRoot? = null
     private var backNavigationListenerPlayer: BackNavigationListenerPlayer? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = MediaFragmentCreatePlaylistBinding.inflate(inflater, container, false)
+
+        setupListeners()
+        setupTextChangeListener()
+        setupViewModelObservers()
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.buttonCreatePlaylist.isClickable = false
+        binding.buttonCreatePlaylist.isEnabled = false
+        binding.tilPlaylistName.isEnabled = false
+        binding.tilPlaylistDescription.isEnabled = false
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    navigateBack()
+                }
+            })
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -66,19 +92,6 @@ class PlaylistCreateFragment : Fragment() {
         backNavigationListenerPlayer = null
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = MediaFragmentCreatePlaylistBinding.inflate(inflater, container, false)
-
-        setupListeners()
-        setupTextChangeListener()
-        setupViewModelObservers()
-
-        return binding.root
-    }
-
     private fun setupTextChangeListener() {
 
         binding.playlistName.addTextChangedListener(object : TextWatcher {
@@ -94,11 +107,6 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.ivBackArrow.setOnClickListener {
-            lifecycleScope.launch {
-                navigateBack()
-            }
-        }
         binding.ivImagePlayer.setOnClickListener { chooseAndUploadImage() }
         binding.buttonCreatePlaylist.setOnClickListener { createNewPlaylist() }
     }
@@ -116,7 +124,7 @@ class PlaylistCreateFragment : Fragment() {
 
     private fun handleSelectedImage(uri: Uri) {
         binding.ivImagePlayer.setImageURI(uri)
-        binding.icAddImage.visibility = View.GONE
+        binding.icAddImage.isVisible = false
         isImageSelected = true
         saveImageToPrivateStorage(uri)
     }
@@ -162,11 +170,13 @@ class PlaylistCreateFragment : Fragment() {
             } else {
                 backNavigationListenerRoot?.onNavigateBack(true)
             }
-        } else if (activity is PlayerActivity) {
+//        } else if (fragmet is PlayerFragment) {
+        } else {
             if (isAnyFieldNotEmpty() || isImageSelected) {
                 showBackConfirmationDialog()
             } else {
                 backNavigationListenerPlayer?.onNavigateBack(true)
+//                findNavController().navigateUp()
             }
         }
     }
@@ -174,8 +184,9 @@ class PlaylistCreateFragment : Fragment() {
     private fun navigateBackAfterCreatingPlaylist() {
         if (activity is RootActivity) {
             backNavigationListenerRoot?.onNavigateBack(true)
-        } else if (activity is PlayerActivity) {
+        } else {
             backNavigationListenerPlayer?.onNavigateBack(true)
+            //                findNavController().navigateUp()
         }
     }
 
@@ -191,8 +202,7 @@ class PlaylistCreateFragment : Fragment() {
                     lifecycleScope.launch {
                         backNavigationListenerRoot?.onNavigateBack(true)
                     }
-                }
-                if (requireActivity() is PlayerActivity) {
+                } else {
                     backNavigationListenerPlayer?.onNavigateBack(true)
                 }
             }

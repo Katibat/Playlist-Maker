@@ -54,7 +54,7 @@ val mediaModule = module {
         MediaPlaylistViewModel(get())
     }
 
-    viewModel { (activity: AppCompatActivity) ->
-        PlaylistCreateViewModel(androidContext(), get(), get())
+    viewModel {
+        PlaylistCreateViewModel(androidContext(), get())
     }
 }

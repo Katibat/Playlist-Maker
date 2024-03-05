@@ -1,6 +1,5 @@
 package com.example.playlistmaker.search.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.player.ui.PlayerActivity
+import com.example.playlistmaker.player.ui.PlayerFragment
 import com.example.playlistmaker.search.domain.models.NetworkError
 import com.example.playlistmaker.search.domain.models.Track
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -185,11 +187,11 @@ class SearchFragment : Fragment() {
 
     private fun startAdapter(track: Track) {
         if (viewModel.clickDebounce()) {
-            viewModel.addTrackInHistoryList(track)
-            val intent = Intent(requireContext(), PlayerActivity::class.java)
-                .apply { putExtra(Track.TRACK, track) }
-            viewModel.clickDebounce()
-            startActivity(intent)
+            val trackJson = Gson().toJson(track)
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerFragment,
+                PlayerFragment.createArgs(trackJson)
+            )
         }
     }
 
