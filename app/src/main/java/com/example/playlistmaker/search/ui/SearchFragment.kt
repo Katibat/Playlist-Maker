@@ -187,6 +187,7 @@ class SearchFragment : Fragment() {
 
     private fun startAdapter(track: Track) {
         if (viewModel.clickDebounce()) {
+            viewModel.addTrackInHistoryList(track)
             val trackJson = Gson().toJson(track)
             findNavController().navigate(
                 R.id.action_searchFragment_to_playerFragment,
