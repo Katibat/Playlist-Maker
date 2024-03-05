@@ -13,14 +13,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentCreatePlaylistBinding
 import com.example.playlistmaker.playlist.domain.api.PlaylistImageStorage
@@ -60,21 +58,6 @@ class PlaylistCreateFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.buttonCreatePlaylist.isClickable = false
-        binding.buttonCreatePlaylist.isEnabled = false
-        binding.tilPlaylistName.isEnabled = false
-        binding.tilPlaylistDescription.isEnabled = false
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    navigateBack()
-                }
-            })
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is BackNavigationListenerRoot) backNavigationListenerRoot = context
@@ -93,7 +76,6 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private fun setupTextChangeListener() {
-
         binding.playlistName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -170,7 +152,6 @@ class PlaylistCreateFragment : Fragment() {
             } else {
                 backNavigationListenerRoot?.onNavigateBack(true)
             }
-//        } else if (fragmet is PlayerFragment) {
         } else {
             if (isAnyFieldNotEmpty() || isImageSelected) {
                 showBackConfirmationDialog()
@@ -186,7 +167,7 @@ class PlaylistCreateFragment : Fragment() {
             backNavigationListenerRoot?.onNavigateBack(true)
         } else {
             backNavigationListenerPlayer?.onNavigateBack(true)
-            //                findNavController().navigateUp()
+//      findNavController().navigateUp()
         }
     }
 

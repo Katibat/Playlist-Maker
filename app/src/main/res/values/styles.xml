@@ -8,6 +8,11 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="common_style" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
     <style name="mainButtonStyle">
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColor">@color/black</item>

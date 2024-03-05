@@ -10,6 +10,7 @@
         android:id="@+id/playlistImageBS"
         tools:srcCompat="@tools:sample/backgrounds/scenic"
         android:background="@drawable/rounded_playlist_cover_small"
+        style="@style/common_style"
         android:clipToOutline="true"
         android:layout_width="@dimen/icon_45"
         android:layout_height="@dimen/icon_45"

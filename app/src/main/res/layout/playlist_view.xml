@@ -10,6 +10,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="160dp"
         android:layout_height="160dp"
+        style="@style/common_style"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp">
 
@@ -31,6 +32,7 @@
         android:layout_gravity="bottom"
         android:backgroundTint="@null"
         android:singleLine="true"
+        style="@style/playlist_view_small_name"
         android:text="Name"/>
 
     <TextView
@@ -41,5 +43,6 @@
         android:backgroundTint="@null"
         android:singleLine="true"
         android:maxLines="1"
+        style="@style/artist_count_track"
         android:text="N tracks"/>
 </LinearLayout>

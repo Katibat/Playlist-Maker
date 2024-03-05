@@ -8,6 +8,11 @@
         <item name="android:background">@color/dark_theme_item</item>
     </style>
 
+    <style name="common_style" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">@color/dark_theme_item</item>
+        <item name="android:backgroundTint">@color/dark_theme_item</item>
+    </style>
+
     <style name="mainButtonStyle">
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColor">@color/dark_theme_item</item>
@@ -302,6 +307,21 @@
         <item name="colorPrimary">@color/system_PM</item>
         <item name="colorSurface">@color/white</item>
         <item name="colorOnSurface">@color/black</item>
+    </style>
+
+    <style name="playlist_hint" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textSize">@dimen/text_12</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="fontWeight">400</item>
+        <item name="boxStrokeColor">@color/playlist_edit_text_outline</item>
+        <item name="android:textColorHint">@color/system_PM</item>
+        <item name="hintTextColor">@color/system_PM</item>
+        <item name="android:hint">@string/playlist_name</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="boxCornerRadiusBottomEnd">4dp</item>
+        <item name="boxCornerRadiusBottomStart">4dp</item>
+        <item name="boxCornerRadiusTopEnd">4dp</item>
+        <item name="boxCornerRadiusTopStart">4dp</item>
     </style>
 
     <style name="playlist_view_small_name">
