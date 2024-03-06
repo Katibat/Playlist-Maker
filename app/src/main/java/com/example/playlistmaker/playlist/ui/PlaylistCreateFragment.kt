@@ -1,6 +1,5 @@
 package com.example.playlistmaker.playlist.ui
 
-import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -19,6 +18,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentCreatePlaylistBinding
 import com.example.playlistmaker.playlist.domain.api.PlaylistImageStorage
@@ -42,9 +43,6 @@ class PlaylistCreateFragment : Fragment() {
             } ?: run {}
         }
 
-    private var backNavigationListenerRoot: BackNavigationListenerRoot? = null
-    private var backNavigationListenerPlayer: BackNavigationListenerPlayer? = null
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,21 +56,9 @@ class PlaylistCreateFragment : Fragment() {
         return binding.root
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is BackNavigationListenerRoot) backNavigationListenerRoot = context
-        if (context is BackNavigationListenerPlayer) backNavigationListenerPlayer = context
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        backNavigationListenerRoot = null
-        backNavigationListenerPlayer = null
     }
 
     private fun setupTextChangeListener() {
@@ -99,11 +85,6 @@ class PlaylistCreateFragment : Fragment() {
         })
     }
 
-    private fun isAnyFieldNotEmpty(): Boolean {
-        return binding.playlistName.text?.isNotEmpty() == true ||
-                binding.playlistDescription.text?.isNotEmpty() == true
-    }
-
     private fun handleSelectedImage(uri: Uri) {
         binding.ivImagePlayer.setImageURI(uri)
         binding.icAddImage.isVisible = false
@@ -124,7 +105,7 @@ class PlaylistCreateFragment : Fragment() {
             )
             viewModel.getImageUrlFromStorage(playlistName)
             showToastPlaylistCreated(playlistName)
-            navigateBackAfterCreatingPlaylist()
+            findNavController().navigateUp()
         }
     }
 
@@ -146,28 +127,12 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     fun navigateBack() {
-        if (activity is RootActivity) {
-            if (isAnyFieldNotEmpty() || isImageSelected) {
-                showBackConfirmationDialog()
-            } else {
-                backNavigationListenerRoot?.onNavigateBack(true)
-            }
+        if (binding.playlistName.text!!.isNotEmpty() ||
+            binding.playlistDescription.text!!.isNotEmpty() ||
+            isImageSelected) {
+            showBackConfirmationDialog()
         } else {
-            if (isAnyFieldNotEmpty() || isImageSelected) {
-                showBackConfirmationDialog()
-            } else {
-                backNavigationListenerPlayer?.onNavigateBack(true)
-//                findNavController().navigateUp()
-            }
-        }
-    }
-
-    private fun navigateBackAfterCreatingPlaylist() {
-        if (activity is RootActivity) {
-            backNavigationListenerRoot?.onNavigateBack(true)
-        } else {
-            backNavigationListenerPlayer?.onNavigateBack(true)
-//      findNavController().navigateUp()
+            findNavController().navigateUp()
         }
     }
 
@@ -179,13 +144,7 @@ class PlaylistCreateFragment : Fragment() {
                 dialog.dismiss()
             }
             .setPositiveButton(getString(R.string.dialog_complete)) { _, _ ->
-                if (requireActivity() is RootActivity) {
-                    lifecycleScope.launch {
-                        backNavigationListenerRoot?.onNavigateBack(true)
-                    }
-                } else {
-                    backNavigationListenerPlayer?.onNavigateBack(true)
-                }
+                findNavController().navigateUp()
             }
             .show()
             .apply {

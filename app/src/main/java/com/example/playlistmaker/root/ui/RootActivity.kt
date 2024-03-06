@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 
 class RootActivity : AppCompatActivity(), BackNavigationListenerRoot {
     private var binding: ActivityRootBinding? = null
+    private var destinationPL: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,7 @@ class RootActivity : AppCompatActivity(), BackNavigationListenerRoot {
             }
             if (destination.id == R.id.playlistCreateFragment) {
                 binding?.toolbar?.title = getString(R.string.media_add_new_playlist)
+                destinationPL = R.id.playlistCreateFragment
             }
         }
 
@@ -64,7 +66,6 @@ class RootActivity : AppCompatActivity(), BackNavigationListenerRoot {
     private fun showBottomNavigation() {
         binding?.bottomNavigationView?.isVisible = true
         binding?.llDivider?.isVisible = true
-
     }
 
     private fun hideBottomNavigation() {
@@ -73,9 +74,11 @@ class RootActivity : AppCompatActivity(), BackNavigationListenerRoot {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         onNavigateBack(false)
+        super.onBackPressed()
     }
+
+
 
     private fun backCheckFragment() {
         val currentNavHostFragment = supportFragmentManager.findFragmentById(R.id.fcvRootConteiner)

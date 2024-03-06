@@ -10,6 +10,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvTrack"
+        style="@style/common_style"
         android:layout_width="@dimen/icon_45"
         android:layout_height="@dimen/icon_45"
         android:layout_marginStart="@dimen/icon_13"
