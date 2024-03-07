@@ -98,7 +98,6 @@ class PlayerFragment : Fragment() {
         binding.ivLikeTrack.setOnClickListener { viewModel.onFavoriteClicked(track!!) }
 
         binding.ivAddPlaylist.setOnClickListener {
-//            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             binding.dimOverlay.isVisible = true
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
             viewModel.getListOfPlaylist()

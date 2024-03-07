@@ -12,18 +12,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentCreatePlaylistBinding
 import com.example.playlistmaker.playlist.domain.api.PlaylistImageStorage
-import com.example.playlistmaker.root.ui.RootActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,6 +34,7 @@ class PlaylistCreateFragment : Fragment() {
     private val viewModel by viewModel<PlaylistCreateViewModel>()
     private var isImageSelected = false
     private var urlImageForNewPlaylist: String? = null
+    private var backNavigationListenerRoot: BackNavigationListenerRoot? = null
 
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -56,9 +56,24 @@ class PlaylistCreateFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    navigateBack()
+                }
+            })
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        backNavigationListenerRoot = null
     }
 
     private fun setupTextChangeListener() {
@@ -132,7 +147,7 @@ class PlaylistCreateFragment : Fragment() {
             isImageSelected) {
             showBackConfirmationDialog()
         } else {
-            findNavController().navigateUp()
+            backNavigationListenerRoot?.onNavigateBack(true)
         }
     }
 
@@ -149,9 +164,9 @@ class PlaylistCreateFragment : Fragment() {
             .show()
             .apply {
                 getButton(DialogInterface.BUTTON_POSITIVE)
-                    .setTextColor(Color.parseColor(R.color.progressBar_tint.toString()))
+                    .setTextColor(Color.parseColor("#3772E7"))
                 getButton(DialogInterface.BUTTON_NEUTRAL)
-                    .setTextColor(Color.parseColor(R.color.progressBar_tint.toString()))
+                    .setTextColor(Color.parseColor("#3772E7"))
             }
     }
 }

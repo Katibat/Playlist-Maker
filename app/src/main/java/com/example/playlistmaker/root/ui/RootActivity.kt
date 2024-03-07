@@ -13,9 +13,8 @@ import com.example.playlistmaker.playlist.ui.BackNavigationListenerRoot
 import com.example.playlistmaker.playlist.ui.PlaylistCreateFragment
 import kotlinx.coroutines.launch
 
-class RootActivity : AppCompatActivity(), BackNavigationListenerRoot {
+class RootActivity : AppCompatActivity() {
     private var binding: ActivityRootBinding? = null
-    private var destinationPL: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +40,9 @@ class RootActivity : AppCompatActivity(), BackNavigationListenerRoot {
             }
             if (destination.id == R.id.playlistCreateFragment) {
                 binding?.toolbar?.title = getString(R.string.media_add_new_playlist)
-                destinationPL = R.id.playlistCreateFragment
+                binding?.toolbar?.setNavigationOnClickListener {
+                    onBackPressed()
+                }
             }
         }
 
@@ -55,11 +56,20 @@ class RootActivity : AppCompatActivity(), BackNavigationListenerRoot {
         }
     }
 
-    override fun onNavigateBack(isEmpty: Boolean) {
+    private fun onNavigateBack(isEmpty: Boolean) {
         if (isEmpty) {
             super.onBackPressedDispatcher.onBackPressed()
         } else {
-            backCheckFragment()
+            val currentNavHostFragment = supportFragmentManager.findFragmentById(R.id.fcvRootConteiner)
+            if (currentNavHostFragment is NavHostFragment) {
+                val childFragmentManager = currentNavHostFragment.childFragmentManager
+                val currentFragment = childFragmentManager.primaryNavigationFragment
+                if (currentFragment is PlaylistCreateFragment) {
+                    lifecycleScope.launch {
+                        currentFragment.navigateBack()
+                    }
+                }
+            }
         }
     }
 
@@ -76,22 +86,5 @@ class RootActivity : AppCompatActivity(), BackNavigationListenerRoot {
     override fun onBackPressed() {
         onNavigateBack(false)
         super.onBackPressed()
-    }
-
-
-
-    private fun backCheckFragment() {
-        val currentNavHostFragment = supportFragmentManager.findFragmentById(R.id.fcvRootConteiner)
-        if (currentNavHostFragment is NavHostFragment) {
-            val childFragmentManager = currentNavHostFragment.childFragmentManager
-            val currentFragment = childFragmentManager.primaryNavigationFragment
-            if (currentFragment is PlaylistCreateFragment) {
-                lifecycleScope.launch {
-                    currentFragment.navigateBack()
-                }
-            } else {
-                super.onBackPressedDispatcher.onBackPressed()
-            }
-        }
     }
 }
