@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class PlayerFragment : Fragment(), BackNavigationListenerPlayer {
+class PlayerFragment : Fragment() {
     private var _binding: FragmentAudioplayerBinding? = null
     private val binding get() = _binding!!
     private var url: String? = null
@@ -242,10 +242,6 @@ class PlayerFragment : Fragment(), BackNavigationListenerPlayer {
     override fun onResume() {
         viewModel.onResume()
         super.onResume()
-    }
-
-    override fun onNavigateBack(isEmpty: Boolean) {
-        findNavController().navigateUp()
     }
 
     private fun setPlayIcon() {
