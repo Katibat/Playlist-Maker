@@ -1,6 +1,6 @@
 package com.example.playlistmaker.playlist.domain.impl
 
-import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.playlist.domain.models.Playlist
 import com.example.playlistmaker.playlist.domain.api.PlaylistInteractor
 import com.example.playlistmaker.playlist.domain.api.PlaylistRepository
 import com.example.playlistmaker.search.domain.models.Track

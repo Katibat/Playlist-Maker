@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.playlist.domain.models.Playlist
 import com.example.playlistmaker.media.util.PlaylistState
 import com.example.playlistmaker.playlist.domain.api.PlaylistInteractor
 import kotlinx.coroutines.launch
@@ -13,8 +13,8 @@ class MediaPlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
-    private val statePlaylistLiveData = MutableLiveData<PlaylistState>()
-    fun observeStatePlaylist(): LiveData<PlaylistState> = statePlaylistLiveData
+    private val _state = MutableLiveData<PlaylistState>()
+    fun liveData(): LiveData<PlaylistState> = _state
 
     fun fillData() {
         renderState(PlaylistState.Loading)
@@ -35,6 +35,6 @@ class MediaPlaylistViewModel(
     }
 
     private fun renderState(state: PlaylistState) {
-        statePlaylistLiveData.postValue(state)
+        _state.postValue(state)
     }
 }

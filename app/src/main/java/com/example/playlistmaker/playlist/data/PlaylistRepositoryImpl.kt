@@ -5,7 +5,7 @@ import com.example.playlistmaker.db.convertor.PlaylistDbConvertor
 import com.example.playlistmaker.db.convertor.TrackInPlaylistDbConvertor
 import com.example.playlistmaker.db.entity.PlaylistEntity
 import com.example.playlistmaker.db.entity.TrackInPlaylistEntity
-import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.playlist.domain.models.Playlist
 import com.example.playlistmaker.playlist.domain.api.PlaylistRepository
 import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow

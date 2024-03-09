@@ -269,6 +269,7 @@
         <item name="android:textColorHint">@color/system_PM</item>
         <item name="hintTextColor">@color/system_PM</item>
         <item name="android:hint">@string/playlist_name</item>
+        <item name="android:textColor">@color/dark_theme_item</item>
         <item name="android:letterSpacing">0.03</item>
         <item name="boxCornerRadiusBottomEnd">4dp</item>
         <item name="boxCornerRadiusBottomStart">4dp</item>

@@ -19,8 +19,4 @@ data class Track(
 ) : Parcelable {
 
     fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
-
-    companion object {
-        const val TRACK = "track"
-    }
 }

@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.PlaylistViewBottomSheetBinding
-import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.playlist.domain.models.Playlist
 
 class PlaylistsAdapterBottomSheet(
     private val playlistsList: MutableList<Playlist>,
@@ -22,12 +22,16 @@ class PlaylistsAdapterBottomSheet(
         fun bind(playlist: Playlist) {
             binding.apply {
                 tvPlaylistNameBS.text = playlist.name
-                countTracksBS.text = "${playlist.countTracks} " +
-                        getTrackWordForm(playlist.countTracks ?: 0)
+                countTracksBS.text = "${playlist.countTracks} ${
+                    itemView.resources.getQuantityString(
+                        R.plurals.playlist_count_tracks,
+                        playlist.countTracks ?: 0
+                    )
+                }"
                 Glide.with(root.context)
-                    .load(playlist.imageUrl)
-                    .transform(RoundedCorners(2))
+                    .load(playlist.imageUrl!!)
                     .placeholder(R.drawable.placeholder)
+                    .transform(RoundedCorners(2))
                     .into(playlistImageBS)
                 root.setOnClickListener { clickListener.onClick(playlist) }
             }
@@ -36,7 +40,11 @@ class PlaylistsAdapterBottomSheet(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistHolderSmall {
         val binding =
-            PlaylistViewBottomSheetBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            PlaylistViewBottomSheetBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         return PlaylistHolderSmall(binding)
     }
 
@@ -50,15 +58,6 @@ class PlaylistsAdapterBottomSheet(
         playlistsList.clear()
         playlistsList.addAll(newPlaylistsList)
         notifyDataSetChanged()
-    }
-
-    private fun getTrackWordForm(count: Int): String {
-        return when {
-            count % 100 in 11..14 -> "треков"
-            count % 10 == 1 -> "трек"
-            count % 10 in 2..4 -> "трека"
-            else -> "треков"
-        }
     }
 
     interface Listener {

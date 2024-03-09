@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentAudioplayerBinding
-import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.playlist.domain.models.Playlist
 import com.example.playlistmaker.media.util.PlaylistResult
 import com.example.playlistmaker.player.domain.util.StatePlayer
 import com.example.playlistmaker.playlist.ui.PlaylistsAdapterBottomSheet
@@ -72,13 +72,20 @@ class PlayerFragment : Fragment() {
             tvTittleTrackName.text = track.trackName
             tvTittleTrackArtist.text = track.artistName
             tvDurationContent.text = getTrackTimeMillis(track.trackTimeMillis)
-            if (track.collectionName.isEmpty() == true) {
+            if (track.collectionName.isEmpty()) {
                 tvAlbumTittle.isVisible = false
                 tvAlbumContent.isVisible = false
             } else {
                 tvAlbumContent.text = track.collectionName
             }
-            tvYearContent.text = track.releaseDate.take(4)
+            if (track.releaseDate.isEmpty()) {
+                tvYearTittle.isVisible = false
+                tvYearContent.isVisible = false
+            } else {
+                tvYearContent.text = track.releaseDate.take(4)
+            }
+//            track.releaseDate.let { tvYearContent.text = it.substring(0, 4) }
+//            track.releaseDate.let { tvYearContent.text = it?.take(4) } // may be null "asd"
             tvGenreContent.text = track.primaryGenreName
             tvCountryContent.text = track.country
             Glide.with(ivImagePlayer)

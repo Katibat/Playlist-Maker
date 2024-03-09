@@ -67,6 +67,7 @@
             android:hint="@string/playlist_name"
             android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
             app:hintTextAppearance="@style/PlaylistHintTextAppearance"
+            android:autofillHints="@string/playlist_name"
             app:layout_constraintEnd_toStartOf="@id/right_guideline"
             app:layout_constraintStart_toEndOf="@id/left_guideline"
             app:layout_constraintTop_toBottomOf="@id/cvImagePlaylist">
@@ -78,8 +79,7 @@
                 android:hint="@string/playlist_name"
                 android:lines="1"
                 android:maxLines="1"
-                android:textAppearance="@style/PlaylistEditTextAppearance"
-                android:text="@string/playlist_name" />
+                android:textAppearance="@style/PlaylistEditTextAppearance" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -91,6 +91,7 @@
             android:hint="@string/playlist_description"
             android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
             app:hintTextAppearance="@style/PlaylistHintTextAppearance"
+            android:autofillHints="@string/playlist_description"
             app:layout_constraintEnd_toStartOf="@id/right_guideline"
             app:layout_constraintStart_toEndOf="@id/left_guideline"
             app:layout_constraintTop_toBottomOf="@id/tilPlaylistName">
@@ -103,8 +104,7 @@
                 android:hint="@string/playlist_description"
                 android:lines="1"
                 android:maxLines="1"
-                android:textAppearance="@style/PlaylistEditTextAppearance"
-                android:text="@string/playlist_description" />
+                android:textAppearance="@style/PlaylistEditTextAppearance" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <View

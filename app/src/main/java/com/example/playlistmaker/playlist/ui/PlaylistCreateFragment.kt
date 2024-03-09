@@ -129,6 +129,8 @@ class PlaylistCreateFragment : Fragment() {
         val outputStream = FileOutputStream(file)
         BitmapFactory.decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        inputStream?.close()
+        outputStream.close()
     }
 
     fun navigateBack() {

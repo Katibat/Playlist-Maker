@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentPlaylistsBinding
-import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.playlist.domain.models.Playlist
 import com.example.playlistmaker.media.util.PlaylistState
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -45,9 +45,8 @@ class MediaFragmentPlaylist : Fragment() {
 
         val layoutManager = GridLayoutManager(context, 2)
         binding.rvPlaylists.layoutManager = layoutManager
-//        binding.rvPlaylists.addItemDecoration(GridSpacingItemDecoration(2, 8, 16))
 
-        viewModel.observeStatePlaylist().observe(viewLifecycleOwner) { state ->
+        viewModel.liveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is PlaylistState.Content -> showContent(state.playlist)
                 is PlaylistState.Empty -> showEmpty()
@@ -81,7 +80,6 @@ class MediaFragmentPlaylist : Fragment() {
     }
 
     companion object {
-        @JvmStatic
         fun newInstance() = MediaFragmentPlaylist()
     }
 }
