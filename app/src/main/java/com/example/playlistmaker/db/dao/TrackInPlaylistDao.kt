@@ -14,13 +14,4 @@ interface TrackInPlaylistDao {
 
     @Query("SELECT * FROM track_table WHERE track_id = :trackId")
     suspend fun getTrackById(trackId: Int): TrackInPlaylistEntity?
-
-//    @Delete(entity = TrackInPlaylistEntity::class)
-//    suspend fun deleteTrackFromPlaylist(track: TrackInPlaylistEntity)
-//
-//    @Query("SELECT * FROM track_in_playlist_table WHERE track_id = :trackId")
-//    suspend fun getTracksFromPlaylistById(trackId: Int): TrackInPlaylistEntity
-//
-//    @Query("SELECT * FROM track_in_playlist_table")
-//    suspend fun getTracksFromPlaylist(): List<TrackInPlaylistEntity>
 }

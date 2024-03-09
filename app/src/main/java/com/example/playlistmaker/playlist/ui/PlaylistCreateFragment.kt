@@ -3,7 +3,6 @@ package com.example.playlistmaker.playlist.ui
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -34,7 +33,6 @@ class PlaylistCreateFragment : Fragment() {
     private val viewModel by viewModel<PlaylistCreateViewModel>()
     private var isImageSelected = false
     private var urlImageForNewPlaylist: String? = null
-    private var backNavigationListenerRoot: BackNavigationListenerRoot? = null
 
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -53,27 +51,19 @@ class PlaylistCreateFragment : Fragment() {
         setupTextChangeListener()
         setupViewModelObservers()
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     navigateBack()
                 }
             })
+
+        return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        backNavigationListenerRoot = null
     }
 
     private fun setupTextChangeListener() {
@@ -147,7 +137,7 @@ class PlaylistCreateFragment : Fragment() {
             isImageSelected) {
             showBackConfirmationDialog()
         } else {
-            backNavigationListenerRoot?.onNavigateBack(true)
+            findNavController().navigateUp()
         }
     }
 
@@ -158,15 +148,16 @@ class PlaylistCreateFragment : Fragment() {
             .setNeutralButton(context?.getString(R.string.dialog_cancel)) { dialog, _ ->
                 dialog.dismiss()
             }
-            .setPositiveButton(getString(R.string.dialog_complete)) { _, _ ->
+            .setPositiveButton(getString(R.string.dialog_complete)) { dialog, _ ->
                 findNavController().navigateUp()
+                dialog.dismiss() // иначе остается диалог на экране медиатеки
             }
             .show()
             .apply {
                 getButton(DialogInterface.BUTTON_POSITIVE)
-                    .setTextColor(Color.parseColor("#3772E7"))
+                    .setTextColor(resources.getColor(R.color.progressBar_tint, null))
                 getButton(DialogInterface.BUTTON_NEUTRAL)
-                    .setTextColor(Color.parseColor("#3772E7"))
+                    .setTextColor(resources.getColor(R.color.progressBar_tint, null))
             }
     }
 }

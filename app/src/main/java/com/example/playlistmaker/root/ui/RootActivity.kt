@@ -9,7 +9,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityRootBinding
-import com.example.playlistmaker.playlist.ui.BackNavigationListenerRoot
 import com.example.playlistmaker.playlist.ui.PlaylistCreateFragment
 import kotlinx.coroutines.launch
 
@@ -41,7 +40,7 @@ class RootActivity : AppCompatActivity() {
             if (destination.id == R.id.playlistCreateFragment) {
                 binding?.toolbar?.title = getString(R.string.media_add_new_playlist)
                 binding?.toolbar?.setNavigationOnClickListener {
-                    onBackPressed()
+                    onNavigateBack()
                 }
             }
         }
@@ -56,18 +55,14 @@ class RootActivity : AppCompatActivity() {
         }
     }
 
-    private fun onNavigateBack(isEmpty: Boolean) {
-        if (isEmpty) {
-            super.onBackPressedDispatcher.onBackPressed()
-        } else {
-            val currentNavHostFragment = supportFragmentManager.findFragmentById(R.id.fcvRootConteiner)
-            if (currentNavHostFragment is NavHostFragment) {
-                val childFragmentManager = currentNavHostFragment.childFragmentManager
-                val currentFragment = childFragmentManager.primaryNavigationFragment
-                if (currentFragment is PlaylistCreateFragment) {
-                    lifecycleScope.launch {
-                        currentFragment.navigateBack()
-                    }
+    private fun onNavigateBack() {
+        val currentNavHostFragment = supportFragmentManager.findFragmentById(R.id.fcvRootConteiner)
+        if (currentNavHostFragment is NavHostFragment) {
+            val childFragmentManager = currentNavHostFragment.childFragmentManager
+            val currentFragment = childFragmentManager.primaryNavigationFragment
+            if (currentFragment is PlaylistCreateFragment) {
+                lifecycleScope.launch {
+                    currentFragment.navigateBack()
                 }
             }
         }
@@ -81,10 +76,5 @@ class RootActivity : AppCompatActivity() {
     private fun hideBottomNavigation() {
         binding?.bottomNavigationView?.isVisible = false
         binding?.llDivider?.isVisible = false
-    }
-
-    override fun onBackPressed() {
-        onNavigateBack(false)
-        super.onBackPressed()
     }
 }
