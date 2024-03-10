@@ -31,7 +31,7 @@ class PlayerFragment : Fragment() {
     private var _binding: FragmentAudioplayerBinding? = null
     private val binding get() = _binding!!
     private var url: String? = null
-    private val viewModel by viewModel<PlayerViewModel>() {
+    private val viewModel by viewModel<PlayerViewModel> {
         parametersOf(url)
     }
     private var adapter: PlaylistsAdapterBottomSheet? = null
