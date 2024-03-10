@@ -35,7 +35,7 @@ class PlaylistsAdapterBottomSheet(
                     "playlist"
                 )
                 Glide.with(itemView)
-                    .load(playlist.imageUrl?.let { File(filePath, it) })
+                    .load(File(filePath, "image_${playlist.name}.jpg"))
                     .placeholder(R.drawable.placeholder)
                     .transform(RoundedCorners(2))
                     .into(playlistImageBS)
