@@ -6,11 +6,11 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityRootBinding
+import com.example.playlistmaker.player.ui.PlayerFragment
 import com.example.playlistmaker.playlist.ui.PlaylistCreateFragment
 import kotlinx.coroutines.launch
 
@@ -38,6 +38,9 @@ class RootActivity : AppCompatActivity() {
             }
             if (destination.id == R.id.playerFragment) {
                 binding?.toolbar?.title = null
+                binding?.toolbar?.setNavigationOnClickListener {
+                    this.onBackPressedDispatcher.onBackPressed()
+                }
             }
             if (destination.id == R.id.playlistCreateFragment) {
                 binding?.toolbar?.title = getString(R.string.media_add_new_playlist)
@@ -55,6 +58,11 @@ class RootActivity : AppCompatActivity() {
                 else -> showBottomNavigation()
             }
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 
     private fun onNavigateBack() {
