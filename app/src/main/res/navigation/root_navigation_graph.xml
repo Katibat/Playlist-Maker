@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_searchFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
-        <action
-            android:id="@+id/action_searchFragment_to_playlistCreateFragment"
-            app:destination="@id/playlistCreateFragment" />
     </fragment>
 
     <fragment

@@ -41,6 +41,7 @@
     <string name="dialog_cancel">Отмена</string>
     <string name="dialog_complete">Завершить</string>
     <string name="playlist_created">Плейлист "%s" создан</string>
+    <string name="no_info">Не указано</string>
     <plurals name="playlist_count_tracks">
         <item quantity="zero"> треков</item>
         <item quantity="one"> трек</item>

@@ -29,7 +29,7 @@ class PlaylistsAdapterBottomSheet(
                     )
                 }"
                 Glide.with(root.context)
-                    .load(playlist.imageUrl!!)
+                    .load(playlist.imageUrl)
                     .placeholder(R.drawable.placeholder)
                     .transform(RoundedCorners(2))
                     .into(playlistImageBS)

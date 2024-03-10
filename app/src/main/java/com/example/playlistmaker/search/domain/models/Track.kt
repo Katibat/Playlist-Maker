@@ -11,10 +11,10 @@ data class Track(
     val trackTimeMillis: Long, // Продолжительность трека
     val artworkUrl100: String, // Ссылка на изображение обложки
     val collectionName: String, // Название альбома
-    val releaseDate: String, // Год релиза трека
+    val releaseDate: String?, // Год релиза трека
     val primaryGenreName: String, // Жанр трека
     val country: String, // Страна исполнителя
-    val previewUrl: String, // Ссылка на отрывок трека (может приходить нулевой)
+    val previewUrl: String?, // Ссылка на отрывок трека (может приходить нулевой)
     var isFavorite: Boolean = false // Индикатор добавления трека в избранное
 ) : Parcelable {
 

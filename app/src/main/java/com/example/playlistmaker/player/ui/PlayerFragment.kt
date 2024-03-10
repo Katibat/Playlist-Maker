@@ -78,14 +78,7 @@ class PlayerFragment : Fragment() {
             } else {
                 tvAlbumContent.text = track.collectionName
             }
-            if (track.releaseDate.isEmpty()) {
-                tvYearTittle.isVisible = false
-                tvYearContent.isVisible = false
-            } else {
-                tvYearContent.text = track.releaseDate.take(4)
-            }
-//            track.releaseDate.let { tvYearContent.text = it.substring(0, 4) }
-//            track.releaseDate.let { tvYearContent.text = it?.take(4) } // may be null "asd"
+            tvYearContent.text = releaseYear(track.releaseDate ?: R.string.no_info.toString())
             tvGenreContent.text = track.primaryGenreName
             tvCountryContent.text = track.country
             Glide.with(ivImagePlayer)
@@ -96,6 +89,8 @@ class PlayerFragment : Fragment() {
                 .into(ivImagePlayer)
         }
     }
+
+    private fun releaseYear(s: String): String = s.removeRange(4 until s.length)
 
     private fun setupClickListeners() {
         binding.ivPlayTrack.setOnClickListener {

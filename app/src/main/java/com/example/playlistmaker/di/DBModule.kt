@@ -9,8 +9,9 @@ val DBModule = module {
 
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "playlist_database.db")
-            .addMigrations(AppDatabase.MIGRATION_1_2)
+//            .addMigrations(AppDatabase.MIGRATION_1_2)
             .allowMainThreadQueries()
+            .fallbackToDestructiveMigration()
             .build()
     }
     single { get<AppDatabase>().trackDao() }
