@@ -1,33 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    tools:context=".playlist.ui.PlaylistCreateFragment">
 
-    <Button
-        android:id="@+id/button_newPlaylist"
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_gravity="center_horizontal"
-        style="@style/search_buttonUpdate"
-        android:text="@string/media_add_new_playlist"
-        android:visibility="visible"/>
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/progressBar_tint"
+        android:outlineAmbientShadowColor="@color/progressBar_shadow"
+        android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/iv_placeholder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        style="@style/search_nothingFoundImage"
-        android:visibility="visible"
-        android:layout_marginTop="106dp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView android:id="@+id/tv_error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        style="@style/media_fragment"
-        android:layout_marginTop="242dp"
-        android:text="@string/media_playlist_error"/>
+        <Button
+            android:id="@+id/buttonCreateNewPlaylist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/button_create_new_playlist"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:fontFamily="@font/ys_display_medium"
+            android:text="@string/media_add_new_playlist"
+            android:textAllCaps="false"
+            android:gravity="center"
+            app:cornerRadius="54dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPlaylists"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="68dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivNotFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            style="@style/search_nothingFoundImage"
+            android:visibility="visible"
+            android:layout_marginTop="106dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonCreateNewPlaylist" />
+
+        <TextView
+            android:id="@+id/tvNotFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            style="@style/media_fragment"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/media_playlist_error"
+            app:layout_constraintTop_toBottomOf="@id/ivNotFound"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -30,6 +30,26 @@
     <string name="media_playlist_error">Вы не создали \n ни одного плейлиста</string>
     <string name="search_no_connection">Проверьте подключение к интернету</string>
     <string name="search_internal_server_error">Ошибка сервера</string>
+    <string name="playlist_name">Название*</string>
+    <string name="playlist_description">Описание</string>
+    <string name="playlist_create">Создать</string>
+    <string name="playlist_add_to_playlist">Добавить в плейлист</string>
+    <string name="playlist_message_added_to_playlist">Добавлено в плейлист %s</string>
+    <string name="playlist_message_track_exist_in_playlist">Трек уже добавлен в плейлист %s</string>
+    <string name="dialog_complete_creation">Завершить создание плейлиста?</string>
+    <string name="dialog_data_will_be_lost">Все несохраненные данные будут потеряны</string>
+    <string name="dialog_cancel">Отмена</string>
+    <string name="dialog_complete">Завершить</string>
+    <string name="playlist_created">Плейлист "%s" создан</string>
+    <string name="no_info">Не указано</string>
+    <plurals name="playlist_count_tracks">
+        <item quantity="zero"> треков</item>
+        <item quantity="one"> трек</item>
+        <item quantity="two"> трека</item>
+        <item quantity="few"> трека</item>
+        <item quantity="many"> треков</item>
+        <item quantity="other"> треков</item>
+    </plurals>
 
     // системные строки
     <string name="messages_header" />

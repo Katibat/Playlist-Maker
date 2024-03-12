@@ -10,6 +10,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvTrack"
+        style="@style/common_style"
         android:layout_width="@dimen/icon_45"
         android:layout_height="@dimen/icon_45"
         android:layout_marginStart="@dimen/icon_13"
@@ -46,6 +47,7 @@
             tools:ignore="NestedWeights" />
 
         <LinearLayout
+            android:id="@+id/llTrackInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 

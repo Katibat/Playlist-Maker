@@ -17,4 +17,5 @@
     <color name="switch_thumb_dark">#3772E7</color>
     <color name="progressBar_tint">#3772E7</color>
     <color name="progressBar_shadow">#6200EE</color>
+    <color name="bottom_sheet">#99000000</color>
 </resources>

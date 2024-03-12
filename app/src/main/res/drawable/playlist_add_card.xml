@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:shape="rectangle"
+    app:layout_constraintDimensionRatio="h,1:1">
+
+    <item android:drawable="@drawable/playlist_ic_add"
+        android:height="100dp"
+        android:width="100dp"
+        android:gravity="center" />
+    <item android:drawable="@drawable/playlist_shape"
+        android:height="312dp"
+        android:width="312dp" />
+</layer-list>
