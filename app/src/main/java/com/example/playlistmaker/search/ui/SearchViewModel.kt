@@ -1,6 +1,5 @@
 package com.example.playlistmaker.search.ui
 
-import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

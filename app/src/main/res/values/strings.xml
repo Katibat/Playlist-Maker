@@ -50,6 +50,21 @@
         <item quantity="many"> треков</item>
         <item quantity="other"> треков</item>
     </plurals>
+    <string name="playlist_is_empty">В этом плейлисте еще нет треков</string>
+    <string name="playlist_details_share">Поделиться</string>
+    <string name="playlist_details_edit_info">Редактировать информацию</string>
+    <string name="playlist_details_delete">Удалить плейлист</string>
+    <string name="dialog_delete_title">Удалить трек</string>
+    <string name="dialog_delete_message">Хотите удалить трек?</string>
+    <string name="dialog_delete_cancel">Нет</string>
+    <string name="dialog_delete_delete">Да</string>
+    <string name="no_tracks_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="dialog_delete_playlist_title">Удалить плейлист</string>
+    <string name="dialog_delete_playlist_message">Хотите удалить плейлист?</string>
+    <string name="dialog_delete_playlist_cancel">Нет</string>
+    <string name="dialog_delete_playlist_delete">Да</string>
+    <string name="playlist_details_edit">Редактировать</string>
+    <string name="playlist_details_save">Сохранить</string>
 
     // системные строки
     <string name="messages_header" />

@@ -47,4 +47,8 @@ class PlaylistCreateViewModel(
             temporaryFile.renameTo(finalFile)
         }
     }
+
+    suspend fun editPlaylist(playlist: Playlist) {
+        interactor.insertPlaylist(playlist)
+    }
 }

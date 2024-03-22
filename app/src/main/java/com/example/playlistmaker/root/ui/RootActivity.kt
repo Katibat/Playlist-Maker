@@ -4,13 +4,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityRootBinding
-import com.example.playlistmaker.player.ui.PlayerFragment
 import com.example.playlistmaker.playlist.ui.PlaylistCreateFragment
 import kotlinx.coroutines.launch
 
@@ -31,21 +29,36 @@ class RootActivity : AppCompatActivity() {
         binding?.toolbar?.setupWithNavController(navController, appBarConfiguration)
         // скрыть стрелку назад, через supportActionBar с флагом false не работает
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if ((destination.id == R.id.searchFragment) ||
-                (destination.id == R.id.settingsFragment)
-            ) {
-                binding?.toolbar?.navigationIcon = null
-            }
-            if (destination.id == R.id.playerFragment) {
-                binding?.toolbar?.title = null
-                binding?.toolbar?.setNavigationOnClickListener {
-                    this.onBackPressedDispatcher.onBackPressed()
+            when (destination.id) {
+                R.id.searchFragment -> binding?.toolbar?.navigationIcon = null
+                R.id.settingsFragment -> binding?.toolbar?.navigationIcon = null
+                R.id.playerFragment -> {
+                    binding?.toolbar?.title = null
+                    binding?.toolbar?.setNavigationOnClickListener {
+                        this.onBackPressedDispatcher.onBackPressed()
+                    }
                 }
-            }
-            if (destination.id == R.id.playlistCreateFragment) {
-                binding?.toolbar?.title = getString(R.string.media_add_new_playlist)
-                binding?.toolbar?.setNavigationOnClickListener {
-                    onNavigateBack()
+                R.id.playlistCreateFragment -> {
+                    binding?.toolbar?.title = getString(R.string.media_add_new_playlist)
+                    binding?.toolbar?.setNavigationOnClickListener {
+                        onNavigateBack()
+                    }
+                }
+                R.id.playlistDetailsFragment -> {
+                    binding?.toolbar?.title = null
+                    binding?.toolbar?.background?.alpha = 0
+                    binding?.toolbar?.setNavigationOnClickListener {
+                        this.onBackPressedDispatcher.onBackPressed()
+                    }
+                    hideBottomNavigation()
+                }
+                R.id.mediaFragmentPlaylist -> {
+                    binding?.toolbar?.navigationIcon = null
+                    binding?.toolbar?.title = null
+                    hideBottomNavigation()
+                    binding?.toolbar?.setNavigationOnClickListener {
+                        this.onBackPressedDispatcher.onBackPressed()
+                    }
                 }
             }
         }

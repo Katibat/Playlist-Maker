@@ -33,12 +33,16 @@ class PlaylistDbConvertor {
         )
     }
 
-    private fun convertTracksIdsToString(tracksIds: List<Int>?): String? {
+    private fun convertTracksIdsToStringFromGson(tracksIds: List<Int>?): String? {
         return if (tracksIds == null) {
             null
         } else {
             Gson().toJson(tracksIds)
         }
+    }
+
+    private fun convertTracksIdsToString(tracksIds: List<Int>?): String? {
+        return return tracksIds?.joinToString(separator = ",")
     }
 
     private fun convertStringTracksIdsToList(tracksIds: String?): List<Int> {

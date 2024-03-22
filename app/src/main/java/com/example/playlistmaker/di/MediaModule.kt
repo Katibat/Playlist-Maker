@@ -16,6 +16,7 @@ import com.example.playlistmaker.playlist.domain.api.PlaylistInteractor
 import com.example.playlistmaker.playlist.domain.api.PlaylistRepository
 import com.example.playlistmaker.playlist.domain.impl.PlaylistInteractorImpl
 import com.example.playlistmaker.playlist.ui.PlaylistCreateViewModel
+import com.example.playlistmaker.playlistDetails.ui.PlaylistDetailsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -56,5 +57,9 @@ val mediaModule = module {
 
     viewModel {
         PlaylistCreateViewModel(androidContext(), get())
+    }
+
+    viewModel {
+        PlaylistDetailsViewModel(get(), get())
     }
 }

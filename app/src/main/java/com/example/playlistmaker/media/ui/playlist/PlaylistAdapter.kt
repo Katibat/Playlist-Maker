@@ -53,6 +53,9 @@ class PlaylistsAdapter(
 
     override fun onBindViewHolder(holder: PlaylistHolder, position: Int) {
         holder.bind(playlists[position])
+        holder.itemView.setOnClickListener {
+            clickListener.onClick(playlists[position])
+        }
     }
 
     fun updateData(newPlaylistsList: List<Playlist>) {

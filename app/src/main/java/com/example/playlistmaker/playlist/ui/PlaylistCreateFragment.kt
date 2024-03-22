@@ -14,14 +14,17 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentCreatePlaylistBinding
 import com.example.playlistmaker.playlist.domain.api.PlaylistImageStorage
+import com.example.playlistmaker.playlist.domain.models.Playlist
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,7 +35,8 @@ class PlaylistCreateFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModel<PlaylistCreateViewModel>()
     private var isImageSelected = false
-    private var urlImageForNewPlaylist: String? = null
+    private var urlImageForPlaylist: String? = null
+    private var editablePlaylist: Playlist? = null
 
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -46,10 +50,12 @@ class PlaylistCreateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = MediaFragmentCreatePlaylistBinding.inflate(inflater, container, false)
+        editablePlaylist = arguments?.getSerializable("EDIT_PLAYLIST") as? Playlist
 
         setupListeners()
         setupTextChangeListener()
         setupViewModelObservers()
+        editablePlaylist?.let { setupUiEditMode(it) }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -81,13 +87,36 @@ class PlaylistCreateFragment : Fragment() {
 
     private fun setupListeners() {
         binding.ivImagePlayer.setOnClickListener { chooseAndUploadImage() }
-        binding.buttonCreatePlaylist.setOnClickListener { createNewPlaylist() }
+        binding.buttonCreatePlaylist.setOnClickListener {
+            if (editablePlaylist == null) {
+                createNewPlaylist()
+            } else {
+                lifecycleScope.launch {
+                    editPlaylist(editablePlaylist!!)
+                }
+            }
+        }
     }
 
     private fun setupViewModelObservers() {
         viewModel.observeImageUrl().observe(viewLifecycleOwner, Observer { url ->
-            urlImageForNewPlaylist = url
+            urlImageForPlaylist = url
         })
+    }
+
+    private fun setupUiEditMode(playlist: Playlist) {
+        binding.playlistName.setText(playlist.name)
+        binding.playlistDescription.setText(playlist.description)
+        binding.buttonCreatePlaylist.text = getString(R.string.playlist_details_save)
+        if (playlist.imageUrl != null) {
+            Glide.with(this)
+                .load(playlist.imageUrl)
+                .into(binding.ivImagePlayer)
+            binding.icAddImage.isVisible = false
+        } else {
+            binding.ivImagePlayer.isVisible = true
+            binding.icAddImage.isVisible = true
+        }
     }
 
     private fun handleSelectedImage(uri: Uri) {
@@ -100,18 +129,69 @@ class PlaylistCreateFragment : Fragment() {
     private fun createNewPlaylist() {
         val playlistName = binding.playlistName.text.toString()
         viewModel.renameImageFile(playlistName)
-        lifecycleScope.launch {
-            viewModel.createNewPlaylist(
-                playlistName,
-                binding.playlistDescription.text.toString(),
-                urlImageForNewPlaylist,
-                null,
-                0
-            )
-            viewModel.getImageUrlFromStorage(playlistName)
-            showToastPlaylistCreated(playlistName)
-            findNavController().navigateUp()
+        if (isImageSelected) {
+            lifecycleScope.launch {
+                viewModel.createNewPlaylist(
+                    playlistName,
+                    binding.playlistDescription.text.toString(),
+                    urlImageForPlaylist,
+                    null,
+                    0
+                )
+            }
+        } else {
+            lifecycleScope.launch {
+                viewModel.createNewPlaylist(
+                    playlistName,
+                    binding.playlistDescription.text.toString(),
+                    null,
+                    null,
+                    0
+                )
+            }
         }
+        viewModel.getImageUrlFromStorage(playlistName)
+        showToastPlaylistCreated(playlistName)
+        findNavController().navigateUp()
+    }
+
+    private suspend fun editPlaylist(playlist: Playlist) {
+        val updatedName = binding.playlistName.text.toString()
+        val updatedDetails = binding.playlistDescription.text.toString()
+        val updatedIdOfTracks =
+            if (playlist.tracksIds?.isEmpty() == true) null else playlist.tracksIds
+        val updatedNumberOfTracks =
+            if (playlist.countTracks == 0) null else playlist.countTracks
+        var updatedPlaylist: Playlist?
+        if (isImageSelected) {
+            updatedPlaylist = playlist.copy(
+                name = updatedName,
+                description = updatedDetails,
+                imageUrl = urlImageForPlaylist,
+                tracksIds = updatedIdOfTracks,
+                countTracks = updatedNumberOfTracks
+            )
+            lifecycleScope.launch {
+                viewModel.editPlaylist(updatedPlaylist!!)
+            }
+        } else {
+            updatedPlaylist = playlist.copy(
+                name = updatedName,
+                description = updatedDetails,
+                tracksIds = updatedIdOfTracks,
+                countTracks = updatedNumberOfTracks
+            )
+            lifecycleScope.launch {
+                lifecycleScope.launch {
+                    viewModel.editPlaylist(updatedPlaylist)
+                }
+            }
+        }
+        val bundle = Bundle()
+        bundle.putSerializable("playlist", updatedPlaylist)
+        parentFragmentManager.setFragmentResult("playlist", bundle)
+
+        findNavController().popBackStack()
     }
 
     private fun chooseAndUploadImage() {
@@ -136,7 +216,8 @@ class PlaylistCreateFragment : Fragment() {
     fun navigateBack() {
         if (binding.playlistName.text!!.isNotEmpty() ||
             binding.playlistDescription.text!!.isNotEmpty() ||
-            isImageSelected) {
+            isImageSelected
+        ) {
             showBackConfirmationDialog()
         } else {
             findNavController().navigateUp()
@@ -144,7 +225,7 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private fun showBackConfirmationDialog() {
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.DialogStyle)
             .setTitle(context?.getString(R.string.dialog_complete_creation))
             .setMessage(context?.getString(R.string.dialog_data_will_be_lost))
             .setNeutralButton(context?.getString(R.string.dialog_cancel)) { dialog, _ ->
@@ -161,5 +242,19 @@ class PlaylistCreateFragment : Fragment() {
                 getButton(DialogInterface.BUTTON_NEUTRAL)
                     .setTextColor(resources.getColor(R.color.progressBar_tint, null))
             }
+    }
+    companion object {
+        fun createArgs(
+            playlistId: Int,
+            playlistName: String,
+            description: String?,
+            imageUrl: String?
+        ): Bundle =
+            bundleOf(
+                "PLAYLIST_ID" to playlistId,
+                "PLAYLIST_NAME" to playlistName,
+                "DESCRIPTION" to description,
+                "IMAGE_URL" to imageUrl
+            )
     }
 }

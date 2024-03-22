@@ -28,7 +28,11 @@ class MediaFragmentPlaylist : Fragment() {
     ): View {
         _binding = MediaFragmentPlaylistsBinding.inflate(inflater, container, false)
         adapter = PlaylistsAdapter(mutableListOf(), object : PlaylistsAdapter.Listener {
-            override fun onClick(playlist: Playlist) {}
+            override fun onClick(playlist: Playlist) {
+                val bundle = Bundle()
+                bundle.putSerializable("playlist", playlist)
+                findNavController().navigate(R.id.playlistDetailsFragment, bundle)
+            }
         })
 
         binding.rvPlaylists.adapter = adapter
