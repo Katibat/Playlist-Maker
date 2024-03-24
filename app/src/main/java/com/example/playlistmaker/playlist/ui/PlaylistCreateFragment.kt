@@ -105,6 +105,7 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private fun setupUiEditMode(playlist: Playlist) {
+        requireActivity().title = getString(R.string.playlist_details_edit)
         binding.playlistName.setText(playlist.name)
         binding.playlistDescription.setText(playlist.description)
         binding.buttonCreatePlaylist.text = getString(R.string.playlist_details_save)
@@ -150,7 +151,6 @@ class PlaylistCreateFragment : Fragment() {
                 )
             }
         }
-        viewModel.getImageUrlFromStorage(playlistName)
         showToastPlaylistCreated(playlistName)
         findNavController().navigateUp()
     }
@@ -162,7 +162,7 @@ class PlaylistCreateFragment : Fragment() {
             if (playlist.tracksIds?.isEmpty() == true) null else playlist.tracksIds
         val updatedNumberOfTracks =
             if (playlist.countTracks == 0) null else playlist.countTracks
-        var updatedPlaylist: Playlist?
+        var updatedPlaylist: Playlist? = null
         if (isImageSelected) {
             updatedPlaylist = playlist.copy(
                 name = updatedName,
@@ -190,8 +190,7 @@ class PlaylistCreateFragment : Fragment() {
         val bundle = Bundle()
         bundle.putSerializable("playlist", updatedPlaylist)
         parentFragmentManager.setFragmentResult("playlist", bundle)
-
-        findNavController().popBackStack()
+        findNavController().navigateUp()
     }
 
     private fun chooseAndUploadImage() {
@@ -242,19 +241,5 @@ class PlaylistCreateFragment : Fragment() {
                 getButton(DialogInterface.BUTTON_NEUTRAL)
                     .setTextColor(resources.getColor(R.color.progressBar_tint, null))
             }
-    }
-    companion object {
-        fun createArgs(
-            playlistId: Int,
-            playlistName: String,
-            description: String?,
-            imageUrl: String?
-        ): Bundle =
-            bundleOf(
-                "PLAYLIST_ID" to playlistId,
-                "PLAYLIST_NAME" to playlistName,
-                "DESCRIPTION" to description,
-                "IMAGE_URL" to imageUrl
-            )
     }
 }

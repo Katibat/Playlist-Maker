@@ -360,6 +360,7 @@
     </style>
 
     <style name="cardview_create_new_playlist">
+        <item name="android:background">@color/dark_theme_item</item>
         <item name="android:backgroundTint">@color/dark_theme_item</item>
     </style>
 

@@ -46,7 +46,6 @@ class PlaylistDetailsFragment : Fragment() {
     ): View {
         _binding = MediaFragmentPlaylistDetailsBinding.inflate(inflater, container, false)
         playlist = arguments?.getSerializable("playlist") as? Playlist
-//        viewModel.getPlaylistById(requireArguments().getInt("ARGS_PLAYLIST"))
         adapter = TrackAdapter {
             findNavController().navigate(
                 R.id.action_playlistDetailsFragment_to_playerFragment,
@@ -69,6 +68,7 @@ class PlaylistDetailsFragment : Fragment() {
             viewModel.getTracksFromCurrentPlaylist(editPlaylist!!)
             playlistToEdit = editPlaylist!!.copy()
         }
+
         val bottomSheetContainer = binding.standardBottomSheetMenuDetails
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
@@ -117,7 +117,6 @@ class PlaylistDetailsFragment : Fragment() {
         if (!tracks.isNullOrEmpty()) {
             binding.messageEmptyList.visibility = View.GONE
             binding.recycleViewBottomSheet.visibility = View.VISIBLE
-            val numberOfTracks = tracks.size
             val updatedTracks = tracks.map { track ->
                 track.copy(
                     artworkUrl100 = track.artworkUrl100
@@ -132,8 +131,18 @@ class PlaylistDetailsFragment : Fragment() {
                 adapter?.notifyDataSetChanged()
                 recycleViewBottomSheet.visibility = View.VISIBLE
                 playlistMinutes.text =
-                    "$formattedDuration ${getMinuteWordForm(formattedDuration)}"
-                playlistTracks.text = "$numberOfTracks ${getTrackWordForm(numberOfTracks)}"
+                    "$formattedDuration ${
+                        context?.resources?.getQuantityString(
+                            R.plurals.playlist_time,
+                            formattedDuration
+                        )
+                    }"
+                playlistTracks.text = "${playlist?.countTracks} ${
+                    root.context.resources.getQuantityString(
+                        R.plurals.playlist_count_tracks,
+                        playlist?.countTracks!!.toInt()
+                    )
+                }"
             }
         }
     }
@@ -196,19 +205,11 @@ class PlaylistDetailsFragment : Fragment() {
 
         binding.editPlaylist.setOnClickListener {
             viewModel.getPlaylistById(editPlaylist!!.id)
-//            val playlist: Playlist? = playlistToEdit
-//            val bundle = Bundle().apply {
-//                putSerializable("EDIT_PLAYLIST", playlist)
-//            }
-//            findNavController().navigate(R.id.mediaFragmentPlaylist, bundle)
-            findNavController()
-                .navigate(
-                    R.id.action_playlistDetailsFragment_to_playlistCreateFragment,
-                    PlaylistCreateFragment.createArgs(
-                        editPlaylist!!.id,
-                        editPlaylist!!.name,
-                        editPlaylist!!.description,
-                        editPlaylist!!.imageUrl))
+            val playlist: Playlist? = playlistToEdit
+            val bundle = Bundle().apply {
+                putSerializable("EDIT_PLAYLIST", playlist)
+            }
+            findNavController().navigate(R.id.mediaFragmentPlaylist, bundle)
         }
     }
 
@@ -236,24 +237,36 @@ class PlaylistDetailsFragment : Fragment() {
         })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupBottomSheet(playlist: Playlist) {
         binding.recycleViewBottomSheet.layoutManager = LinearLayoutManager(requireContext())
         binding.playlistNameBtnSheet.text = playlist.name
         binding.numberOfTracksBtnSheet.text =
-            "${playlist.countTracks.toString()} ${getTrackWordForm(playlist.countTracks ?: 0)}"
+            "${playlist.countTracks} ${
+                context?.resources?.getQuantityString(
+                    R.plurals.playlist_count_tracks,
+                    playlist.countTracks!!.toInt()
+                )
+            }"
         Glide.with(requireContext())
             .load(playlist.imageUrl)
             .placeholder(R.drawable.placeholder)
             .into(binding.playlistCoverImageBtnSheet)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUi(playlist: Playlist) {
         setupBottomSheet(playlist)
         with(binding) {
             playlistName.text = playlist.name
             playlistDetails.text = playlist.description
             playlistTracks.text =
-                "${playlist.countTracks.toString()} ${getTrackWordForm(playlist.countTracks ?: 0)}"
+                "${playlist.countTracks} ${
+                    context?.resources?.getQuantityString(
+                        R.plurals.playlist_count_tracks,
+                        playlist.countTracks!!.toInt()
+                    )
+                }"
             Glide.with(root.context)
                 .load(playlist.imageUrl)
                 .placeholder(R.drawable.placeholder)
@@ -286,24 +299,6 @@ class PlaylistDetailsFragment : Fragment() {
         return true
     }
 
-    private fun getTrackWordForm(count: Int): String {
-        return when {
-            count % 100 in 11..14 -> "треков"
-            count % 10 == 1 -> "трек"
-            count % 10 in 2..4 -> "трека"
-            else -> "треков"
-        }
-    }
-
-    private fun getMinuteWordForm(count: Int): String {
-        return when {
-            count % 100 in 11..14 -> "минут"
-            count % 10 == 1 -> "минута"
-            count % 10 in 2..4 -> "минуты"
-            else -> "минут"
-        }
-    }
-
     private fun getFormattedDuration(duration: Int?): Int {
         return if (duration !== null) {
             SimpleDateFormat("mm", Locale.getDefault()).format(duration).toInt()
@@ -316,10 +311,4 @@ class PlaylistDetailsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-//    companion object {
-//        fun createArgs(playlistId: Int): Bundle =
-//            bundleOf("ARGS_PLAYLIST" to playlistId)
-//
-//    }
 }

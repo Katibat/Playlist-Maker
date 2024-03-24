@@ -353,6 +353,7 @@
     </style>
 
     <style name="cardview_create_new_playlist">
+        <item name="android:background">@color/white</item>
         <item name="android:backgroundTint">@color/white</item>
     </style>
 
