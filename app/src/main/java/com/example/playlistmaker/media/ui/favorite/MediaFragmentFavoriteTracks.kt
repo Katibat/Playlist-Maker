@@ -97,6 +97,8 @@ class MediaFragmentFavoriteTracks : Fragment() {
                     progressBar.isVisible = false
                 }
             }
+
+            else -> {}
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.playlistmaker.playlist.domain.api
 
+import android.net.Uri
 import com.example.playlistmaker.playlist.domain.models.Playlist
 import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
@@ -16,4 +17,5 @@ interface PlaylistRepository {
     suspend fun getPlaylistById(playlistId: Int): Playlist
     fun getAllPlaylists(): Flow<List<Playlist>>
     fun getTracksOnlyFromPlaylist(tracksIdsList: List<Int>): Flow<List<Track>?>
+    fun saveImageFromUri(uri: Uri, picturesDirectoryPath: String): String
 }

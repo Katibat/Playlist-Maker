@@ -1,14 +1,13 @@
 package com.example.playlistmaker.playlist.ui
 
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
-import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.playlist.domain.models.Playlist
 import com.example.playlistmaker.playlist.domain.api.PlaylistInteractor
-import com.example.playlistmaker.playlist.domain.api.PlaylistImageStorage
 import java.io.File
 
 class PlaylistCreateViewModel(
@@ -16,9 +15,8 @@ class PlaylistCreateViewModel(
     private val interactor: PlaylistInteractor
 ) : ViewModel() {
 
-    private val storage: PlaylistImageStorage? = null
-    private val imageUrlLiveData = MutableLiveData<String>()
-    fun observeImageUrl(): LiveData<String> = imageUrlLiveData
+    private val _imagePathLiveData = MutableLiveData<String>()
+    val imagePathLiveData: LiveData<String> get() = _imagePathLiveData
 
     suspend fun createNewPlaylist(
         name: String,
@@ -31,10 +29,10 @@ class PlaylistCreateViewModel(
         interactor.insertPlaylist(newPlaylist)
     }
 
-    fun getImageUrlFromStorage(playlistName: String) {
-        val file = storage?.getImageFileForPlaylist(context, playlistName)
-        val url = file?.toUri().toString()
-        imageUrlLiveData.postValue(url)
+    fun saveImage(uri: Uri) {
+        val picturesDirectoryPath = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath ?: ""
+        val imagePath = interactor.saveImageFromUri(uri, picturesDirectoryPath)
+        _imagePathLiveData.postValue(imagePath)
     }
 
     fun renameImageFile(playlistName: String) {

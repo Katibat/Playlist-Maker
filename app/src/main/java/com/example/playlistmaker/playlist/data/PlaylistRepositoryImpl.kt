@@ -1,5 +1,10 @@
 package com.example.playlistmaker.playlist.data
 
+import android.content.ContentResolver
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import com.example.playlistmaker.db.AppDatabase
 import com.example.playlistmaker.db.convertor.PlaylistDbConvertor
 import com.example.playlistmaker.db.convertor.TrackInPlaylistDbConvertor
@@ -10,11 +15,15 @@ import com.example.playlistmaker.playlist.domain.api.PlaylistRepository
 import com.example.playlistmaker.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.io.File
+import java.io.FileOutputStream
+import java.util.UUID
 
 class PlaylistRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val convertorPlaylist: PlaylistDbConvertor,
-    private val convertorTracksInPlaylist: TrackInPlaylistDbConvertor
+    private val convertorTracksInPlaylist: TrackInPlaylistDbConvertor,
+    private val contentResolver: ContentResolver
 ) : PlaylistRepository {
 
     override suspend fun insertPlaylist(playlist: Playlist) {
@@ -115,5 +124,19 @@ class PlaylistRepositoryImpl(
 
     private fun convertFromTrackToTrackEntity(track: Track): TrackInPlaylistEntity {
         return convertorTracksInPlaylist.map(track)
+    }
+
+    override fun saveImageFromUri(uri: Uri, picturesDirectoryPath: String): String {
+        val uniqueID = UUID.randomUUID().toString()
+        val file = File(picturesDirectoryPath, "image_$uniqueID.jpg")
+
+        val inputStream = contentResolver.openInputStream(uri)
+        val outputStream = FileOutputStream(file)
+
+        BitmapFactory.decodeStream(inputStream).compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        inputStream?.close()
+        outputStream.close()
+
+        return file.absolutePath
     }
 }

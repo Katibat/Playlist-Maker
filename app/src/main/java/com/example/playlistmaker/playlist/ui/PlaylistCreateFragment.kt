@@ -1,8 +1,6 @@
 package com.example.playlistmaker.playlist.ui
 
 import android.content.DialogInterface
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -17,18 +15,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentCreatePlaylistBinding
-import com.example.playlistmaker.playlist.domain.api.PlaylistImageStorage
 import com.example.playlistmaker.playlist.domain.models.Playlist
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.FileOutputStream
 
 class PlaylistCreateFragment : Fragment() {
     private var _binding: MediaFragmentCreatePlaylistBinding? = null
@@ -99,19 +94,20 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private fun setupViewModelObservers() {
-        viewModel.observeImageUrl().observe(viewLifecycleOwner, Observer { url ->
+        viewModel.imagePathLiveData.observe(viewLifecycleOwner) { url ->
             urlImageForPlaylist = url
-        })
+        }
     }
 
     private fun setupUiEditMode(playlist: Playlist) {
-        requireActivity().title = getString(R.string.playlist_details_edit)
+        requireActivity().title = "Редактировать" // getString(R.string.playlist_details_edit)
         binding.playlistName.setText(playlist.name)
         binding.playlistDescription.setText(playlist.description)
-        binding.buttonCreatePlaylist.text = getString(R.string.playlist_details_save)
+        binding.buttonCreatePlaylist.text = "Сохранить" // getString(R.string.playlist_details_save)
         if (playlist.imageUrl != null) {
             Glide.with(this)
                 .load(playlist.imageUrl)
+                .centerCrop()
                 .into(binding.ivImagePlayer)
             binding.icAddImage.isVisible = false
         } else {
@@ -124,7 +120,7 @@ class PlaylistCreateFragment : Fragment() {
         binding.ivImagePlayer.setImageURI(uri)
         binding.icAddImage.isVisible = false
         isImageSelected = true
-        saveImageToPrivateStorage(uri)
+        viewModel.saveImage(uri)
     }
 
     private fun createNewPlaylist() {
@@ -157,34 +153,29 @@ class PlaylistCreateFragment : Fragment() {
 
     private suspend fun editPlaylist(playlist: Playlist) {
         val updatedName = binding.playlistName.text.toString()
-        val updatedDetails = binding.playlistDescription.text.toString()
-        val updatedIdOfTracks =
-            if (playlist.tracksIds?.isEmpty() == true) null else playlist.tracksIds
-        val updatedNumberOfTracks =
-            if (playlist.countTracks == 0) null else playlist.countTracks
-        var updatedPlaylist: Playlist? = null
+        val updatedDescription = binding.playlistDescription.text.toString()
+        val updatedTracksIds = if (playlist.tracksIds?.isEmpty() == true) null else playlist.tracksIds
+        val updatedCountTracks = if (playlist.countTracks == 0) null else playlist.countTracks
+        val updatedPlaylist: Playlist?
         if (isImageSelected) {
             updatedPlaylist = playlist.copy(
                 name = updatedName,
-                description = updatedDetails,
+                description = updatedDescription,
                 imageUrl = urlImageForPlaylist,
-                tracksIds = updatedIdOfTracks,
-                countTracks = updatedNumberOfTracks
-            )
+                tracksIds = updatedTracksIds,
+                countTracks = updatedCountTracks)
             lifecycleScope.launch {
-                viewModel.editPlaylist(updatedPlaylist!!)
+                viewModel.editPlaylist(updatedPlaylist)
             }
         } else {
             updatedPlaylist = playlist.copy(
                 name = updatedName,
-                description = updatedDetails,
-                tracksIds = updatedIdOfTracks,
-                countTracks = updatedNumberOfTracks
-            )
+                description = updatedDescription,
+                imageUrl = urlImageForPlaylist,
+                tracksIds = updatedTracksIds,
+                countTracks = updatedCountTracks)
             lifecycleScope.launch {
-                lifecycleScope.launch {
-                    viewModel.editPlaylist(updatedPlaylist)
-                }
+                viewModel.editPlaylist(updatedPlaylist)
             }
         }
         val bundle = Bundle()
@@ -200,16 +191,6 @@ class PlaylistCreateFragment : Fragment() {
     private fun showToastPlaylistCreated(playlistName: String) {
         val message = getString(R.string.playlist_created, playlistName)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun saveImageToPrivateStorage(uri: Uri) {
-        val file = PlaylistImageStorage.getTemporaryImageFile(requireContext())
-        val inputStream = requireActivity().contentResolver.openInputStream(uri)
-        val outputStream = FileOutputStream(file)
-        BitmapFactory.decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
-        inputStream?.close()
-        outputStream.close()
     }
 
     fun navigateBack() {
@@ -241,5 +222,15 @@ class PlaylistCreateFragment : Fragment() {
                 getButton(DialogInterface.BUTTON_NEUTRAL)
                     .setTextColor(resources.getColor(R.color.progressBar_tint, null))
             }
+    }
+
+    companion object {
+        fun createArgs(id: Int?, name: String?, description: String?, imageUrl: String?): Bundle? =
+            bundleOf(
+                "PLAYLIST_ID" to id,
+                "PLAYLIST_NAME" to name,
+                "DESCRIPTION" to description,
+                "PREVIEW" to imageUrl
+            )
     }
 }

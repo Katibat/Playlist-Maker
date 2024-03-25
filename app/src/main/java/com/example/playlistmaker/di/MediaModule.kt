@@ -36,7 +36,7 @@ val mediaModule = module {
     }
 
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl(get(), get(), get())
+        PlaylistRepositoryImpl(get(), get(), get(), get())
     }
 
     single<FavoriteTracksInteractor> {
