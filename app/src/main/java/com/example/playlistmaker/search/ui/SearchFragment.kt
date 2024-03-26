@@ -14,17 +14,16 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.PlayerFragment
 import com.example.playlistmaker.search.domain.models.NetworkError
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.player.domain.models.Track
+import com.example.playlistmaker.player.ui.TrackAdapter
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), TrackAdapter.OnItemClickListener, TrackAdapter.OnItemLongClickListener {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<SearchViewModel>()
     private var querySearchText = ""
-    private val trackAdapter by lazy { TrackAdapter { startAdapter(it) } }
-    private val historyAdapter by lazy { TrackAdapter { startAdapter(it) } }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,10 +40,6 @@ class SearchFragment : Fragment() {
         viewModel.observeSearchState().observe(viewLifecycleOwner) {
             render(it)
         }
-
-        // Recycler View
-        binding.rvSearchTrack.adapter = trackAdapter
-        binding.rvTracksHistory.adapter = historyAdapter
 
         // кнопка очистить поиск
         binding.ivClearButton.setOnClickListener {
@@ -113,8 +108,8 @@ class SearchFragment : Fragment() {
 
     private fun showHistoryList(tracksList: List<Track>) {
         hideImageView()
-        historyAdapter.tracksList = tracksList as ArrayList
-        if (historyAdapter.tracksList.isNotEmpty()) {
+        binding.rvTracksHistory.adapter = TrackAdapter(ArrayList(tracksList), this@SearchFragment, this@SearchFragment)
+        if (tracksList.isNotEmpty()) {
             with(binding) {
                 llSearchHistory.isVisible = true
                 tvTittleHistory.isVisible = true
@@ -130,8 +125,7 @@ class SearchFragment : Fragment() {
 
     private fun showSearchResult(tracksList: List<Track>) {
         hideImageView()
-        trackAdapter.clearTracks()
-        trackAdapter.tracksList = tracksList as ArrayList
+        binding.rvSearchTrack.adapter = TrackAdapter(ArrayList(tracksList), this@SearchFragment, this@SearchFragment)
         binding.rvSearchTrack.isVisible = true
     }
 
@@ -185,7 +179,11 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun startAdapter(track: Track) {
+    companion object {
+        private const val SEARCH_QUERY = "search_query"
+    }
+
+    override fun onItemClick(track: Track) {
         if (viewModel.clickDebounce()) {
             viewModel.addTrackInHistoryList(track)
             val trackJson = Gson().toJson(track)
@@ -196,7 +194,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    companion object {
-        private const val SEARCH_QUERY = "search_query"
+    override fun onItemLongClick(track: Track): Boolean {
+        return true
     }
 }

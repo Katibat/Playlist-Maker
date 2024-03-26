@@ -15,12 +15,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentAudioplayerBinding
-import com.example.playlistmaker.playlist.domain.models.Playlist
+import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.util.PlaylistResult
 import com.example.playlistmaker.player.domain.util.StatePlayer
-import com.example.playlistmaker.playlist.ui.PlaylistCreateFragment
-import com.example.playlistmaker.playlist.ui.PlaylistsAdapterBottomSheet
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.media.ui.playlist.PlaylistsAdapterBottomSheet
+import com.example.playlistmaker.player.domain.models.Track
 import com.example.playlistmaker.utils.App.Companion.getTrackTimeMillis
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson

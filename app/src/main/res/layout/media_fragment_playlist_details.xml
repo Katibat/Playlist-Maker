@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".playlistDetails.ui.PlaylistDetailsFragment">
+    tools:context=".media.ui.details.PlaylistDetailsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_content"
@@ -12,6 +12,26 @@
         android:layout_height="match_parent"
         android:background="@color/switch_track"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:id="@+id/header_field"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ic_back_arrow"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/arrow"
+                style="@style/back_arrow_from_playlist_creation"
+                app:tint="@color/dark_theme_item" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/image_playlist_cover"

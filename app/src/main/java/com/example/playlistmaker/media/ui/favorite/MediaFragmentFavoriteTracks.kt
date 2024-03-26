@@ -11,17 +11,17 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentFavoriteTracksBinding
 import com.example.playlistmaker.media.util.FavoriteTrackState
 import com.example.playlistmaker.player.ui.PlayerFragment
-import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.ui.TrackAdapter
+import com.example.playlistmaker.player.domain.models.Track
+import com.example.playlistmaker.player.ui.TrackAdapter
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MediaFragmentFavoriteTracks : Fragment() {
+class MediaFragmentFavoriteTracks : Fragment(),
+    TrackAdapter.OnItemClickListener, TrackAdapter.OnItemLongClickListener {
 
     private var _binding: MediaFragmentFavoriteTracksBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<MediaFavoriteTracksViewModel>()
-    private val favoriteTrackAdapter by lazy { TrackAdapter { startAdapter(it) } }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,9 +39,6 @@ class MediaFragmentFavoriteTracks : Fragment() {
             render(it)
         }
 
-        // Recycler View
-        binding.rvFavouriteTracks.adapter = favoriteTrackAdapter
-
         // get favorite Tracks from bd
         viewModel.fillData()
     }
@@ -56,16 +53,6 @@ class MediaFragmentFavoriteTracks : Fragment() {
         _binding = null
     }
 
-    private fun startAdapter(track: Track) {
-        if (viewModel.clickDebounce()) {
-            val trackJson = Gson().toJson(track)
-            findNavController().navigate(
-                R.id.action_mediaFragment_to_playerFragment,
-                PlayerFragment.createArgs(trackJson)
-            )
-        }
-    }
-
     private fun render(state: FavoriteTrackState) {
         when (state) {
             is FavoriteTrackState.Loading -> {
@@ -78,9 +65,8 @@ class MediaFragmentFavoriteTracks : Fragment() {
             }
 
             is FavoriteTrackState.Content -> {
-                favoriteTrackAdapter.clearTracks()
-                favoriteTrackAdapter.tracksList = state.tracks as MutableList<Track>
-                favoriteTrackAdapter.notifyDataSetChanged()
+                binding.rvFavouriteTracks.adapter = TrackAdapter(ArrayList(state.tracks),
+                    this@MediaFragmentFavoriteTracks, this@MediaFragmentFavoriteTracks)
                 with(binding) {
                     rvFavouriteTracks.isVisible = true
                     ivPlaceholder.isVisible = false
@@ -97,9 +83,21 @@ class MediaFragmentFavoriteTracks : Fragment() {
                     progressBar.isVisible = false
                 }
             }
-
-            else -> {}
         }
+    }
+
+    override fun onItemClick(track: Track) {
+        if (viewModel.clickDebounce()) {
+            val trackJson = Gson().toJson(track)
+            findNavController().navigate(
+                R.id.action_mediaFragment_to_playerFragment,
+                PlayerFragment.createArgs(trackJson)
+            )
+        }
+    }
+
+    override fun onItemLongClick(track: Track): Boolean {
+        return true
     }
 
     companion object {

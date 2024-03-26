@@ -1,10 +1,10 @@
-package com.example.playlistmaker.playlist.domain.impl
+package com.example.playlistmaker.media.domain.impl
 
 import android.net.Uri
-import com.example.playlistmaker.playlist.domain.models.Playlist
-import com.example.playlistmaker.playlist.domain.api.PlaylistInteractor
-import com.example.playlistmaker.playlist.domain.api.PlaylistRepository
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.media.domain.api.PlaylistInteractor
+import com.example.playlistmaker.media.domain.api.PlaylistRepository
+import com.example.playlistmaker.player.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistInteractorImpl(private val repository: PlaylistRepository) : PlaylistInteractor {

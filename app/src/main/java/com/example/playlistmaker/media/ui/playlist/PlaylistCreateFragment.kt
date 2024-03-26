@@ -1,4 +1,4 @@
-package com.example.playlistmaker.playlist.ui
+package com.example.playlistmaker.media.ui.playlist
 
 import android.content.DialogInterface
 import android.net.Uri
@@ -9,10 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.os.bundleOf
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -20,19 +19,21 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentCreatePlaylistBinding
-import com.example.playlistmaker.playlist.domain.models.Playlist
+import com.example.playlistmaker.media.domain.models.Playlist
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PlaylistCreateFragment : Fragment() {
     private var _binding: MediaFragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModel<PlaylistCreateViewModel>()
+    private val viewModel by viewModel<PlaylistCreateViewModel>() {
+        parametersOf(requireActivity() as AppCompatActivity)
+    }
     private var isImageSelected = false
     private var urlImageForPlaylist: String? = null
     private var editablePlaylist: Playlist? = null
-
     private val pickMedia =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             uri?.let {
@@ -46,18 +47,10 @@ class PlaylistCreateFragment : Fragment() {
     ): View {
         _binding = MediaFragmentCreatePlaylistBinding.inflate(inflater, container, false)
         editablePlaylist = arguments?.getSerializable("EDIT_PLAYLIST") as? Playlist
-
         setupListeners()
-        setupTextChangeListener()
+        setupTextChangedListener()
         setupViewModelObservers()
         editablePlaylist?.let { setupUiEditMode(it) }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    navigateBack()
-                }
-            })
 
         return binding.root
     }
@@ -67,20 +60,22 @@ class PlaylistCreateFragment : Fragment() {
         _binding = null
     }
 
-    private fun setupTextChangeListener() {
+    private fun setupTextChangedListener() {
         binding.playlistName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
             override fun afterTextChanged(s: Editable?) {
-
                 binding.buttonCreatePlaylist.isEnabled = s?.isNotEmpty() == true
             }
         })
     }
 
     private fun setupListeners() {
+        binding.icBackArrow.setOnClickListener {
+            lifecycleScope.launch {
+                navigateBack()
+            }
+        }
         binding.ivImagePlayer.setOnClickListener { chooseAndUploadImage() }
         binding.buttonCreatePlaylist.setOnClickListener {
             if (editablePlaylist == null) {
@@ -100,10 +95,10 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private fun setupUiEditMode(playlist: Playlist) {
-        requireActivity().title = "Редактировать" // getString(R.string.playlist_details_edit)
+        requireActivity().title = "Редактировать"
         binding.playlistName.setText(playlist.name)
         binding.playlistDescription.setText(playlist.description)
-        binding.buttonCreatePlaylist.text = "Сохранить" // getString(R.string.playlist_details_save)
+        binding.buttonCreatePlaylist.text = "Сохранить"
         if (playlist.imageUrl != null) {
             Glide.with(this)
                 .load(playlist.imageUrl)
@@ -113,6 +108,9 @@ class PlaylistCreateFragment : Fragment() {
         } else {
             binding.ivImagePlayer.isVisible = true
             binding.icAddImage.isVisible = true
+        }
+        binding.icBackArrow.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
@@ -125,7 +123,6 @@ class PlaylistCreateFragment : Fragment() {
 
     private fun createNewPlaylist() {
         val playlistName = binding.playlistName.text.toString()
-        viewModel.renameImageFile(playlistName)
         if (isImageSelected) {
             lifecycleScope.launch {
                 viewModel.createNewPlaylist(
@@ -154,18 +151,20 @@ class PlaylistCreateFragment : Fragment() {
     private suspend fun editPlaylist(playlist: Playlist) {
         val updatedName = binding.playlistName.text.toString()
         val updatedDescription = binding.playlistDescription.text.toString()
-        val updatedTracksIds = if (playlist.tracksIds?.isEmpty() == true) null else playlist.tracksIds
+        val updatedTracksIds =
+            if (playlist.tracksIds?.isEmpty() == true) null else playlist.tracksIds
         val updatedCountTracks = if (playlist.countTracks == 0) null else playlist.countTracks
-        val updatedPlaylist: Playlist?
+        var updatedPlaylist: Playlist? = null
         if (isImageSelected) {
             updatedPlaylist = playlist.copy(
                 name = updatedName,
                 description = updatedDescription,
                 imageUrl = urlImageForPlaylist,
                 tracksIds = updatedTracksIds,
-                countTracks = updatedCountTracks)
+                countTracks = updatedCountTracks
+            )
             lifecycleScope.launch {
-                viewModel.editPlaylist(updatedPlaylist)
+                viewModel.editPlaylist(updatedPlaylist!!)
             }
         } else {
             updatedPlaylist = playlist.copy(
@@ -173,7 +172,8 @@ class PlaylistCreateFragment : Fragment() {
                 description = updatedDescription,
                 imageUrl = urlImageForPlaylist,
                 tracksIds = updatedTracksIds,
-                countTracks = updatedCountTracks)
+                countTracks = updatedCountTracks
+            )
             lifecycleScope.launch {
                 viewModel.editPlaylist(updatedPlaylist)
             }
@@ -189,14 +189,13 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private fun showToastPlaylistCreated(playlistName: String) {
-        val message = getString(R.string.playlist_created, playlistName)
+        val message = context?.getString(R.string.playlist_created, playlistName)
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     fun navigateBack() {
         if (binding.playlistName.text!!.isNotEmpty() ||
-            binding.playlistDescription.text!!.isNotEmpty() ||
-            isImageSelected
+            binding.playlistDescription.text!!.isNotEmpty() || isImageSelected
         ) {
             showBackConfirmationDialog()
         } else {
@@ -222,15 +221,5 @@ class PlaylistCreateFragment : Fragment() {
                 getButton(DialogInterface.BUTTON_NEUTRAL)
                     .setTextColor(resources.getColor(R.color.progressBar_tint, null))
             }
-    }
-
-    companion object {
-        fun createArgs(id: Int?, name: String?, description: String?, imageUrl: String?): Bundle? =
-            bundleOf(
-                "PLAYLIST_ID" to id,
-                "PLAYLIST_NAME" to name,
-                "DESCRIPTION" to description,
-                "PREVIEW" to imageUrl
-            )
     }
 }

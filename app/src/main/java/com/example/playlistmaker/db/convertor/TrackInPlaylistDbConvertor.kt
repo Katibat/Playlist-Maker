@@ -1,7 +1,7 @@
 package com.example.playlistmaker.db.convertor
 
 import com.example.playlistmaker.db.entity.TrackInPlaylistEntity
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.player.domain.models.Track
 
 class TrackInPlaylistDbConvertor {
     fun map(track: Track): TrackInPlaylistEntity {

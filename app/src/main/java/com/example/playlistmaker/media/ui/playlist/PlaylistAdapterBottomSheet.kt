@@ -1,4 +1,4 @@
-package com.example.playlistmaker.playlist.ui
+package com.example.playlistmaker.media.ui.playlist
 
 import android.annotation.SuppressLint
 import android.os.Environment
@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.PlaylistViewBottomSheetBinding
-import com.example.playlistmaker.playlist.domain.models.Playlist
+import com.example.playlistmaker.media.domain.models.Playlist
 import java.io.File
 
 class PlaylistsAdapterBottomSheet(

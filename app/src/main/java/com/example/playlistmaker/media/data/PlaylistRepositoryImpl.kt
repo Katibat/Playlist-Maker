@@ -1,7 +1,6 @@
-package com.example.playlistmaker.playlist.data
+package com.example.playlistmaker.media.data
 
 import android.content.ContentResolver
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -10,9 +9,9 @@ import com.example.playlistmaker.db.convertor.PlaylistDbConvertor
 import com.example.playlistmaker.db.convertor.TrackInPlaylistDbConvertor
 import com.example.playlistmaker.db.entity.PlaylistEntity
 import com.example.playlistmaker.db.entity.TrackInPlaylistEntity
-import com.example.playlistmaker.playlist.domain.models.Playlist
-import com.example.playlistmaker.playlist.domain.api.PlaylistRepository
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.media.domain.api.PlaylistRepository
+import com.example.playlistmaker.player.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File

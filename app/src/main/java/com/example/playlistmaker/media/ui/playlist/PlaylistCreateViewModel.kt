@@ -1,4 +1,4 @@
-package com.example.playlistmaker.playlist.ui
+package com.example.playlistmaker.media.ui.playlist
 
 import android.content.Context
 import android.net.Uri
@@ -6,9 +6,8 @@ import android.os.Environment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.playlist.domain.models.Playlist
-import com.example.playlistmaker.playlist.domain.api.PlaylistInteractor
-import java.io.File
+import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.media.domain.api.PlaylistInteractor
 
 class PlaylistCreateViewModel(
     private val context: Context,
@@ -33,17 +32,6 @@ class PlaylistCreateViewModel(
         val picturesDirectoryPath = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath ?: ""
         val imagePath = interactor.saveImageFromUri(uri, picturesDirectoryPath)
         _imagePathLiveData.postValue(imagePath)
-    }
-
-    fun renameImageFile(playlistName: String) {
-        val filePath = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlist")
-        val temporaryFileName = "image.jpg"
-        val temporaryFile = File(filePath, temporaryFileName)
-
-        if (temporaryFile.exists()) {
-            val finalFile = File(filePath, "image_$playlistName.jpg")
-            temporaryFile.renameTo(finalFile)
-        }
     }
 
     suspend fun editPlaylist(playlist: Playlist) {

@@ -1,6 +1,6 @@
 package com.example.playlistmaker.media.util
 
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.player.domain.models.Track
 
 sealed interface FavoriteTrackState {
 

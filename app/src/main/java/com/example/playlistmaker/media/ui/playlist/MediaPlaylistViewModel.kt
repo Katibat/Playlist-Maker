@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.playlist.domain.models.Playlist
+import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.util.PlaylistState
-import com.example.playlistmaker.playlist.domain.api.PlaylistInteractor
+import com.example.playlistmaker.media.domain.api.PlaylistInteractor
 import kotlinx.coroutines.launch
 
 class MediaPlaylistViewModel(

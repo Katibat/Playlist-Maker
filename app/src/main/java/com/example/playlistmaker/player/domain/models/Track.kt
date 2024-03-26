@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search.domain.models
+package com.example.playlistmaker.player.domain.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

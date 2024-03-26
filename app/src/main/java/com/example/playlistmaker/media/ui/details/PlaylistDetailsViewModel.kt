@@ -1,23 +1,23 @@
-package com.example.playlistmaker.playlistDetails.ui
+package com.example.playlistmaker.media.ui.details
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.playlist.domain.api.PlaylistInteractor
-import com.example.playlistmaker.playlist.domain.models.Playlist
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.media.domain.api.PlaylistInteractor
+import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.player.domain.models.Track
 import com.example.playlistmaker.sharing.domain.api.SharingInteractor
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlaylistDetailsViewModel(
     private val playlistInteractor: PlaylistInteractor,
     private val sharingInteractor: SharingInteractor
 ) : ViewModel() {
 
+    private var isClickAllowed = true
     private val _playlistDetails = MutableLiveData<Playlist>()
     val playlistDetails: LiveData<Playlist> get() = _playlistDetails
 
@@ -44,20 +44,6 @@ class PlaylistDetailsViewModel(
             _tracksLiveData.postValue(listOf())
         }
     }
-
-
-//    private fun getTracksFromCurrentPlaylistUpdated(updatedIdsList: List<Int>?) {
-//        if (updatedIdsList?.isEmpty() == true || updatedIdsList == null) {
-//            processResult(emptyList())
-//        } else {
-//            viewModelScope.launch {
-//                playlistInteractor.getTracksOnlyFromPlaylist(updatedIdsList)
-//                    .collect { track ->
-//                        processResult(track)
-//                    }
-//            }
-//        }
-//    }
 
     private fun processResult(tracks: List<Track>?) {
         _tracksLiveData.postValue(tracks)
@@ -98,29 +84,53 @@ class PlaylistDetailsViewModel(
         }
     }
 
-    fun shareTracks(playlist: Playlist, listOfTracks: MutableList<Track>?) {
-        val message = generateMessage(playlist, listOfTracks)
-        sharingInteractor.shareTrack(message)
+    fun shareTracks(playlist: Playlist, tracks: List<Track>) {
+        sharingInteractor.shareTrack(generateMessage(playlist, tracks))
     }
 
-    private fun generateMessage(playlist: Playlist, trackList: MutableList<Track>?): String {
-        var sharingText =
-            with(playlist) {
-                "${name}\n" +
-                        "${description}\n" +
-                        "${countTracks} треков\n"
-            }
-        if (trackList != null) {
-            for (i in trackList.indices) {
-                sharingText += "${i + 1}. ${trackList[i].artistName}, " +
-                        "${trackList[i].trackName} - (" + "${
-                    SimpleDateFormat(
-                        "mm:ss",
-                        Locale.getDefault()
-                    ).format(trackList[i].trackTimeMillis)
-                })\n"
+    private fun generateMessage(playlist: Playlist, tracks: List<Track>): String {
+        val sb = StringBuilder()
+        sb.append(playlist.name).append("\n")
+        if (playlist.description?.isNotEmpty() == true) {
+            sb.append(playlist.description).append("\n")
+        }
+        val trackWord = getTrackWordForm(tracks.size)
+        sb.append(tracks.size).append(trackWord).append("\n")
+        tracks.forEachIndexed { index, track ->
+            val trackDuration = convertMillisToTimeFormat(track.trackTimeMillis)
+            sb.append("${index + 1}. ${track.artistName} - ${track.trackName} ($trackDuration)")
+                .append("\n")
+        }
+        return sb.toString()
+    }
+
+    private fun convertMillisToTimeFormat(millis: Long): String {
+        val minutes = millis / 1000 / 60
+        val seconds = millis / 1000 % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+
+    private fun getTrackWordForm(count: Int): String {
+        return when {
+            count % 100 in 11..14 -> "треков"
+            count % 10 == 1 -> "трек"
+            count % 10 in 2..4 -> "трека"
+            else -> "треков"
+        }
+    }
+
+    fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            viewModelScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
+                isClickAllowed = true
             }
         }
-        return sharingText
+        return current
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
     }
 }

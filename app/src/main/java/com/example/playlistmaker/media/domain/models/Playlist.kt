@@ -1,4 +1,4 @@
-package com.example.playlistmaker.playlist.domain.models
+package com.example.playlistmaker.media.domain.models
 
 import java.io.Serializable
 

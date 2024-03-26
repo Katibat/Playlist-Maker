@@ -75,13 +75,16 @@
 
     <fragment
         android:id="@+id/playlistCreateFragment"
-        android:name="com.example.playlistmaker.playlist.ui.PlaylistCreateFragment"
+        android:name="com.example.playlistmaker.media.ui.playlist.PlaylistCreateFragment"
         android:label="PlaylistCreateFragment"
-        tools:layout="@layout/media_fragment_create_playlist" />
-
+        tools:layout="@layout/media_fragment_create_playlist">
+    <action
+        android:id="@+id/action_playlistCreateFragment_to_playlistDetailsFragment"
+        app:destination="@id/playlistDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/playlistDetailsFragment"
-        android:name="com.example.playlistmaker.playlistDetails.ui.PlaylistDetailsFragment"
+        android:name="com.example.playlistmaker.media.ui.details.PlaylistDetailsFragment"
         android:label="PlaylistDetailsFragment"
         tools:layout="@layout/media_fragment_playlist_details">
         <action

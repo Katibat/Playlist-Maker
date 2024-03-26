@@ -1,4 +1,4 @@
-package com.example.playlistmaker.playlistDetails.ui
+package com.example.playlistmaker.media.ui.details
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
@@ -17,10 +17,10 @@ import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentPlaylistDetailsBinding
 import com.example.playlistmaker.player.ui.PlayerFragment
-import com.example.playlistmaker.playlist.domain.models.Playlist
-import com.example.playlistmaker.playlist.ui.PlaylistCreateFragment
-import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.ui.TrackAdapter
+import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.media.ui.playlist.PlaylistCreateFragment
+import com.example.playlistmaker.player.domain.models.Track
+import com.example.playlistmaker.player.ui.TrackAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
@@ -29,16 +29,21 @@ import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlaylistDetailsFragment : Fragment() {
+class PlaylistDetailsFragment : Fragment(), TrackAdapter.OnItemClickListener,
+    TrackAdapter.OnItemLongClickListener {
     private val viewModel: PlaylistDetailsViewModel by activityViewModel()
     private var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private var playlist: Playlist? = null
     private var updatedPlaylist: Playlist? = null
     private var playlistToEdit: Playlist? = null
-    private var adapter: TrackAdapter? = null
 
     private var _binding: MediaFragmentPlaylistDetailsBinding? = null
     private val binding get() = _binding!!
+    private var adapter = TrackAdapter(
+        arrayListOf(),
+        this@PlaylistDetailsFragment,
+        this@PlaylistDetailsFragment
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,16 +51,7 @@ class PlaylistDetailsFragment : Fragment() {
     ): View {
         _binding = MediaFragmentPlaylistDetailsBinding.inflate(inflater, container, false)
         playlist = arguments?.getSerializable("playlist") as? Playlist
-        adapter = TrackAdapter {
-            findNavController().navigate(
-                R.id.action_playlistDetailsFragment_to_playerFragment,
-                PlayerFragment.createArgs(Gson().toJson(it))
-            )
-        }
-        adapter!!.onLongTrackClick = { track ->
-            onItemLongClick(track)
-            true
-        }
+
         binding.recycleViewBottomSheet.adapter = adapter
 
         if (updatedPlaylist == null || playlist?.id != updatedPlaylist?.id) {
@@ -82,6 +78,11 @@ class PlaylistDetailsFragment : Fragment() {
         setupObservers()
         setUpClickListeners()
         setupBottomSheetBehaviorCallback()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setupUI() {
@@ -127,9 +128,9 @@ class PlaylistDetailsFragment : Fragment() {
 
             with(binding) {
                 val formattedDuration = getFormattedDuration(duration)
-                adapter?.tracksList = ArrayList(updatedTracks)
+                adapter.tracksList = ArrayList(updatedTracks)
                 recycleViewBottomSheet.adapter = adapter
-                adapter?.notifyDataSetChanged()
+                adapter.notifyDataSetChanged()
                 recycleViewBottomSheet.isVisible = true
                 playlistMinutes.text =
                     "$formattedDuration ${
@@ -149,6 +150,10 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun setUpClickListeners() {
+        binding.icBackArrow.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.iconShare.setOnClickListener {
             if (updatedPlaylist?.countTracks == 0) {
                 Toast.makeText(
@@ -157,7 +162,7 @@ class PlaylistDetailsFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                adapter?.tracksList?.let { it1 -> viewModel.shareTracks(playlist!!, it1) }
+                adapter.tracksList.let { it1 -> viewModel.shareTracks(playlist!!, it1) }
             }
         }
 
@@ -174,7 +179,7 @@ class PlaylistDetailsFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                viewModel.shareTracks(playlist!!, adapter?.tracksList)
+                viewModel.shareTracks(playlist!!, adapter.tracksList)
             }
             bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
         }
@@ -189,7 +194,7 @@ class PlaylistDetailsFragment : Fragment() {
                 }
                 .setPositiveButton(getString(R.string.dialog_delete_playlist_delete)) { _, _ ->
                     lifecycleScope.launch {
-                        viewModel.deletePlaylistById(playlist!!.id, adapter?.tracksList!!)
+                        viewModel.deletePlaylistById(playlist!!.id, adapter.tracksList)
                         findNavController().popBackStack()
                     }
                 }
@@ -205,24 +210,12 @@ class PlaylistDetailsFragment : Fragment() {
         }
 
         binding.editPlaylist.setOnClickListener {
-//            viewModel.getPlaylistById(editPlaylist!!.id)
-//            val playlist: Playlist? = playlistToEdit
-//            val bundle = Bundle().apply {
-//                putSerializable("EDIT_PLAYLIST", playlist)
-//            }
-//            findNavController()
-//                .navigate(R.id.action_mediaFragment_to_playlistCreateFragment, bundle)
-            bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
-            findNavController()
-                .navigate(
-                    R.id.action_playlistDetailsFragment_to_playlistCreateFragment,
-                    PlaylistCreateFragment.createArgs(
-                        playlistToEdit?.id,
-                        playlistToEdit?.name,
-                        playlistToEdit?.description,
-                        playlistToEdit?.imageUrl
-                    )
-                )
+            viewModel.getPlaylistById(updatedPlaylist!!.id)
+            val playlist: Playlist? = playlistToEdit
+            val bundle = Bundle().apply {
+                putSerializable("EDIT_PLAYLIST", playlist)
+            }
+            findNavController().navigate(R.id.playlistCreateFragment, bundle)
         }
     }
 
@@ -288,7 +281,17 @@ class PlaylistDetailsFragment : Fragment() {
         binding.playlistDetails.isVisible = playlist.description?.isEmpty() != true
     }
 
-    private fun onItemLongClick(track: Track): Boolean {
+    override fun onItemClick(track: Track) {
+        if (viewModel.clickDebounce()) {
+            val trackJson = Gson().toJson(track)
+            findNavController().navigate(
+                R.id.action_mediaFragment_to_playerFragment,
+                PlayerFragment.createArgs(trackJson)
+            )
+        }
+    }
+
+    override fun onItemLongClick(track: Track): Boolean {
         MaterialAlertDialogBuilder(requireContext(), R.style.DialogStyle)
             .setTitle(context?.getString(R.string.dialog_delete_title))
             .setMessage(context?.getString(R.string.dialog_delete_message))
@@ -318,10 +321,5 @@ class PlaylistDetailsFragment : Fragment() {
         } else {
             0
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

@@ -1,6 +1,7 @@
 package com.example.playlistmaker.root.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -9,7 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityRootBinding
-import com.example.playlistmaker.playlist.ui.PlaylistCreateFragment
+import com.example.playlistmaker.media.ui.playlist.PlaylistCreateFragment
 import kotlinx.coroutines.launch
 
 class RootActivity : AppCompatActivity() {
@@ -30,29 +31,38 @@ class RootActivity : AppCompatActivity() {
         // скрыть стрелку назад, через supportActionBar с флагом false не работает
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.searchFragment -> binding?.toolbar?.navigationIcon = null
-                R.id.settingsFragment -> binding?.toolbar?.navigationIcon = null
+                R.id.searchFragment -> {
+                    binding?.toolbar?.isVisible = true
+                    binding?.toolbar?.navigationIcon = null
+                }
+                R.id.settingsFragment -> {
+                    binding?.toolbar?.isVisible = true
+                    binding?.toolbar?.navigationIcon = null
+                }
                 R.id.playerFragment -> {
+                    binding?.toolbar?.isVisible = true
                     binding?.toolbar?.title = null
                     binding?.toolbar?.setNavigationOnClickListener {
                         this.onBackPressedDispatcher.onBackPressed()
                     }
                 }
                 R.id.playlistCreateFragment -> {
-                    binding?.toolbar?.title = getString(R.string.media_add_new_playlist)
+                    binding?.toolbar?.isVisible = false
                     binding?.toolbar?.setNavigationOnClickListener {
                         onNavigateBack()
                     }
                 }
                 R.id.playlistDetailsFragment -> {
-                    binding?.toolbar?.title = null
-                    binding?.toolbar?.background?.alpha = 0
+                    binding?.toolbar?.isVisible = false
+//                    binding?.toolbar?.title = null
+//                    binding?.toolbar?.background?.alpha = 0
                     binding?.toolbar?.setNavigationOnClickListener {
                         this.onBackPressedDispatcher.onBackPressed()
                     }
                     hideBottomNavigation()
                 }
                 R.id.mediaFragmentPlaylist -> {
+                    binding?.toolbar?.isVisible = true
                     binding?.toolbar?.navigationIcon = null
                     binding?.toolbar?.title = null
                     hideBottomNavigation()
