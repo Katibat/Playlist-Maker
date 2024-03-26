@@ -285,7 +285,7 @@ class PlaylistDetailsFragment : Fragment(), TrackAdapter.OnItemClickListener,
         if (viewModel.clickDebounce()) {
             val trackJson = Gson().toJson(track)
             findNavController().navigate(
-                R.id.action_mediaFragment_to_playerFragment,
+                R.id.action_playlistDetailsFragment_to_playerFragment,
                 PlayerFragment.createArgs(trackJson)
             )
         }

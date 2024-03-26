@@ -46,7 +46,7 @@
                 style="@style/back_arrow_from_playlist" />
 
             <TextView
-                android:id="@+id/text_header"
+                android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

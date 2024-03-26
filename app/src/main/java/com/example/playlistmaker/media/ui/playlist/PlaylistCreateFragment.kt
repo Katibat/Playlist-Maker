@@ -95,10 +95,10 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private fun setupUiEditMode(playlist: Playlist) {
-        requireActivity().title = "Редактировать"
+        binding.tvTitle.text = context?.getString(R.string.playlist_details_edit)
         binding.playlistName.setText(playlist.name)
         binding.playlistDescription.setText(playlist.description)
-        binding.buttonCreatePlaylist.text = "Сохранить"
+        binding.buttonCreatePlaylist.text = context?.getString(R.string.playlist_details_save)
         if (playlist.imageUrl != null) {
             Glide.with(this)
                 .load(playlist.imageUrl)
