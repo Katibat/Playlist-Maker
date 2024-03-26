@@ -348,7 +348,7 @@
         <item name="android:textSize">@dimen/text_22</item>
     </style>
 
-    <style name="back_arrow_from_playlist_creation">
+    <style name="back_arrow_from_playlist">
         <item name="android:tint">@color/dark_theme_item</item>
     </style>
 

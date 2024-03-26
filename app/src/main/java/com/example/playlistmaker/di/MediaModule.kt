@@ -9,7 +9,7 @@ import com.example.playlistmaker.favorite.domain.api.FavoriteTracksInteractor
 import com.example.playlistmaker.favorite.domain.impl.FavoriteTracksInteractorImpl
 import com.example.playlistmaker.favorite.domain.api.FavoriteTracksRepository
 import com.example.playlistmaker.media.ui.favorite.MediaFavoriteTracksViewModel
-import com.example.playlistmaker.media.ui.playlist.MediaPlaylistViewModel
+import com.example.playlistmaker.media.ui.playlist.adapters.MediaPlaylistViewModel
 import com.example.playlistmaker.media.data.PlaylistRepositoryImpl
 import com.example.playlistmaker.media.domain.api.PlaylistInteractor
 import com.example.playlistmaker.media.domain.api.PlaylistRepository

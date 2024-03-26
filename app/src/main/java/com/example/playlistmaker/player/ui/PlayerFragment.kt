@@ -18,7 +18,7 @@ import com.example.playlistmaker.databinding.FragmentAudioplayerBinding
 import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.util.PlaylistResult
 import com.example.playlistmaker.player.domain.util.StatePlayer
-import com.example.playlistmaker.media.ui.playlist.PlaylistsAdapterBottomSheet
+import com.example.playlistmaker.media.ui.playlist.adapters.PlaylistsAdapterBottomSheet
 import com.example.playlistmaker.player.domain.models.Track
 import com.example.playlistmaker.utils.App.Companion.getTrackTimeMillis
 import com.google.android.material.bottomsheet.BottomSheetBehavior

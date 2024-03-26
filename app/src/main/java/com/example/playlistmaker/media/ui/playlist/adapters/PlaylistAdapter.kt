@@ -1,7 +1,6 @@
-package com.example.playlistmaker.media.ui.playlist
+package com.example.playlistmaker.media.ui.playlist.adapters
 
 import android.annotation.SuppressLint
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +9,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.PlaylistViewBinding
 import com.example.playlistmaker.media.domain.models.Playlist
-import java.io.File
 
 class PlaylistsAdapter(
     private val playlists: MutableList<Playlist>,
@@ -29,12 +27,8 @@ class PlaylistsAdapter(
                         playlist.countTracks ?: 0
                     )
                 }"
-                val filePath = File(
-                    itemView.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                    "playlist"
-                )
                 Glide.with(itemView)
-                    .load(File(filePath, "image_${playlist.name}.jpg"))
+                    .load(playlist.imageUrl) // File(filePath, "image_${playlist.name}.jpg")
                     .placeholder(R.drawable.placeholder)
                     .transform(RoundedCorners(8))
                     .into(ivPlaylist)

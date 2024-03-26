@@ -18,7 +18,6 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentPlaylistDetailsBinding
 import com.example.playlistmaker.player.ui.PlayerFragment
 import com.example.playlistmaker.media.domain.models.Playlist
-import com.example.playlistmaker.media.ui.playlist.PlaylistCreateFragment
 import com.example.playlistmaker.player.domain.models.Track
 import com.example.playlistmaker.player.ui.TrackAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -150,7 +149,7 @@ class PlaylistDetailsFragment : Fragment(), TrackAdapter.OnItemClickListener,
     }
 
     private fun setUpClickListeners() {
-        binding.icBackArrow.setOnClickListener {
+        binding.ivBackArrow.setOnClickListener {
             findNavController().popBackStack()
         }
 
@@ -230,6 +229,7 @@ class PlaylistDetailsFragment : Fragment(), TrackAdapter.OnItemClickListener,
                         dimOverlay.alpha = 1f
                         dimOverlay.isVisible = true
                     }
+
                     else -> {
                         dimOverlay.isVisible = false
                     }
@@ -276,7 +276,7 @@ class PlaylistDetailsFragment : Fragment(), TrackAdapter.OnItemClickListener,
                 .load(playlist.imageUrl)
                 .placeholder(R.drawable.placeholder)
                 .centerCrop()
-                .into(imagePlaylistCover)
+                .into(ivCardPlaylist)
         }
         binding.playlistDetails.isVisible = playlist.description?.isEmpty() != true
     }

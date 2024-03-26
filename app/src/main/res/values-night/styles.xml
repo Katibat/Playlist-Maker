@@ -355,7 +355,7 @@
         <item name="android:textSize">22sp</item>
     </style>
 
-    <style name="back_arrow_from_playlist_creation">
+    <style name="back_arrow_from_playlist">
         <item name="android:tint">@color/white</item>
     </style>
 

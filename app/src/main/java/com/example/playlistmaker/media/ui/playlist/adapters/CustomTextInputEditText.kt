@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media.ui.playlist
+package com.example.playlistmaker.media.ui.playlist.adapters
 
 import android.content.Context
 import android.util.AttributeSet

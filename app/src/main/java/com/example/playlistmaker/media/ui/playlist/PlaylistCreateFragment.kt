@@ -71,7 +71,7 @@ class PlaylistCreateFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.icBackArrow.setOnClickListener {
+        binding.ivBackArrow.setOnClickListener {
             lifecycleScope.launch {
                 navigateBack()
             }
@@ -109,7 +109,7 @@ class PlaylistCreateFragment : Fragment() {
             binding.ivImagePlayer.isVisible = true
             binding.icAddImage.isVisible = true
         }
-        binding.icBackArrow.setOnClickListener {
+        binding.ivBackArrow.setOnClickListener {
             findNavController().popBackStack()
         }
     }
