@@ -188,7 +188,7 @@ class PlaylistDetailsFragment : Fragment(), TrackAdapter.OnItemClickListener,
             MaterialAlertDialogBuilder(requireContext(), R.style.DialogStyle)
                 .setTitle(context?.getString(R.string.dialog_delete_playlist_title))
                 .setMessage(context?.getString(R.string.dialog_delete_playlist_message))
-                .setNeutralButton(context?.getString(R.string.dialog_delete_playlist_cancel)) { dialog, _ ->
+                .setNegativeButton(context?.getString(R.string.dialog_delete_playlist_cancel)) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .setPositiveButton(getString(R.string.dialog_delete_playlist_delete)) { _, _ ->
@@ -295,7 +295,7 @@ class PlaylistDetailsFragment : Fragment(), TrackAdapter.OnItemClickListener,
         MaterialAlertDialogBuilder(requireContext(), R.style.DialogStyle)
             .setTitle(context?.getString(R.string.dialog_delete_title))
             .setMessage(context?.getString(R.string.dialog_delete_message))
-            .setNeutralButton(context?.getString(R.string.dialog_delete_cancel)) { dialog, _ ->
+            .setNegativeButton(context?.getString(R.string.dialog_delete_cancel)) { dialog, _ ->
                 dialog.dismiss()
             }
             .setPositiveButton(getString(R.string.dialog_delete_delete)) { _, _ ->
