@@ -32,7 +32,7 @@
             android:layout_marginTop="14dp"
             android:layout_marginStart="8dp"
             android:text="Name"
-            style="@style/playlist_view_small_name" />
+            style="@style/playlist_view_small_text" />
 
         <TextView
             android:id="@+id/countTracksBS"

@@ -289,7 +289,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0"
-        android:background="@color/bottom_sheet"
+        android:background="@color/bottom_sheet_overlay"
         android:visibility="gone" />
 
     <LinearLayout
@@ -310,12 +310,12 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:visibility="visible"
-            style="@style/handler_bottom_sheet" />
+            style="@style/bottom_sheet" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/header_bottom_sheet"
+            style="@style/title_bottom_sheet"
             android:gravity="center"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="24dp"

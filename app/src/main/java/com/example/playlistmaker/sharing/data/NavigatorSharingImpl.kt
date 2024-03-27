@@ -39,4 +39,14 @@ class NavigatorSharingImpl(private val context: Context) : NavigatorSharing {
             context.startActivity(this)
         }
     }
+
+    override fun shareTrack(shareAppLink: String) {
+        Intent().apply {
+            action = Intent.ACTION_SEND
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            putExtra(Intent.EXTRA_TEXT, shareAppLink)
+            type = "text/plain"
+            context.startActivity(this)
+        }
+    }
 }

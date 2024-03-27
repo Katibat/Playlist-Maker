@@ -1,6 +1,6 @@
 package com.example.playlistmaker.media.util
 
-import com.example.playlistmaker.playlist.domain.models.Playlist
+import com.example.playlistmaker.media.domain.models.Playlist
 
 sealed interface PlaylistState {
     object Loading : PlaylistState

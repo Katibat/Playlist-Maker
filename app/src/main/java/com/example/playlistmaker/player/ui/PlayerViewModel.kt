@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.favorite.domain.api.FavoriteTracksInteractor
-import com.example.playlistmaker.playlist.domain.models.Playlist
+import com.example.playlistmaker.media.domain.models.Playlist
 import com.example.playlistmaker.media.util.PlaylistResult
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.util.StatePlayer
-import com.example.playlistmaker.playlist.domain.api.PlaylistInteractor
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.media.domain.api.PlaylistInteractor
+import com.example.playlistmaker.player.domain.models.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.last

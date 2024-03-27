@@ -18,6 +18,10 @@ class SharingInteractorImpl(private val navigator: NavigatorSharing) : SharingIn
         navigator.openEmail(EmailData(email = SUPPORT_EMAIL))
     }
 
+    override fun shareTrack(shareAppLink: String) {
+        navigator.shareTrack(shareAppLink)
+    }
+
     companion object {
         const val URL_ANDROID_DEVELOPER = "https://practicum.yandex.ru/android-developer/"
         const val URL_OFFER = "https://yandex.ru/legal/practicum_offer/"

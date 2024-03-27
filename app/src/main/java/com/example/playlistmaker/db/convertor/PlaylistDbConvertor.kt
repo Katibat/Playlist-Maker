@@ -1,7 +1,7 @@
 package com.example.playlistmaker.db.convertor
 
 import com.example.playlistmaker.db.entity.PlaylistEntity
-import com.example.playlistmaker.playlist.domain.models.Playlist
+import com.example.playlistmaker.media.domain.models.Playlist
 import com.google.gson.Gson
 
 class PlaylistDbConvertor {
@@ -33,12 +33,16 @@ class PlaylistDbConvertor {
         )
     }
 
-    private fun convertTracksIdsToString(tracksIds: List<Int>?): String? {
+    private fun convertTracksIdsToStringFromGson(tracksIds: List<Int>?): String? {
         return if (tracksIds == null) {
             null
         } else {
             Gson().toJson(tracksIds)
         }
+    }
+
+    private fun convertTracksIdsToString(tracksIds: List<Int>?): String? {
+        return return tracksIds?.joinToString(separator = ",")
     }
 
     private fun convertStringTracksIdsToList(tracksIds: String?): List<Int> {

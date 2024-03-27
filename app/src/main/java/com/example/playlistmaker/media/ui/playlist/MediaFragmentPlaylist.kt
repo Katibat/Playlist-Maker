@@ -10,7 +10,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.MediaFragmentPlaylistsBinding
-import com.example.playlistmaker.playlist.domain.models.Playlist
+import com.example.playlistmaker.media.domain.models.Playlist
+import com.example.playlistmaker.media.ui.playlist.adapters.MediaPlaylistViewModel
+import com.example.playlistmaker.media.ui.playlist.adapters.PlaylistsAdapter
 import com.example.playlistmaker.media.util.PlaylistState
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -28,7 +30,11 @@ class MediaFragmentPlaylist : Fragment() {
     ): View {
         _binding = MediaFragmentPlaylistsBinding.inflate(inflater, container, false)
         adapter = PlaylistsAdapter(mutableListOf(), object : PlaylistsAdapter.Listener {
-            override fun onClick(playlist: Playlist) {}
+            override fun onClick(playlist: Playlist) {
+                val bundle = Bundle()
+                bundle.putSerializable("playlist", playlist)
+                findNavController().navigate(R.id.playlistDetailsFragment, bundle)
+            }
         })
 
         binding.rvPlaylists.adapter = adapter

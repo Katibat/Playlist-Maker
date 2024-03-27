@@ -1,48 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rcTrackList"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <ImageView
+        android:id="@+id/ivPlaylist"
         android:layout_width="160dp"
         android:layout_height="160dp"
-        style="@style/common_style"
+        android:background="@drawable/rounded_playlist_cover"
+        android:clipToOutline="true"
         app:cardCornerRadius="8dp"
-        app:cardElevation="0dp">
-
-        <ImageView
-            android:id="@+id/ivPlaylist"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:backgroundTint="@null"
-            android:src="@drawable/placeholder"
-            tools:srcCompat="@tools:sample/backgrounds/scenic"/>
-    </androidx.cardview.widget.CardView>
+        app:cardElevation="0dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholder"
+        tools:srcCompat="@tools:sample/backgrounds/scenic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvPlaylistName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_gravity="bottom"
         android:backgroundTint="@null"
         android:singleLine="true"
-        style="@style/playlist_view_small_name"
-        android:text="Name"/>
+        style="@style/playlist_view_small_text"
+        android:text="Name"
+        app:layout_constraintStart_toStartOf="@id/ivPlaylist"
+        app:layout_constraintTop_toBottomOf="@id/ivPlaylist"/>
 
     <TextView
         android:id="@+id/tvCountTracks"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:backgroundTint="@null"
         android:singleLine="true"
         android:maxLines="1"
         style="@style/artist_count_track"
-        android:text="N tracks"/>
-</LinearLayout>
+        android:text="N tracks"
+        app:layout_constraintStart_toStartOf="@id/ivPlaylist"
+        app:layout_constraintTop_toBottomOf="@+id/tvPlaylistName"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
