@@ -35,9 +35,9 @@ class PlaylistDetailsViewModel(
         val idsList = playlist.tracksIds?.toList()
         if (idsList != null) {
             viewModelScope.launch {
-                playlistInteractor.getTracksOnlyFromPlaylist(idsList)
+                playlistInteractor.getTracksCurrentPlaylist(idsList)
                     .collect { track ->
-                        processResult(track)
+                        _tracksLiveData.postValue(track)
                     }
             }
         } else {
@@ -45,25 +45,20 @@ class PlaylistDetailsViewModel(
         }
     }
 
-    private fun processResult(tracks: List<Track>?) {
-        _tracksLiveData.postValue(tracks)
-    }
-
     suspend fun deleteTrackFromPlaylist(track: Track, playlist: Playlist) {
         val idTrackToDelete = track.trackId
         val idsInPlaylist = playlist.tracksIds?.toMutableList()
         idsInPlaylist?.remove(track.trackId)
         playlist.tracksIds = idsInPlaylist?.reversed()
-        if (playlist.countTracks != null) {
-            playlist.countTracks = playlist.countTracks!! - 1
+        if (playlist.countTracks != 0) {
+            playlist.countTracks = playlist.countTracks!!.toInt() - 1
         }
         _playlistDetails.postValue(playlist)
 
         playlistInteractor.deleteTrackFromPlayList(
             idsInPlaylist?.toList(),
             playlist.id,
-            idTrackToDelete
-        )
+            idTrackToDelete)
         getTracksFromCurrentPlaylist(playlist)
         viewModelScope.launch(Dispatchers.IO) {
             updateDbTracksInAllPlaylists(playlist.id, idTrackToDelete)

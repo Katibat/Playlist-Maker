@@ -94,14 +94,15 @@ class PlaylistDetailsFragment : Fragment(), TrackAdapter.OnItemClickListener,
             playlistToEdit!!.name = playlist.name
             playlistToEdit!!.description = playlist.description
             playlistToEdit!!.imageUrl = playlist.imageUrl
+            playlistToEdit!!.countTracks = playlist.countTracks
         }
         viewModel.tracksLiveData.observe(viewLifecycleOwner) { tracks ->
             val ids = tracks?.map { it.trackId }
             val totalTrackTimeMillis = tracks?.sumOf { it.trackTimeMillis.toInt() }
             updatedPlaylist = updatedPlaylist!!.copy(tracksIds = ids)
-            showContent(tracks, totalTrackTimeMillis)
             playlistToEdit!!.tracksIds = ids
             playlistToEdit!!.countTracks = tracks?.size
+            showContent(tracks, totalTrackTimeMillis)
         }
     }
 
@@ -111,8 +112,10 @@ class PlaylistDetailsFragment : Fragment(), TrackAdapter.OnItemClickListener,
             binding.apply {
                 messageEmptyList.isVisible = true
                 recycleViewBottomSheet.isVisible = false
-                playlistMinutes.text = "0 минут"
-                playlistTracks.text = "0 треков"
+                playlistMinutes.text = "0 ${context?.resources?.getQuantityString(
+                        R.plurals.playlist_time, 0)}"
+                playlistTracks.text = "0 ${root.context.resources.getQuantityString(
+                        R.plurals.playlist_count_tracks, 0)}"
             }
         }
         if (!tracks.isNullOrEmpty()) {
@@ -131,19 +134,12 @@ class PlaylistDetailsFragment : Fragment(), TrackAdapter.OnItemClickListener,
                 recycleViewBottomSheet.adapter = adapter
                 adapter.notifyDataSetChanged()
                 recycleViewBottomSheet.isVisible = true
-                playlistMinutes.text =
-                    "$formattedDuration ${
-                        context?.resources?.getQuantityString(
-                            R.plurals.playlist_time,
-                            formattedDuration
-                        )
-                    }"
-                playlistTracks.text = "${playlist?.countTracks} ${
-                    root.context.resources.getQuantityString(
-                        R.plurals.playlist_count_tracks,
-                        playlist?.countTracks!!.toInt()
-                    )
-                }"
+                playlistMinutes.text = "$formattedDuration ${
+                    context?.resources?.getQuantityString(
+                            R.plurals.playlist_time, formattedDuration)}"
+                playlistTracks.text = "${updatedPlaylist?.countTracks} ${
+                    context?.resources?.getQuantityString(
+                        R.plurals.playlist_count_tracks, updatedPlaylist?.countTracks!!.toInt())}"
             }
         }
     }
@@ -256,6 +252,7 @@ class PlaylistDetailsFragment : Fragment(), TrackAdapter.OnItemClickListener,
         Glide.with(requireContext())
             .load(playlist.imageUrl)
             .placeholder(R.drawable.placeholder)
+            .centerCrop()
             .into(binding.playlistCoverImageBtnSheet)
     }
 

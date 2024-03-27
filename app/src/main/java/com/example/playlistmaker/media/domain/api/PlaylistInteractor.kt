@@ -16,6 +16,6 @@ interface PlaylistInteractor {
     suspend fun updateDbListOfTracksInAllPlaylists(playlistId: Int, trackId: Int)
     suspend fun getPlaylistById(playlistId: Int): Playlist
     fun getAllPlaylists(): Flow<List<Playlist>>
-    fun getTracksOnlyFromPlaylist(tracksIdsList: List<Int>): Flow<List<Track>?>
+    fun getTracksCurrentPlaylist(tracksIdsList: List<Int>): Flow<List<Track>?>
     fun saveImageFromUri(uri: Uri, picturesDirectoryPath: String): String
 }

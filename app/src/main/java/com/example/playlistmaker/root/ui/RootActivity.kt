@@ -1,7 +1,6 @@
 package com.example.playlistmaker.root.ui
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -35,10 +34,12 @@ class RootActivity : AppCompatActivity() {
                     binding?.toolbar?.isVisible = true
                     binding?.toolbar?.navigationIcon = null
                 }
+
                 R.id.settingsFragment -> {
                     binding?.toolbar?.isVisible = true
                     binding?.toolbar?.navigationIcon = null
                 }
+
                 R.id.playerFragment -> {
                     binding?.toolbar?.isVisible = true
                     binding?.toolbar?.title = null
@@ -46,21 +47,22 @@ class RootActivity : AppCompatActivity() {
                         this.onBackPressedDispatcher.onBackPressed()
                     }
                 }
+
                 R.id.playlistCreateFragment -> {
                     binding?.toolbar?.isVisible = false
                     binding?.toolbar?.setNavigationOnClickListener {
                         onNavigateBack()
                     }
                 }
+
                 R.id.playlistDetailsFragment -> {
                     binding?.toolbar?.isVisible = false
-//                    binding?.toolbar?.title = null
-//                    binding?.toolbar?.background?.alpha = 0
                     binding?.toolbar?.setNavigationOnClickListener {
                         this.onBackPressedDispatcher.onBackPressed()
                     }
                     hideBottomNavigation()
                 }
+
                 R.id.mediaFragmentPlaylist -> {
                     binding?.toolbar?.isVisible = true
                     binding?.toolbar?.navigationIcon = null

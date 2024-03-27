@@ -33,7 +33,7 @@ class PlaylistInteractorImpl(private val repository: PlaylistRepository) : Playl
         return repository.getAllPlaylists()
     }
 
-    override fun getTracksOnlyFromPlaylist(tracksIdsList: List<Int>): Flow<List<Track>?> {
+    override fun getTracksCurrentPlaylist(tracksIdsList: List<Int>): Flow<List<Track>?> {
         return repository.getTracksOnlyFromPlaylist(tracksIdsList)
     }
 

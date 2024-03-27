@@ -46,17 +46,17 @@
         <item quantity="zero"> треков</item>
         <item quantity="one"> трек</item>
         <item quantity="two"> трека</item>
-        <item quantity="few"> треков</item>
+        <item quantity="few"> трека</item>
         <item quantity="many"> треков</item>
-        <item quantity="other"> треков</item>
+        <item quantity="other"> трека</item>
     </plurals>
     <plurals name="playlist_time">
         <item quantity="zero"> минут</item>
         <item quantity="one"> минута</item>
         <item quantity="two"> минуты</item>
-        <item quantity="few"> минуты</item>
+        <item quantity="few"> минут</item>
         <item quantity="many"> минут</item>
-        <item quantity="other"> минут</item>
+        <item quantity="other"> минуты</item>
     </plurals>
     <string name="playlist_is_empty">В этом плейлисте еще нет треков</string>
     <string name="playlist_details_share">Поделиться</string>
